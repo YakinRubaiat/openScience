@@ -210,5 +210,9 @@ HTML_TEMPLATE = """
 
 
 if __name__ == "__main__":
+    import os
+
     app = create_app()
-    app.run(debug=True)
+    # Debug mode must be opt-in via environment; never default to True
+    # (Bandit B201: the Werkzeug debugger allows arbitrary code execution).
+    app.run(debug=os.environ.get("FLASK_DEBUG", "").lower() in {"1", "true", "yes"})

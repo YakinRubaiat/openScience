@@ -1,85 +1,259 @@
-# Security
+---
+layout: default
+title: Security Policies
+nav_order: 9
+description: "Security architecture, policies, and best practices"
+---
 
-openScience is designed around a deny-by-default posture: agent capabilities
-start at zero and are granted explicitly through a human-approval broker.
+# Security Policies
 
-## Principles
+openScience implements defense-in-depth to protect data, prevent unauthorized access, and ensure responsible AI use in scientific research.
 
-### OS-Level Sandbox
+---
 
-- **Deny-by-default network egress** — agents cannot reach the network unless
-  a connector's destination is explicitly allowed.
-- **File-system guards** — writes are confined to the session workspace;
-  anything outside requires approval.
-- **Process isolation** — skills run in per-specialist Conda environments to
-  contain dependency conflicts and supply-chain surprises.
+## Security Architecture
 
-### Human-Approval Broker
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                    Security Layers                          │
+├─────────────────────────────────────────────────────────────┤
+│ 1. Human Approval Broker                                    │
+│    Gates deletions, external code exec, network egress     │
+├─────────────────────────────────────────────────────────────┤
+│ 2. OS-Level Sandbox                                         │
+│    Deny-by-default network & filesystem                    │
+├─────────────────────────────────────────────────────────────┤
+│ 3. Encrypted Credentials                                    │
+│    System keyring (Keychain, Secret Service, …)            │
+├─────────────────────────────────────────────────────────────┤
+│ 4. Biosecurity Safeguards                                   │
+│    Dual-use research screening                              │
+├─────────────────────────────────────────────────────────────┤
+│ 5. Audit Logging                                            │
+│    Full provenance with timestamps                          │
+├─────────────────────────────────────────────────────────────┤
+│ 6. Access Control                                           │
+│    API keys & role-based permissions                        │
+└─────────────────────────────────────────────────────────────┘
+```
 
-Privileged actions queue for human approval before executing:
+---
 
-- Arbitrary code execution
-- Outbound network requests to new destinations
-- File deletions and writes outside the workspace
+## OS-Level Sandbox
 
-Tasks wait in `awaiting_approval` until a human approves or denies via the UI
-or the [API](api.md).
+The sandbox enforces **deny-by-default** policies for every agent operation.
 
-### Biosecurity Safeguards
+### Network policies
 
-- **Dual-use review** — workflows flagged as potential dual-use research of
-  concern are routed through additional human review.
-- **Audit trail** — every approved and denied action is logged with the full
-  agent chain that requested it.
+| Policy | Behavior | Use |
+|--------|----------|-----|
+| `deny_all` | All egress blocked | Untrusted code |
+| `allowlist` (default) | Listed hosts only | Research pipelines |
+| `permissive` | Open internet | Local dev only |
 
-### Credential Handling
+Configure in `openscience.yaml`:
 
-- Connector credentials (PubMed, AWS, …) live in the **OS keyring**, never in
-  `.env`, source, or container images.
-- `.env` holds only deployment secrets (`DB_PASSWORD`, `SECRET_KEY`, …) and
-  must never be committed. `.gitignore` excludes it; the committed
-  `.env.example` contains only placeholders.
+```yaml
+sandbox:
+  network_policy: allowlist
+  allowed_hosts:
+    - pubmed.ncbi.nlm.nih.gov
+    - api.semanticscholar.org
+    - eutils.ncbi.nlm.nih.gov
+```
+
+**Per-connector scoping**: each database connector is granted access to *only* its own base URL. A PubMed connector cannot reach ChEMBL; a compromised agent cannot pivot.
+
+### Filesystem policies
+
+```yaml
+sandbox:
+  file_system:
+    read:
+      - data/raw
+      - reference/
+    write:
+      - data/processed
+      - results/
+      - figures/
+```
+
+`data/raw` is **read-only** — accidental overwrites of source data are impossible.
+
+### Human approval broker
+
+Certain operations trigger an interactive approval prompt:
+
+| Operation | Why it needs approval |
+|-----------|----------------------|
+| File deletion | Irreversible |
+| External code execution | Arbitrary risk |
+| Network egress beyond allowlist | Data exfiltration vector |
+| Credential access | Secrets disclosure |
+
+Approval is logged with timestamp, user, and justification.
+
+```python
+# In scripts, pre-approve a specific operation
+session = ScienceSession(allow_approvals=["code_execution:script.py"])
+```
+
+For unattended pipelines, scope approvals narrowly rather than disabling the broker.
+
+---
+
+## Credential Management
+
+### DO
+
+✅ Store secrets in `.env` (git-ignored)
+✅ Use `openscience credentials set` for keyring storage
+✅ Rotate API keys regularly
+✅ Use one key per environment (dev/prod)
+✅ Set NCBI API key to raise rate limits legitimately
+
+### DON'T
+
+❌ Hardcode keys in source
+❌ Commit `.env` to git
+❌ Share keys across team members
+❌ Log credentials
+
+### Verify git hygiene
+
+```bash
+# Pre-commit hook that catches leaked keys
+pre-commit run detect-private-key --all-files
+
+# Audit history (if you suspect a leak)
+git log -p | grep -i "sk-" || echo "clean"
+```
+
+If a key leaks, **revoke it immediately** and rotate.
+
+---
+
+## Biosecurity Safeguards
+
+openScience includes screening for **dual-use research of concern (DURC)** — work that could be misused.
+
+### Automatic screening
+
+Tasks that touch flagged domains are routed through a biosecurity review layer:
+
+- Synthesis workflows for select agents
+- Gain-of-function protocol requests
+- Pathogen engineering without documented oversight
+
+### What happens on a flagged task
+
+1. Task is paused
+2. User is prompted for an institutional review reference (IBC/IRB number)
+3. Approved tasks proceed under enhanced logging
+4. Unapproved tasks are refused with guidance
+
+### Your responsibilities
+
+- Comply with your institution's IBC policies
+- Report potential dual-use concerns to your biosafety officer
+- Do not use openScience for activities prohibited by the [Biological Weapons Convention](https://www.un.org/disarmament/biological-weapons/)
+
+---
+
+## Audit Logging
+
+Every agent call is recorded:
+
+```json
+{
+  "timestamp": "2025-06-12T14:23:07Z",
+  "session_id": "sess_abc123",
+  "agent": "scanpy_specialist",
+  "task": "QC and clustering",
+  "parameters": {"min_genes": 200, "resolution": 0.5},
+  "skills_called": ["scanpy.qc", "scanpy.normalize", "scanpy.leiden"],
+  "artifacts": ["results/adata_clustered.h5ad"],
+  "approvals": [],
+  "duration_ms": 42150
+}
+```
+
+Logs are retained per `logging.retention_days` (default 30) and can be exported for compliance.
+
+---
+
+## REST API Security
+
+The bundled Flask server is designed for `localhost`. **Do not expose it directly to the internet.**
+
+### For remote deployment
+
+Put it behind an authenticating reverse proxy:
+
+```nginx
+# nginx + OIDC example
+location / {
+    auth_request /oauth2/auth;
+    proxy_pass http://localhost:8080;
+}
+```
+
+Recommended proxy layers:
+
+- OAuth2-Proxy with your institution's IdP
+- nginx + client certificates (mTLS)
+- Cloudflare Access / Tailscale for lab networks
+
+### Session isolation
+
+Each user should have their own `ScienceSession`. The default server uses a single session for simplicity — production deployments must scope sessions per authenticated user.
+
+---
 
 ## Reporting a Vulnerability
 
-**Do not open a public GitHub issue.** Email the maintainers (see
-`CONTRIBUTING.md` for contact) with:
+**Please do not open a public GitHub issue for security vulnerabilities.**
 
-- A description of the issue and affected versions
-- Reproduction steps or proof of concept
-- Suggested severity
+Email **<security@openscience.dev>** with:
 
-You will receive acknowledgment within 72 hours. Fixes are coordinated before
-public disclosure.
+1. Description
+2. Steps to reproduce
+3. Impact assessment
+4. Suggested remediation (optional)
 
-## Security Testing
+We follow a 90-day coordinated disclosure policy.
 
-The `security.yml` GitHub Actions workflow runs on every PR:
+---
 
-- **bandit** — static security analysis of the Python source
-- **pip-audit** — known-vulnerability scan of dependencies
-- Docker image scanning on release builds
+## Security Checklist for Deployments
 
-Run the same checks locally:
+- [ ] `SANDBOX_ENABLED=true`
+- [ ] Network policy is `allowlist`, not `permissive`
+- [ ] API behind authenticated proxy if remote
+- [ ] Postgres/Redis not exposed to the internet
+- [ ] Credentials stored in keyring, not plaintext
+- [ ] `data/raw` mounted read-only
+- [ ] Audit log retention configured per policy
+- [ ] Regular dependency updates (`pip-audit`)
+- [ ] Human approval broker active for sensitive ops
+
+---
+
+## Dependency Security
+
+Check for known CVEs:
 
 ```bash
-pip install -e ".[dev]"
-bandit -c pyproject.toml -r src
+pip install pip-audit
 pip-audit
 ```
 
-## Deployment Hardening Checklist
+GitHub Dependabot is enabled on the repository and opens PRs for vulnerable dependencies.
 
-- [ ] All default passwords in `.env` replaced
-- [ ] `SECRET_KEY` generated with `openssl rand -hex 32`
-- [ ] PostgreSQL (5432) and Redis (6379) not exposed to the public internet
-- [ ] TLS enabled via `docker-compose.prod.yml` with real `DOMAIN`/`SSL_EMAIL`
-- [ ] `LOG_LEVEL` at `WARNING` or higher in production
-- [ ] Regular `pip-audit` runs against the deployed lockfile
-- [ ] Database backups encrypted at rest
+---
 
-## Related
+## See Also
 
-- [Configuration](configuration.md) — secrets and keyring setup
-- [Docker Guide](docker.md) — production checklist
-- [Contributing](contributing.md) — disclosure contact
+- [Configuration](configuration.md) — sandbox and credential settings
+- [Architecture](architecture.md) — how layers fit together
+- [Docker](docker.md) — production hardening

@@ -1,6 +1,6 @@
 """Request schemas."""
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -57,7 +57,7 @@ class AnalysisRequest(BaseModel):
     task: str = Field(min_length=1, max_length=4000)
     specialist: Optional[SafeAgentName] = None
     data_name: Optional[str] = Field(default=None, max_length=255)
-    parameters: Dict[str, Any] = Field(default_factory=dict)
+    parameters: dict[str, Any] = Field(default_factory=dict)
 
 
 class VisualizeRequest(BaseModel):

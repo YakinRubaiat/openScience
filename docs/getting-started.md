@@ -14,7 +14,7 @@ This guide walks you through installing openScience and setting up your first pr
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
@@ -28,7 +28,7 @@ This guide walks you through installing openScience and setting up your first pr
 
 ---
 
-## 🐳 Option 1: Docker Installation (Recommended)
+## Option 1: Docker Installation (Recommended)
 
 Docker packages openScience with PostgreSQL, Redis, and all scientific dependencies.
 
@@ -93,7 +93,7 @@ Continue to the [5-Minute Quickstart](quickstart.md) to run your first analysis.
 
 ---
 
-## 🐍 Option 2: Local Python Installation
+## Option 2: Local Python Installation
 
 ### Step 1 — Clone and create environment
 
@@ -143,7 +143,7 @@ openscience init
 
 This creates:
 
-```
+```text
 my-research/
 ├── openscience.yaml      # Project configuration
 ├── data/
@@ -178,7 +178,7 @@ Open <http://localhost:8080> in your browser.
 
 ---
 
-## ✅ Verify the Installation
+## Verify the Installation
 
 ### Check the CLI
 
@@ -208,7 +208,7 @@ All tests should pass. If not, see [Troubleshooting](troubleshooting.md).
 
 ---
 
-## 🔑 Setting Up API Keys
+## Setting Up API Keys
 
 openScience uses LLMs and external databases. Keys you may want:
 
@@ -223,11 +223,11 @@ Store keys in `.env` (git-ignored) or in the system keyring with `openscience cr
 
 ---
 
-## 🗂️ Project Layout After Init
+## Project Layout After Init
 
 After `openscience init`, your project looks like this:
 
-```
+```text
 my-research/
 ├── openscience.yaml     # Project settings (compute, dirs, sandbox)
 ├── .env                 # Secrets (never commit!)
@@ -244,7 +244,7 @@ Best practice: keep `data/raw/` **read-only**. Agents write derived data to `dat
 
 ---
 
-## ⚙️ Compute Backend Quick Reference
+## Compute Backend Quick Reference
 
 By default, agents run locally. To use HPC or cloud resources:
 
@@ -260,7 +260,7 @@ Full details: [Configuration](configuration.md#compute-backends).
 
 ---
 
-## 🚨 Common Setup Issues
+## Common Setup Issues
 
 | Symptom | Fix |
 |---------|-----|
@@ -274,7 +274,7 @@ More in [Troubleshooting](troubleshooting.md).
 
 ---
 
-## ➡️ Next Steps
+## Next Steps
 
 - **[5-Minute Quickstart](quickstart.md)** — run your first analysis
 - **[Configuration](configuration.md)** — customize compute, sandbox, and credentials

@@ -3,8 +3,7 @@
 from pathlib import Path
 from typing import Optional
 
-from openscience.core.agent import BaseAgent, AgentMetadata
-
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 # Map common file extensions to canonical load format names.
 _EXTENSION_FORMAT_MAP = {

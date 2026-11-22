@@ -1,7 +1,5 @@
 """Analysis capability routes."""
 
-from typing import List
-
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -16,13 +14,13 @@ router = APIRouter(prefix="/analysis", tags=["analysis"])
 
 @router.get(
     "/capabilities",
-    response_model=List[AgentDetail],
+    response_model=list[AgentDetail],
     summary="List analysis capabilities",
 )
 def list_analysis_capabilities(
     db: Session = Depends(get_db),
     user: UserModel = Depends(get_current_active_user),
-) -> List[AgentDetail]:
+) -> list[AgentDetail]:
     """List agents capable of running data analyses."""
     agents = (
         db.query(AgentModel)

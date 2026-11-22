@@ -13,9 +13,9 @@ In this tutorial you'll analyze a single-cell RNA-seq dataset end-to-end: load d
 
 ---
 
-## 🎯 What You'll Build
+## What You'll Build
 
-```
+```text
 Input:  pbmc_10k.h5ad  (10k PBMCs from 10x Genomics)
    ↓
 QC + normalization + clustering          →  results/
@@ -27,7 +27,7 @@ Methods section (Nature-style)           →  results/methods.md
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 - openScience installed ([installation guide](getting-started.md))
 - ~250 MB free disk space for the sample dataset
@@ -36,7 +36,7 @@ You can follow along with the **Python API**, the **CLI**, or the **REST API**. 
 
 ---
 
-## ✅ Step 1 — Get the sample data
+## Step 1 — Get the sample data
 
 ```bash
 mkdir -p data/raw
@@ -49,7 +49,7 @@ curl -L -o data/raw/pbmc_10k.h5ad \
 
 ---
 
-## ✅ Step 2 — Run the analysis (Python API)
+## Step 2 — Run the analysis (Python API)
 
 Create `quickstart.py`:
 
@@ -103,7 +103,7 @@ python quickstart.py
 
 Expected output:
 
-```
+```text
 🔬 Loading data...
 📊 Running QC and clustering...
 📈 Generating UMAP...
@@ -113,7 +113,7 @@ Expected output:
 
 ---
 
-## ✅ Alternative: Use the CLI
+## Alternative: Use the CLI
 
 ```bash
 # Initialize the session and load data
@@ -132,7 +132,7 @@ openscience run visualize --type umap --style publication \
 
 ---
 
-## ✅ Alternative: Use the REST API
+## Alternative: Use the REST API
 
 With `openscience start` (or `docker-compose up`) running:
 
@@ -155,7 +155,7 @@ Full endpoint reference: [API Documentation](api.md).
 
 ---
 
-## 🔍 Step 3 — Inspect the results
+## Step 3 — Inspect the results
 
 ### numbers
 
@@ -179,7 +179,7 @@ The orchestrator inspects the stored result and replies with the numbers plus th
 
 ---
 
-## 🧭 What Just Happened?
+## What Just Happened?
 
 Behind the scenes, the orchestrator:
 
@@ -196,7 +196,7 @@ Every step is logged; nothing is a black box.
 
 ---
 
-## 🚀 Next Steps
+## Next Steps
 
 ### Try other specialists
 
@@ -241,7 +241,7 @@ enrichment = session.analyze(
 
 ---
 
-## 🎉 You Did It
+## You Did It
 
 You've run a complete agentic scientific workflow: ingest → analyze → visualize → document. Every result is reproducible and auditable.
 

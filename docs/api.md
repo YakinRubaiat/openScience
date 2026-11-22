@@ -17,7 +17,7 @@ All three call the same core framework; results are identical regardless of inte
 
 ---
 
-## 🐍 Python API
+## Python API
 
 ### `ScienceSession`
 
@@ -48,11 +48,11 @@ Load a dataset into the session.
 
 ```python
 session.load_data(
-    file_path: Union[str, Path],
-    format: str = "auto",
-    name: Optional[str] = None,
+    file_path="data/raw/pbmc_10k.h5ad",
+    format="auto",
+    name=None,
     **kwargs,
-) -> ScienceSession
+)
 ```
 
 | Parameter | Description |
@@ -76,9 +76,9 @@ Run an analysis task.
 
 ```python
 result = session.analyze(
-    task: str,
-    specialist: Optional[str] = None,
-    data_name: Optional[str] = None,
+    task="QC filtering and clustering",
+    specialist=None,
+    data_name=None,
     **parameters,
 )
 ```
@@ -109,10 +109,10 @@ Generate a figure from analysis results.
 
 ```python
 figure = session.visualize(
-    result: Any,
-    type: str = "auto",
-    style: str = "publication",
-    output: Optional[Union[str, Path]] = None,
+    result,
+    type="auto",
+    style="publication",
+    output=None,
     **kwargs,
 )
 ```
@@ -134,10 +134,10 @@ session.visualize(result, type="umap", output="figures/umap.pdf", color="leiden"
 Generate a methods section.
 
 ```python
-methods: str = session.write_methods(
-    result: Any,
-    style: str = "nature",            # "nature" | "science" | "cell" | "plos"
-    citation_format: str = "apa",     # "apa" | "vancouver" | "harvard"
+methods = session.write_methods(
+    result,
+    style="nature",            # "nature" | "science" | "cell" | "plos"
+    citation_format="apa",     # "apa" | "vancouver" | "harvard"
     **kwargs,
 )
 ```
@@ -191,7 +191,7 @@ class MyAgent(BaseAgent):
 
 ---
 
-## 🌐 REST API
+## REST API
 
 The REST API runs at `http://localhost:8080` when started with `openscience start` or `docker-compose up`.
 
@@ -329,7 +329,7 @@ curl http://localhost:8080/api/artifacts/art_umap_pdf/provenance
 
 ---
 
-## 💻 CLI Reference
+## CLI Reference
 
 Installed as `openscience` via pip.
 
@@ -374,7 +374,7 @@ openscience agents
 
 Output:
 
-```
+```text
 🤖 Available Agents
 ==================================================
 
@@ -408,7 +408,7 @@ openscience credentials delete <key>
 
 ---
 
-## 🧪 Async Usage
+## Async Usage
 
 All agent and skill methods are `asyncio`-native. For custom pipelines:
 
@@ -427,7 +427,7 @@ The synchronous `ScienceSession` API wraps async internals for convenience.
 
 ---
 
-## 📚 Type Conventions
+## Type Conventions
 
 - **Paths** accept `str` or `pathlib.Path` — `Path` is canonical internally
 - **Datasets** are keyed by string names inside a session
@@ -435,7 +435,7 @@ The synchronous `ScienceSession` API wraps async internals for convenience.
 
 ---
 
-## ➡️ See Also
+## See Also
 
 - [Quickstart](quickstart.md) — hands-on tutorial
 - [Architecture](architecture.md) — internals

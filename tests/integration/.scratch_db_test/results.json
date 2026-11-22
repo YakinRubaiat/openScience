@@ -1,0 +1,172 @@
+{
+  "1. Database connection": {
+    "ok": true,
+    "details": "connection established, schema present, get_db works",
+    "queries": [
+      "SELECT 1",
+      "PRAGMA database_list",
+      "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name",
+      "PRAGMA user_version  -- (alembic_version check)"
+    ],
+    "checks": [
+      "SELECT 1 -> 1 (expected 1)",
+      "tables present: ['agents', 'sessions', 'tasks', 'users']; missing: none",
+      "get_db() dependency yields working session: True"
+    ]
+  },
+  "2. User model CRUD": {
+    "ok": true,
+    "details": "CRUD round-trip OK, defaults applied correctly",
+    "queries": [
+      "INSERT INTO users (id, username, email, hashed_password, is_active, is_admin, created_at) VALUES (...)",
+      "SELECT * FROM users WHERE username = :username",
+      "UPDATE users SET email = :email WHERE id = :id",
+      "SELECT is_active, is_admin, created_at FROM users WHERE id = :id",
+      "DELETE FROM users WHERE id = :id",
+      "SELECT * FROM users WHERE username = :username",
+      "SELECT * FROM users WHERE id = :bad_id  -- with :bad_id NOT NULL"
+    ],
+    "checks": [
+      "INSERT user id=0a79cb52-3208-4566-ae41-df64a0b03cb8 committed",
+      "SELECT by username -> found",
+      "defaults: is_active=True (expected True), is_admin=False (expected False), created_at set=True",
+      "UPDATE email -> updated@example.com (expected updated@example.com)",
+      "after DELETE, SELECT by username -> gone",
+      "PRAGMA foreign_keys (engine default) = 1"
+    ]
+  },
+  "3. Session model CRUD": {
+    "ok": true,
+    "details": "CRUD + cascade delete + onupdate timestamp all OK",
+    "queries": [
+      "INSERT INTO sessions (id, name, owner_id, project_dir, compute_backend, status, data_keys, loaded_data, created_at, updated_at) VALUES (...)",
+      "SELECT * FROM sessions WHERE owner_id = :owner_id",
+      "UPDATE sessions SET status = :status WHERE id = :id",
+      "SELECT updated_at FROM sessions WHERE id = :id  -- verify onupdate fired",
+      "DELETE FROM sessions WHERE id = :id",
+      "SELECT COUNT(*) FROM tasks WHERE session_id = :id  -- orphan check"
+    ],
+    "checks": [
+      "INSERT session id=a105ec12-e63b-48b7-9213-9f09082c011d with data_keys=['counts', 'metadata']",
+      "owner.sessions -> ['exp-05'] (expected ['exp-05'])",
+      "defaults: status='active', compute_backend='local'",
+      "UPDATE status -> 'archived'; updated_at changed: True",
+      "after session DELETE, orphan tasks = 0 (expected 0)"
+    ]
+  },
+  "4. Task model CRUD": {
+    "ok": true,
+    "details": "CRUD + JSON round-trip + ordering OK",
+    "queries": [
+      "INSERT INTO tasks (id, session_id, task_type, description, parameters, status, result, error, created_at) VALUES (...)",
+      "SELECT * FROM tasks WHERE session_id = :sid ORDER BY created_at",
+      "UPDATE tasks SET status = 'failed', error = 'boom' WHERE id = :id",
+      "SELECT json_extract(result, '$.accuracy') FROM tasks WHERE id = :id  -- JSON round-trip",
+      "DELETE FROM tasks WHERE id = :id"
+    ],
+    "checks": [
+      "INSERT task id=1e5210c8-5e61-420a-926a-a7bc67111516 status='running' params={'threshold': 0.8}",
+      "SELECT -> result={'accuracy': 0.95} (type dict)",
+      "JSON column round-trip -> {'accuracy': 0.95}",
+      "session.tasks ordered by created_at -> ['analysis', 'plot']",
+      "UPDATE -> status='failed' error='boom'",
+      "DELETE -> row gone"
+    ]
+  },
+  "5. Agent model CRUD": {
+    "ok": true,
+    "details": "agent CRUD + JSON list round-trip OK",
+    "queries": [
+      "INSERT INTO agents (id, name, category, description, required_skills, input_types, output_types) VALUES (...)",
+      "SELECT * FROM agents WHERE name = :name",
+      "SELECT * FROM agents WHERE category = :category",
+      "UPDATE agents SET description = :desc WHERE id = :id",
+      "SELECT required_skills, input_types, output_types FROM agents WHERE id = :id  -- JSON lists",
+      "DELETE FROM agents WHERE id = :id"
+    ],
+    "checks": [
+      "INSERT agent id=dd9dc444-136c-4394-b90e-ec723ae5e752 name='qc_analyzer'",
+      "SELECT by name -> found",
+      "JSON lists: required_skills=['fastqc', 'metrics'], input_types=['fastq'], output_types=['report']",
+      "UPDATE description -> 'Updated description'",
+      "DELETE -> row gone"
+    ]
+  },
+  "6. Database migrations (alembic upgrade)": {
+    "ok": true,
+    "details": "upgrade head applied revision 0001, all tables created",
+    "queries": [
+      "alembic upgrade head   (DDL from 0001_initial_schema.py)",
+      "SELECT version_num FROM alembic_version",
+      "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+    ],
+    "checks": [
+      "alembic upgrade head exit=0",
+      "alembic_version.version_num = '0001' (expected '0001')",
+      "tables: ['agents', 'alembic_version', 'sessions', 'tasks', 'users']; missing: none"
+    ]
+  },
+  "7. Database rollback (alembic downgrade)": {
+    "ok": true,
+    "details": "downgrade to base removed all tables; re-upgrade OK",
+    "queries": [
+      "alembic downgrade base   (DROP TABLE tasks/sessions/agents/users)",
+      "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name",
+      "alembic upgrade head   (re-apply to leave DB usable)"
+    ],
+    "checks": [
+      "alembic downgrade base exit=0",
+      "after downgrade, app tables remaining: none",
+      "re-upgrade head exit=0"
+    ]
+  },
+  "8. Database constraints": {
+    "ok": true,
+    "details": "constraints verified; PRAGMA foreign_keys state documented",
+    "queries": [
+      "INSERT INTO users (username, email, ...) duplicate username  -> UNIQUE violation",
+      "INSERT INTO users (username, ...) with NULL hashed_password  -> NOT NULL violation",
+      "INSERT INTO sessions (..., owner_id) with FK to deleted user  -> FK violation (PRAGMA foreign_keys=ON)",
+      "INSERT INTO sessions (..., name=NULL)  -> NOT NULL violation"
+    ],
+    "checks": [
+      "UNIQUE username enforced: IntegrityError: UNIQUE constraint failed: users.username",
+      "NOT NULL hashed_password enforced: NOT NULL constraint failed: users.hashed_password",
+      "PRAGMA foreign_keys on pooled connection = 1",
+      "FK owner_id enforced: FOREIGN KEY constraint failed",
+      "NOT NULL sessions.name enforced: NOT NULL constraint failed: sessions.name",
+      "ORM insert with dangling FK rejected"
+    ]
+  },
+  "9. Database indexes": {
+    "ok": true,
+    "details": "all 10 expected indexes exist and are used by the planner",
+    "queries": [
+      "SELECT name, tbl_name FROM sqlite_master WHERE type='index' AND name NOT LIKE 'sqlite_%' ORDER BY tbl_name, name",
+      "PRAGMA index_xinfo('ix_users_email')",
+      "EXPLAIN QUERY PLAN SELECT * FROM users WHERE username = :u     -- expect USING INDEX ix_users_username",
+      "EXPLAIN QUERY PLAN SELECT * FROM tasks WHERE task_type = :t    -- expect USING INDEX ix_tasks_task_type"
+    ],
+    "checks": [
+      "expected 10 indexes; missing: none",
+      "plan(users.username): SEARCH users USING INDEX ix_users_username (username=?)",
+      "plan(tasks.task_type): SEARCH tasks USING INDEX ix_tasks_task_type (task_type=?)"
+    ]
+  },
+  "10. Concurrent database access": {
+    "ok": true,
+    "details": "8x25 concurrent inserts all committed; no lost/duplicate rows",
+    "queries": [
+      "8 threads x 25 INSERT INTO tasks ...   (concurrent writers)",
+      "SELECT COUNT(*) FROM tasks             -- expect 200",
+      "SELECT COUNT(DISTINCT id) FROM tasks   -- PK uniqueness under concurrency",
+      "4 reader threads SELECT during writes  -- isolation check"
+    ],
+    "checks": [
+      "writer errors: none",
+      "total tasks = 200 (expected 200)",
+      "distinct ids = 200 (equal to total: True)",
+      "reader saw monotonically consistent counts (min=3, max=35, all int: True)"
+    ]
+  }
+}

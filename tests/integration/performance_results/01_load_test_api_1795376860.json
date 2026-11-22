@@ -1,0 +1,23 @@
+{
+  "test_name": "01_load_test_api",
+  "timestamp": "2026-11-22T11:47:36.984398",
+  "results": {
+    "concurrent_users": 100,
+    "total_requests": 2000,
+    "successful_requests": 2000,
+    "failed_requests": 0,
+    "total_time_seconds": 3.441572904586792,
+    "avg_response_time_seconds": 0.1490361099243164,
+    "p50_response_time_seconds": 0.15564894676208496,
+    "p95_response_time_seconds": 0.22895479202270508,
+    "p99_response_time_seconds": 0.2781198024749756,
+    "min_response_time_seconds": 0.009821176528930664,
+    "max_response_time_seconds": 0.35828304290771484,
+    "throughput_requests_per_second": 581.1296332948459
+  },
+  "bottlenecks": [],
+  "recommendations": [
+    "Consider adding response caching for /api/agents"
+  ],
+  "duration_seconds": 3.4425370693206787
+}

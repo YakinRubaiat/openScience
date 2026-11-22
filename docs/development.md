@@ -1,133 +1,411 @@
-# Development
+---
+layout: default
+title: Development Setup
+nav_order: 8
+description: "Set up a local development environment for openScience"
+---
 
-Set up a local development environment and run the test suite.
+# Development Setup
+
+This guide gets you from a fresh clone to running tests, formatting code, and submitting your first pull request.
+
+---
 
 ## Prerequisites
 
-- macOS 13+ or Linux (Ubuntu 20.04+, RHEL 8+)
-- Python 3.10+
-- Docker (optional, for the full stack)
-- 16 GB RAM, 50 GB free disk
+| Tool | Version | Purpose |
+|------|---------|---------|
+| Python | 3.10+ | Core language |
+| Git | 2.x+ | Version control |
+| Docker | 20.10+ | Integration tests |
+| Node.js | 18+ | UI development *(optional)* |
+| R | 4.x+ | DESeq2, Seurat agents *(optional)* |
 
-## Setup
+---
+
+## Five-Minute Setup
 
 ```bash
-git clone https://github.com/YakinRubaiat/openScience.git
+# 1. Fork on GitHub, then clone your fork
+git clone https://github.com/YOUR_USERNAME/openScience.git
 cd openScience
 
+# 2. Track the upstream repo
+git remote add upstream https://github.com/YakinRubaiat/openScience.git
+
+# 3. Create a virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
-# Editable install with dev and test extras
-pip install -e ".[dev,test]"
+# 4. Install in development mode
+pip install -e ".[dev,all]"
+
+# 5. Install pre-commit hooks
+pre-commit install
+
+# 6. Run tests to verify
+pytest tests/ -v
 ```
+
+If the suite passes, you're ready to develop.
+
+---
+
+## Step by Step
+
+### 1. Install dependencies
+
+`pyproject.toml` defines several extras:
+
+```bash
+pip install -e ".[dev]"     # core development tools (pytest, black, ruff, mypy)
+pip install -e ".[bio]"     # biopython, scanpy, anndata, pysam
+pip install -e ".[chem]"    # rdkit, openmm
+pip install -e ".[ml]"      # torch, tensorflow, xgboost
+pip install -e ".[viz]"     # dash, bokeh, altair
+pip install -e ".[all]"     # everything
+```
+
+Development dependencies:
+
+- `pytest`, `pytest-asyncio`, `pytest-cov` — tests and coverage
+- `black` — formatter
+- `ruff` — linter
+- `mypy` — static type checker
+- `pre-commit` — git hooks
+
+### 2. Pre-commit hooks
+
+`.pre-commit-config.yaml` runs on every commit:
+
+```bash
+# Install
+pre-commit install
+
+# Run manually against all files
+pre-commit run --all-files
+```
+
+Hooks include:
+
+- `black` (code formatting)
+- `ruff` (lint)
+- `mypy` (type check on changed files)
+- YAML/Markdown formatting checks
+- Large-file and private-key detection
+
+### 3. IDE configuration
+
+**VS Code** (`.vscode/settings.json` — already in repo):
+
+```json
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests/"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "ms-python.black-formatter",
+  "[python]": {
+    "editor.codeActionsOnSave": { "source.organizeImports": true }
+  }
+}
+```
+
+**PyCharm**: set the project interpreter to `./venv/bin/python` and enable pytest as the test runner.
+
+---
 
 ## Project Layout
 
-```
+```text
 openScience/
-├── src/openscience/      # Package source (setuptools src layout)
-│   ├── core/             # ScienceSession, AgentOrchestrator
-│   ├── agents/           # Specialist agent definitions
-│   ├── cli.py            # `openscience` command
-│   └── server.py         # REST API
-├── tests/                # pytest suite
+├── src/openscience/
+│   ├── __init__.py
+│   ├── cli.py                  # CLI entry point
+│   ├── server.py               # Flask REST API
 │   ├── core/
-│   └── api/
-├── docs/                 # This documentation (mkdocs)
-├── docker/               # nginx/prometheus/sql configs
-├── scripts/              # Helper scripts
-├── alembic/              # Database migrations
-├── ui/                   # Web UI source
-├── docker-compose.yml    # Dev stack
-├── pyproject.toml        # Packaging + tool config
-└── mkdocs.yml            # Docs site config
+│   │   ├── session.py          # ScienceSession
+│   │   ├── orchestrator.py     # AgentOrchestrator
+│   │   ├── agent.py            # BaseAgent, AgentMetadata
+│   │   └── sandbox.py          # OS-level sandbox
+│   ├── agents/                 # 100 specialized agents
+│   │   ├── literature/         #   15
+│   │   ├── experiment/         #   15
+│   │   ├── data_management/    #   15
+│   │   ├── analysis/           #   20
+│   │   ├── visualization/      #   15
+│   │   └── writing/            #   20
+│   ├── connectors/             # 60+ database connectors
+│   ├── skills/                 # 150+ scientific tools
+│   └── api/                    # REST endpoints
+├── tests/
+│   ├── agents/                 # per-agent tests
+│   ├── integration/            # end-to-end tests
+│   └── conftest.py             # shared fixtures
+├── docs/                       # this documentation
+├── examples/                   # example projects
+├── scripts/                    # utility scripts
+├── docker/                     # Dockerfiles
+├── docker-compose.yml
+├── pyproject.toml
+└── README.md
 ```
 
-## Running Tests
+---
+
+## Testing
+
+### Run tests
 
 ```bash
-# Full suite
-pytest
-
-# With coverage
-pytest --cov=openscience --cov-report=term-missing
-
-# One file
-pytest tests/core/test_agent.py -v
-
-# Smoke test only
-pytest tests/test_smoke.py
+pytest                          # all tests
+pytest tests/agents/            # agent tests only
+pytest tests/integration/       # end-to-end tests
+pytest -v                       # verbose
+pytest -k "scanpy"              # filter by name
+pytest --maxfail=1 -x           # stop on first failure
 ```
 
-Or in Docker:
+### Coverage
 
 ```bash
-docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
+pytest --cov=openscience --cov-report=html
+open htmlcov/index.html
 ```
+
+Target: **>80% coverage** for new code.
+
+### Async tests
+
+```python
+import pytest
+
+class TestMyAgent:
+    @pytest.mark.asyncio
+    async def test_execute(self):
+        agent = MyAgent()
+        result = await agent.execute(task, context)
+        assert result is not None
+```
+
+### Integration tests with Docker
+
+```bash
+docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+```
+
+---
 
 ## Code Quality
 
-The project uses black, ruff, mypy, and bandit (all configured in
-`pyproject.toml`):
-
 ```bash
 # Format
-black src tests
+black src/ tests/
 
 # Lint
-ruff check src tests
+ruff check src/
+ruff check --fix src/         # auto-fix
 
-# Type-check (strict mode)
-mypy src
-
-# Security scan
-bandit -c pyproject.toml -r src
+# Type check
+mypy src/
 ```
 
-Style rules: line length 100, target Python 3.10.
+Configuration lives in `pyproject.toml`:
 
-## Database Migrations
+```toml
+[tool.black]
+line-length = 100
+target-version = ["py310"]
 
-Schema changes are managed with Alembic:
+[tool.ruff]
+line-length = 100
+target-version = "py310"
 
-```bash
-# Create a migration after changing models
-alembic revision --autogenerate -m "describe the change"
-
-# Apply migrations
-openscience init-db   # or: alembic upgrade head
+[tool.mypy]
+python_version = "3.10"
+strict = true
 ```
 
-## Building the Docs
+---
 
-```bash
-pip install mkdocs
+## Adding a New Agent
 
-# Serve at http://127.0.0.1:8000 (use 8001 if the API is running)
-cd docs
-mkdocs serve --dev-addr 127.0.0.1:8001
+### Step 1 — Create the agent file
 
-# Build a static site into site/
-mkdocs build
+```python
+# src/openscience/agents/analysis/my_agent.py
+
+from openscience.core.agent import BaseAgent, AgentMetadata
+
+
+class MyAgent(BaseAgent):
+    """Short description of what this agent does."""
+
+    metadata = AgentMetadata(
+        name="my_agent",
+        category="analysis",
+        description="One-line description",
+        required_skills=["scanpy"],       # tools it needs
+        input_types=["anndata"],
+        output_types=["results"],
+    )
+
+    async def execute(self, task, context):
+        data = context["data"]
+        result = await self.run_skill(
+            "scanpy", operation="qc",
+            data=data,
+            **task.parameters,
+        )
+        return self.format_result(result, agent=self.metadata.name)
 ```
 
-## Releasing
+### Step 2 — Add tests
+
+```python
+# tests/agents/analysis/test_my_agent.py
+
+import pytest
+from openscience.agents.analysis.my_agent import MyAgent
+
+
+@pytest.mark.asyncio
+async def test_my_agent_metadata():
+    assert MyAgent.metadata.name == "my_agent"
+
+@pytest.mark.asyncio
+async def test_my_agent_execute(sample_anndata):
+    agent = MyAgent(orchestrator=None)
+    # construct task/context, run, assert
+```
+
+### Step 3 — Document
+
+Update `docs/agents.md` with the new agent following the existing format:
+
+```markdown
+### my_agent
+**Category**: Data Analysis
+**Description**: One-line description
+**Skills**: scanpy
+**Input**: anndata
+**Output**: results
+```
+
+### Step 4 — Wire into orchestrator
+
+The orchestrator auto-discovers agents in `src/openscience/agents/`. No registry edit needed if you follow the layout.
+
+---
+
+## Working with Branches
 
 ```bash
-# Version bump happens via CI tags; build artifacts locally with:
+# Sync with upstream
+git fetch upstream
+git checkout main
+git merge upstream/main
+
+# Create a feature branch
+git checkout -b feat/my-agent
+
+# Work, commit, push
+git add -A
+git commit -m "feat: add my_agent"
+git push -u origin feat/my-agent
+```
+
+**Commit message format** (Conventional Commits):
+
+```text
+feat: add new agent
+fix: resolve scanpy memory leak
+docs: update quickstart
+test: add integration test for orchestrator
+refactor: simplify connector caching
+chore: bump dependencies
+```
+
+---
+
+## Building and Releasing
+
+```bash
+# Bump version in pyproject.toml
+
+# Build distribution
 python -m build
-twine check dist/*
+
+# Inspect
+tar tzf dist/openscience-0.1.0.tar.gz
+
+# Upload to PyPI (maintainers only)
+twine upload dist/*
 ```
 
-## CI
+---
 
-GitHub Actions workflows in `.github/workflows/` cover CI (`ci.yml`), Docker
-builds (`docker.yml`), docs (`docs.yml`), releases (`release.yml`), and
-security scanning (`security.yml`).
+## Debugging Tips
 
-## Related
+### Log level
 
-- [Contributing](contributing.md) — PR process and commit conventions
-- [Architecture](architecture.md) — system design
-- [Security](security.md) — security testing expectations
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+```
+
+Or in `openscience.yaml`:
+
+```yaml
+logging:
+  level: DEBUG
+```
+
+### Inspect the orchestrator
+
+```python
+from openscience.core.orchestrator import AgentOrchestrator
+
+orch = AgentOrchestrator()
+print(list(orch.agents.keys()))
+print(orch.route("cluster my scRNA-seq data"))
+```
+
+### VS Code debugger
+
+`.vscode/launch.json`:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "pytest current",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}", "-v"],
+      "console": "integratedTerminal"
+    }
+  ]
+}
+```
+
+---
+
+## Keeping Your Fork in Sync
+
+```bash
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+```
+
+---
+
+## See Also
+
+- [Contributing Guide](contributing.md) — PR process and code of conduct
+- [Architecture](architecture.md) — how it all fits together
+- [Troubleshooting](troubleshooting.md) — dev environment issues

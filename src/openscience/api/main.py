@@ -12,7 +12,7 @@ from slowapi.util import get_remote_address
 
 from openscience.api.config import get_settings
 from openscience.api.database import get_db, init_db
-from openscience.api.deps import register_agents, session_registry
+from openscience.api.deps import register_agents
 from openscience.api.middleware.cors import add_cors_middleware
 from openscience.api.middleware.logging import RequestLoggingMiddleware
 from openscience.api.routes import agents, analysis, auth, sessions
@@ -46,7 +46,7 @@ def create_app() -> FastAPI:
         app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
         app.add_middleware(SlowAPIMiddleware)
 
-    # CORS and logging
+    # CORS and request logging
     add_cors_middleware(app, settings)
     app.add_middleware(RequestLoggingMiddleware)
 
@@ -74,9 +74,17 @@ def create_app() -> FastAPI:
     async def validation_exception_handler(
         request: Request, exc: RequestValidationError
     ) -> JSONResponse:
+        # Pydantic's ``exc.errors()`` can embed arbitrary ``Exception`` objects
+        # (e.g. the ``ValueError`` raised by an ``AfterValidator``) which are
+        # not JSON-serializable; coerce them via ``jsonable_encoder``.
+        from fastapi.encoders import jsonable_encoder
+
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            content={"detail": "Request validation failed", "errors": exc.errors()},
+            content={
+                "detail": "Request validation failed",
+                "errors": jsonable_encoder(exc.errors(), custom_encoder={Exception: str}),
+            },
         )
 
     @app.exception_handler(Exception)
@@ -99,7 +107,7 @@ def create_app() -> FastAPI:
 
     @app.on_event("shutdown")
     def on_shutdown() -> None:
-        session_registry.clear()
+        sessions.live_sessions.clear()
 
     return app
 

@@ -166,3 +166,5 @@ openscience.yaml
 data/
 results/
 figures/
+openscience.db
+.audit_security.db

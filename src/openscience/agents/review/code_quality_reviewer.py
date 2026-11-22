@@ -1,12 +1,12 @@
 """Code Quality Review Agent for openScience."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class CodeQualityReviewerAgent(BaseAgent):
     """
     Agent for reviewing code quality, style, and maintainability.
-    
+
     Reviews code for:
     - PEP 8 compliance
     - Code complexity (cyclomatic complexity)
@@ -29,65 +29,61 @@ class CodeQualityReviewerAgent(BaseAgent):
     async def execute(self, task, context):
         """Execute code quality review."""
         target_path = task.parameters.get("target_path", "src/")
-        
+
         # Run code quality checks
         pylint_results = await self.run_skill(
             "pylint",
             operation="scan",
             path=target_path,
         )
-        
+
         complexity_results = await self.run_skill(
             "radon",
             operation="complexity",
             path=target_path,
         )
-        
+
         formatting_check = await self.run_skill(
             "black",
             operation="check",
             path=target_path,
         )
-        
+
         type_check = await self.run_skill(
             "mypy",
             operation="check",
             path=target_path,
         )
-        
+
         # Analyze code duplication
         duplication_results = await self.run_skill(
             "pylint",
             operation="duplication",
             path=target_path,
         )
-        
+
         pylint_score = self._coerce_score(pylint_results, key="score", default=0)
         formatting_issues = (
-            formatting_check.get("issues", [])
-            if isinstance(formatting_check, dict)
-            else []
+            formatting_check.get("issues", []) if isinstance(formatting_check, dict) else []
         )
-        type_errors = (
-            type_check.get("errors", [])
-            if isinstance(type_check, dict)
-            else []
+        type_errors = type_check.get("errors", []) if isinstance(type_check, dict) else []
+
+        return self.format_result(
+            {
+                "pylint_score": pylint_score,
+                "complexity_metrics": complexity_results,
+                "formatting_issues": formatting_issues,
+                "type_errors": type_errors,
+                "duplication": duplication_results,
+                "recommendations": self._generate_recommendations(
+                    pylint_results,
+                    complexity_results,
+                    formatting_check,
+                    type_check,
+                ),
+            }
         )
 
-        return self.format_result({
-            "pylint_score": pylint_score,
-            "complexity_metrics": complexity_results,
-            "formatting_issues": formatting_issues,
-            "type_errors": type_errors,
-            "duplication": duplication_results,
-            "recommendations": self._generate_recommendations(
-                pylint_results,
-                complexity_results,
-                formatting_check,
-                type_check,
-            ),
-        })
-    
     def _generate_recommendations(self, pylint, complexity, formatting, typing):
         """Generate code quality recommendations.
 
@@ -100,35 +96,42 @@ class CodeQualityReviewerAgent(BaseAgent):
         # --- pylint score ---
         pylint_score = self._coerce_score(pylint, key="score", default=10.0)
         if pylint_score < 8.0:
-            recommendations.append({
-                "priority": "high",
-                "category": "code_quality",
-                "action": "Improve pylint score to 8.0+",
-                "current_score": pylint_score,
-            })
+            recommendations.append(
+                {
+                    "priority": "high",
+                    "category": "code_quality",
+                    "action": "Improve pylint score to 8.0+",
+                    "current_score": pylint_score,
+                }
+            )
 
         # --- complexity: only list-of-dict entries are meaningful ---
         complexity_items = complexity if isinstance(complexity, list) else []
         high_complexity = [
-            f for f in complexity_items
+            f
+            for f in complexity_items
             if isinstance(f, dict) and self._to_number(f.get("complexity"), 0) > 10
         ]
         if high_complexity:
-            recommendations.append({
-                "priority": "medium",
-                "category": "complexity",
-                "action": f"Refactor {len(high_complexity)} complex functions",
-                "functions": [f.get("name", "<unknown>") for f in high_complexity[:5]],
-            })
+            recommendations.append(
+                {
+                    "priority": "medium",
+                    "category": "complexity",
+                    "action": f"Refactor {len(high_complexity)} complex functions",
+                    "functions": [f.get("name", "<unknown>") for f in high_complexity[:5]],
+                }
+            )
 
         # --- typing errors ---
         typing_errors = self._coerce_score(typing, key="error_count", default=0)
         if typing_errors > 0:
-            recommendations.append({
-                "priority": "medium",
-                "category": "typing",
-                "action": f"Fix {int(typing_errors)} type errors",
-            })
+            recommendations.append(
+                {
+                    "priority": "medium",
+                    "category": "typing",
+                    "action": f"Fix {int(typing_errors)} type errors",
+                }
+            )
 
         return recommendations
 

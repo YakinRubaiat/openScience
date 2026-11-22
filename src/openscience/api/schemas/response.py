@@ -1,7 +1,7 @@
 """Response schemas."""
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -48,15 +48,15 @@ class AgentDetail(BaseModel):
     name: str
     category: str
     description: str
-    required_skills: List[str] = Field(default_factory=list)
-    input_types: List[str] = Field(default_factory=list)
-    output_types: List[str] = Field(default_factory=list)
+    required_skills: list[str] = Field(default_factory=list)
+    input_types: list[str] = Field(default_factory=list)
+    output_types: list[str] = Field(default_factory=list)
 
 
 class AgentListResponse(BaseModel):
     """List of available agents."""
 
-    agents: List[AgentDetail]
+    agents: list[AgentDetail]
     total: int
 
 
@@ -69,9 +69,9 @@ class TaskResponse(BaseModel):
     session_id: str
     task_type: str
     description: str
-    parameters: Dict[str, Any] = Field(default_factory=dict)
+    parameters: dict[str, Any] = Field(default_factory=dict)
     status: str
-    result: Optional[Dict[str, Any]] = None
+    result: Optional[dict[str, Any]] = None
     error: Optional[str] = None
     created_at: datetime
 
@@ -87,7 +87,7 @@ class SessionResponse(BaseModel):
     project_dir: Optional[str] = None
     compute_backend: str
     status: str
-    data_keys: List[str] = Field(default_factory=list)
+    data_keys: list[str] = Field(default_factory=list)
     created_at: datetime
     updated_at: datetime
 
@@ -96,5 +96,5 @@ class ResultsResponse(BaseModel):
     """All results recorded for a session."""
 
     session_id: str
-    results: Dict[str, Any]
-    tasks: List[TaskResponse]
+    results: dict[str, Any]
+    tasks: list[TaskResponse]

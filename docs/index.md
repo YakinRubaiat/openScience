@@ -14,7 +14,7 @@ openScience automates the toil between scientific questions and answers — hand
 
 ---
 
-## 🚀 New here? Start with these
+## New here? Start with these
 
 | Guide | Description |
 |-------|-------------|
@@ -24,7 +24,7 @@ openScience automates the toil between scientific questions and answers — hand
 
 ---
 
-## 📚 Core Documentation
+## Core Documentation
 
 ### Architecture and Design
 
@@ -49,7 +49,7 @@ openScience automates the toil between scientific questions and answers — hand
 
 ---
 
-## 🎯 Navigate by Task
+## Navigate by Task
 
 | I want to... | Start here |
 |--------------|------------|
@@ -66,7 +66,7 @@ openScience automates the toil between scientific questions and answers — hand
 
 ---
 
-## 🧬 The Six Workflow Archetypes
+## The Six Workflow Archetypes
 
 openScience organizes its **100 specialized agents** into six categories covering the research lifecycle:
 
@@ -81,7 +81,7 @@ openScience organizes its **100 specialized agents** into six categories coverin
 
 ---
 
-## ⚡ 60-Second Overview
+## 60-Second Overview
 
 ### Python API
 
@@ -112,7 +112,7 @@ open http://localhost:8080
 
 ---
 
-## 📖 Tutorial Examples
+## Tutorial Examples
 
 Step-by-step walkthroughs of complete workflows:
 
@@ -122,7 +122,7 @@ Step-by-step walkthroughs of complete workflows:
 
 ---
 
-## 🆘 Getting Help
+## Getting Help
 
 - **Something broken?** → [Troubleshooting](troubleshooting.md)
 - **Quick question?** → [FAQ](faq.md)

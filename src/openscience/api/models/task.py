@@ -2,11 +2,15 @@
 
 import uuid
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy import JSON, DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from openscience.api.database import Base
+
+if TYPE_CHECKING:
+    from openscience.api.models.session import SessionModel
 
 
 def _uuid() -> str:
@@ -32,6 +36,4 @@ class TaskModel(Base):
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
-    session: Mapped["SessionModel"] = relationship(
-        "SessionModel", back_populates="tasks"
-    )  # noqa: F821
+    session: Mapped["SessionModel"] = relationship("SessionModel", back_populates="tasks")

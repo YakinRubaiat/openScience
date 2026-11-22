@@ -11,7 +11,7 @@ openScience is highly configurable. This guide covers every knob, from API keys 
 
 ---
 
-## 📁 Configuration Files
+## Configuration Files
 
 | File | Purpose | Location | Committed to git? |
 |------|---------|----------|-------------------|
@@ -22,33 +22,33 @@ openScience is highly configurable. This guide covers every knob, from API keys 
 
 **Precedence** (highest wins):
 
-```
+```text
 Project openscience.yaml  >  Environment variables  >  Global config  >  Built-in defaults
 ```
 
 ---
 
-## 🔑 API Keys & Credentials
+## API Keys & Credentials
 
 ### `.env` file
 
 Store secrets in `.env`, never in source code:
 
 ```ini
-# --- LLM providers (pick one or both) ---
+# LLM providers (pick one or both) ---
 OPENAI_API_KEY=sk-your-key
 ANTHROPIC_API_KEY=sk-ant-your-key
 
-# --- Literature databases ---
+# Literature databases ---
 NCBI_API_KEY=your-ncbi-key
 SEMANTIC_SCHOLAR_API_KEY=your-ss-key
 
-# --- Cloud (for remote compute) ---
+# Cloud (for remote compute) ---
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/gcp-key.json
 
-# --- Misc ---
+# Misc ---
 UNPAYWALL_EMAIL=you@institution.edu
 ```
 
@@ -82,7 +82,7 @@ Storage backends:
 
 ---
 
-## ⚙️ Project Configuration (`openscience.yaml`)
+## Project Configuration (`openscience.yaml`)
 
 A full annotated example:
 
@@ -95,7 +95,7 @@ project:
   name: my-research
   description: "PBMC atlas construction"
 
-# ── Compute ──────────────────────────────────────────────
+# Compute ──────────────────────────────────────────────
 compute:
   default: local            # local|slurm|ssh|kubernetes|cloud
 
@@ -115,19 +115,19 @@ compute:
       region: us-east-1
       instance_type: p3.2xlarge
 
-# ── Data locations ───────────────────────────────────────
+# Data locations ───────────────────────────────────────
 data:
   raw_dir: data/raw           # treated as read-only
   processed_dir: data/processed
   cache_dir: .cache/openscience
 
-# ── Outputs ──────────────────────────────────────────────
+# Outputs ──────────────────────────────────────────────
 output:
   results_dir: results
   figures_dir: figures
   notebooks_dir: notebooks
 
-# ── Sandbox (security) ───────────────────────────────────
+# Sandbox (security) ───────────────────────────────────
 sandbox:
   enabled: true
   network_policy: deny_all    # deny_all|allowlist|permissive
@@ -139,20 +139,20 @@ sandbox:
     - file_deletion
     - network_egress
 
-# ── LLM ──────────────────────────────────────────────────
+# LLM ──────────────────────────────────────────────────
 llm:
   provider: openai            # openai|anthropic
   model: gpt-4-turbo
   temperature: 0.1
   max_tokens: 4096
 
-# ── Agents ───────────────────────────────────────────────
+# Agents ───────────────────────────────────────────────
 agents:
   auto_route: true            # false → require explicit specialist
   confidence_threshold: 0.7
   parallel_workers: 4
 
-# ── Connectors ───────────────────────────────────────────
+# Connectors ───────────────────────────────────────────
 connectors:
   pubmed:
     rate_limit: 10            # requests/second
@@ -161,7 +161,7 @@ connectors:
     rate_limit: 5
     cache_ttl: 604800
 
-# ── Logging ──────────────────────────────────────────────
+# Logging ──────────────────────────────────────────────
 logging:
   level: INFO                 # DEBUG|INFO|WARNING|ERROR
   file: logs/openscience.log
@@ -177,7 +177,7 @@ openscience config          # show merged configuration
 
 ---
 
-## 🖥️ Compute Backends
+## Compute Backends
 
 ### Local (default)
 
@@ -253,7 +253,7 @@ compute:
 
 ---
 
-## 🔐 Sandbox Policies
+## Sandbox Policies
 
 Three presets:
 
@@ -285,7 +285,7 @@ sandbox:
 
 ---
 
-## 🤖 LLM Configuration
+## LLM Configuration
 
 ```yaml
 llm:
@@ -308,7 +308,7 @@ llm:
 
 ---
 
-## 🔬 Agent Tuning
+## Agent Tuning
 
 ```yaml
 agents:
@@ -326,7 +326,7 @@ agents:
 
 ---
 
-## 🌍 Connector Tuning
+## Connector Tuning
 
 ```yaml
 connectors:
@@ -342,7 +342,7 @@ connectors:
 
 ---
 
-## 📋 Logging
+## Logging
 
 ```yaml
 logging:
@@ -366,7 +366,7 @@ docker-compose logs -f openscience-worker
 
 ---
 
-## 🧪 Environment Variable Reference
+## Environment Variable Reference
 
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -387,7 +387,7 @@ Environment variables override `openscience.yaml`.
 
 ---
 
-## 🛠️ Common Recipes
+## Common Recipes
 
 ### Use OpenAI for routing, Anthropic for writing
 
@@ -424,7 +424,7 @@ Commit `openscience.yaml`, ignore `.env`, and document required keys in `README.
 
 ---
 
-## ⚠️ Common Pitfalls
+## Common Pitfalls
 
 - 🔴 **Editing the wrong file** — `openscience config` shows the merged result of *all* config layers. Use it to diagnose.
 - 🔴 **Committing `.env`** — secrets leak. Always check `.gitignore`.
@@ -433,7 +433,7 @@ Commit `openscience.yaml`, ignore `.env`, and document required keys in `README.
 
 ---
 
-## ➡️ See Also
+## See Also
 
 - [Getting Started](getting-started.md)
 - [Security](security.md)

@@ -19,8 +19,8 @@ pip install -r requirements-dev.txt
 python -m build
 
 # Output will be in dist/
-# - openscience-0.1.0.tar.gz
-# - openscience-0.1.0-py3-none-any.whl
+# openscience-0.1.0.tar.gz
+# openscience-0.1.0-py3-none-any.whl
 ```
 
 ### Installing the Package
@@ -61,7 +61,7 @@ mypy src/
 
 ### Package Structure
 
-```
+```text
 openscience/
 ├── __init__.py          # Main package exports
 ├── __version__          # Version information
@@ -132,6 +132,8 @@ figure = session.visualize(result, type="umap")
 #### Using Agents Directly
 
 ```python
+import asyncio
+
 from openscience import AgentOrchestrator
 
 # Initialize orchestrator
@@ -141,7 +143,11 @@ orch = AgentOrchestrator()
 agent = orch.agents["security_reviewer"]
 
 # Execute
-result = await agent.execute(task, context)
+async def run():
+    result = await agent.execute(task, context)
+    return result
+
+result = asyncio.run(run())
 ```
 
 #### Using the CLI
@@ -206,7 +212,8 @@ docker-compose up -d
 
 ### Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
+See [CONTRIBUTING.md](https://github.com/YakinRubaiat/openScience/blob/main/CONTRIBUTING.md) for detailed guidelines on:
+
 - Adding new agents
 - Adding new connectors
 - Adding new skills
@@ -216,4 +223,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
 
 ### License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT License - see [LICENSE](https://github.com/YakinRubaiat/openScience/blob/main/LICENSE) for details.

@@ -1,12 +1,12 @@
 """Performance Review Agent for openScience."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class PerformanceReviewerAgent(BaseAgent):
     """
     Agent for reviewing code performance and optimization opportunities.
-    
+
     Reviews:
     - Algorithm complexity
     - Memory usage patterns
@@ -30,43 +30,45 @@ class PerformanceReviewerAgent(BaseAgent):
         """Execute performance review."""
         target_path = task.parameters.get("target_path", "src/")
         runtime_data = task.parameters.get("runtime_data", {})
-        
+
         # Analyze algorithm complexity
         complexity_analysis = self._analyze_complexity(target_path)
-        
+
         # Identify bottlenecks
         bottlenecks = await self.run_skill(
             "py-spy",
             operation="analyze",
             data=runtime_data,
         )
-        
+
         # Check memory usage
         memory_analysis = await self.run_skill(
             "memory-profiler",
             operation="analyze",
             path=target_path,
         )
-        
+
         # Database query analysis
         query_analysis = self._analyze_queries(target_path)
-        
+
         # Async usage review
         async_review = self._review_async_patterns(target_path)
-        
-        return self.format_result({
-            "complexity_analysis": complexity_analysis,
-            "bottlenecks": bottlenecks,
-            "memory_analysis": memory_analysis,
-            "query_analysis": query_analysis,
-            "async_review": async_review,
-            "recommendations": self._generate_performance_recommendations(
-                complexity_analysis,
-                bottlenecks,
-                memory_analysis,
-            ),
-        })
-    
+
+        return self.format_result(
+            {
+                "complexity_analysis": complexity_analysis,
+                "bottlenecks": bottlenecks,
+                "memory_analysis": memory_analysis,
+                "query_analysis": query_analysis,
+                "async_review": async_review,
+                "recommendations": self._generate_performance_recommendations(
+                    complexity_analysis,
+                    bottlenecks,
+                    memory_analysis,
+                ),
+            }
+        )
+
     def _analyze_complexity(self, target_path):
         """Analyze algorithm complexity."""
         return {
@@ -74,7 +76,7 @@ class PerformanceReviewerAgent(BaseAgent):
             "nested_loops": [],
             "recursive_functions": [],
         }
-    
+
     def _analyze_queries(self, target_path):
         """Analyze database queries."""
         return {
@@ -82,7 +84,7 @@ class PerformanceReviewerAgent(BaseAgent):
             "missing_indexes": [],
             "inefficient_queries": [],
         }
-    
+
     def _review_async_patterns(self, target_path):
         """Review async/await patterns."""
         return {
@@ -90,7 +92,7 @@ class PerformanceReviewerAgent(BaseAgent):
             "missing_async_keywords": [],
             "improper_executor_usage": [],
         }
-    
+
     def _generate_performance_recommendations(self, complexity, bottlenecks, memory):
         """Generate performance recommendations.
 
@@ -103,23 +105,27 @@ class PerformanceReviewerAgent(BaseAgent):
 
         bottleneck_items = self._coerce_list(bottlenecks)
         if bottleneck_items:
-            recommendations.append({
-                "priority": "high",
-                "category": "performance",
-                "action": f"Optimize {len(bottleneck_items)} identified bottlenecks",
-                "top_bottlenecks": bottleneck_items[:3],
-            })
+            recommendations.append(
+                {
+                    "priority": "high",
+                    "category": "performance",
+                    "action": f"Optimize {len(bottleneck_items)} identified bottlenecks",
+                    "top_bottlenecks": bottleneck_items[:3],
+                }
+            )
 
         memory_leaks = self._coerce_list(
             memory.get("memory_leaks") if isinstance(memory, dict) else None
         )
         if memory_leaks:
-            recommendations.append({
-                "priority": "critical",
-                "category": "memory",
-                "action": "Fix memory leaks",
-                "leaks": memory_leaks,
-            })
+            recommendations.append(
+                {
+                    "priority": "critical",
+                    "category": "memory",
+                    "action": "Fix memory leaks",
+                    "leaks": memory_leaks,
+                }
+            )
 
         return recommendations
 

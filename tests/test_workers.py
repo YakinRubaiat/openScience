@@ -4,7 +4,7 @@ import pytest
 
 celery = pytest.importorskip("celery", reason="celery not installed")
 
-from openscience.workers.tasks import celery_app, health_check  # noqa: E402
+from openscience.workers.tasks import celery_app, health_check
 
 
 def test_celery_app_config():

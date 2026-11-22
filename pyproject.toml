@@ -45,8 +45,21 @@ viz = [
     "bokeh>=3.1.0",
     "altair>=5.0.0",
 ]
+api = [
+    "fastapi>=0.110.0",
+    "uvicorn>=0.29.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "email-validator>=2.0.0",
+    "PyJWT>=2.8.0",
+    "passlib>=1.7.4",
+    "slowapi>=0.1.9",
+    "httpx>=0.27.0",
+]
 all = [
-    "openscience[bio,chem,ml,viz]",
+    "openscience[bio,chem,ml,viz,api]",
 ]
 dev = [
     "black>=23.0.0",
@@ -66,6 +79,11 @@ test = [
 
 [project.scripts]
 openscience = "openscience.cli:cli"
+openscience-api = "openscience.api.serve:run"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -96,7 +114,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101"]  # assert usage in tests
+"tests/**" = ["S101", "S110", "PLW1510", "RUF012"]  # test-code idioms: asserts, bare except-pass, subprocess without check, fixture-like class attrs
 
 [tool.mypy]
 python_version = "3.10"

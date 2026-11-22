@@ -1,0 +1,17 @@
+{
+  "test_name": "08_concurrent_session_handling",
+  "timestamp": "2026-11-22T11:47:58.455661",
+  "results": {
+    "total_sessions": 50,
+    "successful_sessions": 50,
+    "failed_sessions": 0,
+    "total_time_seconds": 0.4715900421142578,
+    "sessions_per_second": 106.0242913014815
+  },
+  "bottlenecks": [],
+  "recommendations": [
+    "Implement session pooling",
+    "Add rate limiting per session"
+  ],
+  "duration_seconds": 0.47166991233825684
+}

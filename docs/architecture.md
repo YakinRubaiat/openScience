@@ -11,9 +11,9 @@ This document explains how openScience's components interact to deliver agentic 
 
 ---
 
-## 📐 High-Level Overview
+## High-Level Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                      User Interfaces                        │
 │         Web UI │ CLI │ Python API │ Jupyter Notebooks      │
@@ -50,7 +50,7 @@ This document explains how openScience's components interact to deliver agentic 
 
 ---
 
-## 🧱 Layer-by-Layer
+## Layer-by-Layer
 
 ### 1. User Interfaces
 
@@ -114,7 +114,7 @@ The brain. Responsibilities:
 
 Routing algorithm (simplified):
 
-```
+```text
 def route(task_description):
     # 1. Explicit specialist requested? Use it.
     if specialist is not None:
@@ -257,7 +257,7 @@ Agents declare their resource class (`cpu_light`, `cpu_heavy`, `gpu_required`) i
 
 ---
 
-## 🔄 Data Flow: A Complete Example
+## Data Flow: A Complete Example
 
 Trace a request through the system:
 
@@ -268,7 +268,7 @@ result = session.analyze(
 )
 ```
 
-```
+```text
 1. User code
        │
        ▼
@@ -314,9 +314,9 @@ At every arrow, the provenance system records inputs, outputs, timestamps, and t
 
 ---
 
-## 🗄️ State and Persistence
+## State and Persistence
 
-```
+```text
 ScienceSession
 ├── project_dir         # on disk
 ├── _data: Dict         # in memory (datasets)
@@ -336,7 +336,7 @@ For heavy datasets, the orchestrator stores **references** (paths) rather than f
 
 ---
 
-## 🔒 Security by Design
+## Security by Design
 
 | Threat | Mitigation |
 |--------|-----------|
@@ -350,7 +350,7 @@ Details: [Security Policies](security.md).
 
 ---
 
-## 📈 Scalability
+## Scalability
 
 - **Vertical**: agents request CPU/RAM via metadata; backend router allocates
 - **Horizontal**: tasks ship to SLURM/K8s workers
@@ -359,7 +359,7 @@ Details: [Security Policies](security.md).
 
 ---
 
-## 🔭 Design Trade-offs
+## Design Trade-offs
 
 | Decision | Why | Alternative rejected |
 |----------|-----|---------------------|
@@ -371,7 +371,7 @@ Details: [Security Policies](security.md).
 
 ---
 
-## ➡️ Related Reading
+## Related Reading
 
 - [Agent Catalog](agents.md) — what each agent does
 - [API Reference](api.md) — calling conventions

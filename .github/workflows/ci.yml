@@ -131,6 +131,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev,test]"
+          # Optional full-stack deps (API, workers) when the repo provides them.
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
 
       - name: Test with pytest
         run: |

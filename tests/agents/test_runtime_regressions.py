@@ -69,12 +69,12 @@ class TestCodeQualityReviewerFix:
             {"name": "f2", "complexity": 3},
         ]
 
-        async def skill(name, operation, **kwargs):
-            if name == "radon":
+        async def skill(skill_name, operation, **kwargs):
+            if skill_name == "radon":
                 return complexity_list
-            if name == "pylint":
+            if skill_name == "pylint":
                 return {"score": 9.5}
-            if name == "mypy":
+            if skill_name == "mypy":
                 return {"error_count": 0}
             return {"issues": []}
 
@@ -165,8 +165,8 @@ class TestPerformanceReviewerFix:
 
         print("PYTHON:", sys.version)
 
-        async def skill(name, operation, **kwargs):
-            if name == "py-spy":
+        async def skill(skill_name, operation, **kwargs):
+            if skill_name == "py-spy":
                 return [{"fn": f"f{i}"} for i in range(5)]
             return {"memory_leaks": []}
 
