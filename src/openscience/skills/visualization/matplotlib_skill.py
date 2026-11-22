@@ -292,11 +292,8 @@ def _correlation_matrix(df: pd.DataFrame, ax=None, palette=None, **kw):
     cbar.ax.tick_params(labelsize=5, width=0.5, length=2)
     cbar.outline.set_linewidth(0.5)
 
-    # rotate long y tick labels so they don't clip the right edge
-    for lbl in ax.get_yticklabels():
-        lbl.set_rotation(0)
-        lbl.set_ha("right")
-    ax.tick_params(axis="y", pad=1)
+    # bottom-right tick label tends to clip; pad the figure side
+    fig.subplots_adjust(right=0.88)
     return fig, ax
 
 

@@ -90,7 +90,7 @@
     {
       "name": "verify_artifacts",
       "ok": true,
-      "msg": "all 18 files present, total 1266 KiB",
+      "msg": "all 18 files present, total 1260 KiB",
       "error": null,
       "artifacts": []
     }

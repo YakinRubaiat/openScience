@@ -76,6 +76,11 @@ def run(
     )
     kw = {k: v for k, v in kw.items() if v is not None}
 
+    # Default to Okabe-Ito when caller did not provide an explicit palette
+    if "palette" not in kw or kw["palette"] is None:
+        kw["palette"] = ["#0072B2", "#D55E00", "#009E73", "#CC79A7",
+                         "#E69F00", "#56B4E9", "#F0E442", "#000000"]
+
     if plot_type == "boxplot":
         sns.boxplot(**kw, linewidth=0.6, fliersize=1.5, width=0.6)
     elif plot_type == "violin":

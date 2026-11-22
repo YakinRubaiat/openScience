@@ -115,7 +115,8 @@ class TestDockerAPIIntegration:
     """Bring up db + api services via Compose and verify integration."""
 
     @pytest.fixture(scope="class")
-    def compose_stack(self, tmp_path_factory):
+    @classmethod
+    def compose_stack(cls, tmp_path_factory):
         if shutil.which("docker") is None:
             pytest.skip("docker unavailable")
         try:
@@ -214,7 +215,7 @@ class TestDockerAPIIntegration:
             import openscience.api.database as db_mod
 
             db_mod.reset_engine()
-            db_mod.init_db("postgresql://test:test@localhost:55432/openscience_it")
+            db_mod.init_db("postgresql+psycopg2://test:test@localhost:55432/openscience_it")
             cur.execute(
                 "SELECT tablename FROM pg_tables WHERE schemaname='public' " "ORDER BY tablename"
             )
