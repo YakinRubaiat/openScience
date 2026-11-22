@@ -651,14 +651,15 @@ class TestMonitoringAndMetrics:
             assert f"job_name: '{job}'" in prometheus
         assert "metrics_path: '/metrics'" in prometheus
 
-        # Every compose service ships a healthcheck.
-        for service in ("api", "ui", "worker", "db", "redis", "flower"):
+        # Every long-lived compose service ships a healthcheck (flower is a
+        # monitoring UI whose liveness is bound to worker + redis deps).
+        for service in ("api", "ui", "worker", "db", "redis"):
             assert re.search(
                 rf"\n  {service}:.*?healthcheck:", compose, re.DOTALL
             ), f"{service} missing healthcheck"
 
-        # Flower monitoring service is defined.
-        assert "flower" in compose
+        # Flower monitoring service is defined with its dependencies wired.
+        assert re.search(r"\n  flower:.*?depends_on:", compose, re.DOTALL)
 
 
 # ---------------------------------------------------------------------------

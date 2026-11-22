@@ -93,31 +93,45 @@ def _volcano(df: pd.DataFrame, ax=None, palette=None, **kw):
     label_n = int(kw.get("label_top", 6))
     if "gene" in df.columns and label_n > 0:
         top = df.loc[sig].nsmallest(label_n, "padj").reset_index(drop=True)
-        # simple repulsion: stagger labels vertically per log2fc side
-        for side, ha, dx in ((True, "left", 5), (False, "right", -5)):
-            sub = top.loc[top["log2FoldChange"] > 0 if side
-                          else top["log2FoldChange"] <= 0].sort_values(
-                              "padj").reset_index(drop=True)
-            n_side = len(sub)
-            # Spread dy across a band on the side of the points
-            for k, (_, row) in enumerate(sub.iterrows()):
-                x = float(row["log2FoldChange"])
-                y = -np.log10(max(float(row["padj"]), 1e-300))
-                # Place labels in a vertical column on the outer side,
-                # alternating up/down to avoid stacking.
-                spacing = 8
-                band = (n_side - 1) * spacing / 2.0
-                dy = (k * spacing) - band if side else -((k * spacing) - band)
-                ax.annotate(
-                    str(row["gene"]),
-                    (x, y),
-                    xytext=(dx, dy),
-                    textcoords="offset points",
-                    fontsize=5, style="italic", ha=ha,
-                    va="center",
-                    arrowprops=dict(arrowstyle="-", lw=0.3, color="0.4",
-                                    shrinkA=0, shrinkB=1),
-                )
+
+        # Compute y-range to convert offset points -> data coords.
+        y_pts = (-np.log10(np.clip(top["padj"].to_numpy(float),
+                                   1e-300, None)))
+        x_pts = top["log2FoldChange"].to_numpy(float)
+        y_range = float(neg_log10p.max() - 0) or 1.0
+
+        # Try to use adjustText when available; otherwise fall back to a
+        # simple bounded stagger in fractions of the y-axis range.
+        try:
+            from adjustText import adjust_text  # type: ignore
+            texts = []
+            for x, y, name in zip(x_pts, y_pts, top["gene"]):
+                texts.append(ax.text(x, y, str(name), fontsize=5,
+                                     style="italic"))
+            adjust_text(texts, ax=ax, arrowprops=dict(
+                arrowstyle="-", lw=0.3, color="0.4"))
+        except ImportError:
+            # No adjustText: spread labels in data coords to avoid overlap.
+            for side_mask, ha, x_off in ((x_pts > 0, "left", 0.05),
+                                        (x_pts <= 0, "right", -0.05)):
+                sub = top.loc[side_mask].sort_values("padj")
+                n_side = len(sub)
+                if n_side == 0:
+                    continue
+                # distribute labels evenly across the top half of the y-axis
+                slots = np.linspace(0.55, 0.97, n_side) * y_range
+                for (idx, row), slot_y in zip(sub.iterrows(), slots):
+                    x = float(row["log2FoldChange"])
+                    y = -np.log10(max(float(row["padj"]), 1e-300))
+                    ax.annotate(
+                        str(row["gene"]),
+                        xy=(x, y),
+                        xytext=(x + x_off * y_range if side_mask.any() and x > 0
+                                else x + x_off * y_range, slot_y),
+                        fontsize=5, style="italic", ha=ha, va="center",
+                        arrowprops=dict(arrowstyle="-", lw=0.3, color="0.4",
+                                        shrinkA=0, shrinkB=1),
+                    )
 
     ax.set_xlabel(r"log$_2$ fold change")
     ax.set_ylabel(r"$-\log_{10}$ adjusted $P$")

@@ -1,6 +1,7 @@
 """FastAPI application factory for the openScience REST API."""
 
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
@@ -22,6 +23,21 @@ from openscience.core.session import ScienceSession
 logger = logging.getLogger("openscience.api")
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application startup/shutdown lifecycle."""
+    settings = get_settings()
+    init_db()
+    db = next(get_db())
+    try:
+        reference = ScienceSession(sandbox_enabled=settings.sandbox_enabled)
+        register_agents(db, reference.orchestrator)
+    finally:
+        db.close()
+    yield
+    sessions.live_sessions.clear()
+
+
 def create_app() -> FastAPI:
     """Build and configure the FastAPI application."""
     settings = get_settings()
@@ -33,6 +49,7 @@ def create_app() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc",
         openapi_url="/openapi.json",
+        lifespan=lifespan,
         responses={
             422: {"model": ErrorResponse, "description": "Validation error"},
             500: {"model": ErrorResponse, "description": "Internal server error"},
@@ -74,17 +91,17 @@ def create_app() -> FastAPI:
     async def validation_exception_handler(
         request: Request, exc: RequestValidationError
     ) -> JSONResponse:
-        # Pydantic's ``exc.errors()`` can embed arbitrary ``Exception`` objects
-        # (e.g. the ``ValueError`` raised by an ``AfterValidator``) which are
-        # not JSON-serializable; coerce them via ``jsonable_encoder``.
-        from fastapi.encoders import jsonable_encoder
-
+        # ``ctx`` may contain raw Exception objects which are not JSON
+        # serializable; stringify everything defensively.
+        errors = []
+        for error in exc.errors():
+            safe = {k: (str(v) if k == "ctx" else v) for k, v in error.items()}
+            if isinstance(safe.get("ctx"), dict):
+                safe["ctx"] = {k: str(v) for k, v in safe["ctx"].items()}
+            errors.append(safe)
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            content={
-                "detail": "Request validation failed",
-                "errors": jsonable_encoder(exc.errors(), custom_encoder={Exception: str}),
-            },
+            content={"detail": "Request validation failed", "errors": errors},
         )
 
     @app.exception_handler(Exception)
@@ -94,20 +111,6 @@ def create_app() -> FastAPI:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"detail": "Internal server error"},
         )
-
-    @app.on_event("startup")
-    def on_startup() -> None:
-        init_db()
-        db = next(get_db())
-        try:
-            reference = ScienceSession(sandbox_enabled=settings.sandbox_enabled)
-            register_agents(db, reference.orchestrator)
-        finally:
-            db.close()
-
-    @app.on_event("shutdown")
-    def on_shutdown() -> None:
-        sessions.live_sessions.clear()
 
     return app
 
