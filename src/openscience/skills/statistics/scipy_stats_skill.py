@@ -54,8 +54,8 @@ def mannwhitney(group1: Any = None, group2: Any = None, **kwargs: Any) -> dict[s
         "u_statistic": float(u),
         "p_value": float(p),
         "rank_biserial_r": float(rbc),
-        "n1": int(len(g1)),
-        "n2": int(len(g2)),
+        "n1": len(g1),
+        "n2": len(g2),
         "significant_at_005": bool(p < 0.05),
     }
 

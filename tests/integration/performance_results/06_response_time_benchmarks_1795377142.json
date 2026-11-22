@@ -1,0 +1,30 @@
+{
+  "test_name": "06_response_time_benchmarks",
+  "timestamp": "2026-11-22T11:52:21.618816",
+  "results": {
+    "iterations": 100,
+    "endpoint_benchmarks": {
+      "/health": {
+        "min": 0.002117156982421875,
+        "max": 0.008043050765991211,
+        "avg": 0.0029660868644714356,
+        "p50": 0.0027379989624023438,
+        "p95": 0.004472017288208008,
+        "p99": 0.008043050765991211
+      },
+      "/api/agents": {
+        "min": 0.0028710365295410156,
+        "max": 0.00447392463684082,
+        "avg": 0.0035327863693237305,
+        "p50": 0.0034942626953125,
+        "p95": 0.004198789596557617,
+        "p99": 0.00447392463684082
+      }
+    }
+  },
+  "bottlenecks": [],
+  "recommendations": [
+    "Implement endpoint-specific caching strategies"
+  ],
+  "duration_seconds": 0.6501572132110596
+}

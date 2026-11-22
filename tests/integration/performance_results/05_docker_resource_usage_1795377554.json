@@ -1,0 +1,28 @@
+{
+  "test_name": "05_docker_resource_usage",
+  "timestamp": "2026-11-22T11:59:03.245401",
+  "results": {
+    "docker_available": true,
+    "containers_running": 6,
+    "container_names": [
+      "openscience-ui",
+      "openscience-flower",
+      "openscience-api",
+      "openscience-worker",
+      "openscience-db",
+      "openscience-redis"
+    ],
+    "container_openscience-ui_stats": "0.00%|7.734MiB / 7.651GiB|18.9kB / 18.9kB|238kB / 8.19kB",
+    "container_openscience-flower_stats": "53.85%|108.4MiB / 7.651GiB|322kB / 291kB|426kB / 0B",
+    "container_openscience-api_stats": "0.29%|64.84MiB / 7.651GiB|6.41MB / 72.4MB|7.43MB / 0B",
+    "container_openscience-worker_stats": "53.40%|213.4MiB / 7.651GiB|477kB / 494kB|1.76MB / 0B",
+    "container_openscience-db_stats": "0.00%|28.55MiB / 7.651GiB|2.37kB / 126B|10.2MB / 623kB",
+    "container_openscience-redis_stats": "0.92%|10.94MiB / 7.651GiB|796kB / 804kB|6.33MB / 356kB"
+  },
+  "bottlenecks": [],
+  "recommendations": [
+    "Monitor container resource limits in production",
+    "Set appropriate CPU and memory limits"
+  ],
+  "duration_seconds": 11.640034914016724
+}

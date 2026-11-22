@@ -1,0 +1,124 @@
+{
+  "repo": "/Users/srubaiat/openScience",
+  "outdir": "/Users/srubaiat/openScience/experiments/figure_generation",
+  "agents_loaded": 111,
+  "steps": [
+    {
+      "name": "color_palette_designer",
+      "ok": true,
+      "msg": "got 4 palettes",
+      "error": null,
+      "artifacts": []
+    },
+    {
+      "name": "panel_volcano",
+      "ok": true,
+      "msg": "3 file(s): ['panel_a_volcano.pdf', 'panel_a_volcano.png', 'panel_a_volcano.svg']",
+      "error": null,
+      "artifacts": [
+        "panel_a_volcano.pdf",
+        "panel_a_volcano.png",
+        "panel_a_volcano.svg"
+      ]
+    },
+    {
+      "name": "panel_heatmap",
+      "ok": true,
+      "msg": "3 file(s): ['panel_b_heatmap.pdf', 'panel_b_heatmap.png', 'panel_b_heatmap.svg']",
+      "error": null,
+      "artifacts": [
+        "panel_b_heatmap.pdf",
+        "panel_b_heatmap.png",
+        "panel_b_heatmap.svg"
+      ]
+    },
+    {
+      "name": "panel_kaplan_meier",
+      "ok": true,
+      "msg": "3 file(s): ['panel_c_kaplan_meier.pdf', 'panel_c_kaplan_meier.png', 'panel_c_kaplan_meier.svg']",
+      "error": null,
+      "artifacts": [
+        "panel_c_kaplan_meier.pdf",
+        "panel_c_kaplan_meier.png",
+        "panel_c_kaplan_meier.svg"
+      ]
+    },
+    {
+      "name": "panel_correlation_matrix",
+      "ok": true,
+      "msg": "3 file(s): ['panel_d_correlation.pdf', 'panel_d_correlation.png', 'panel_d_correlation.svg']",
+      "error": null,
+      "artifacts": [
+        "panel_d_correlation.pdf",
+        "panel_d_correlation.png",
+        "panel_d_correlation.svg"
+      ]
+    },
+    {
+      "name": "layout_composer",
+      "ok": true,
+      "msg": "panels=4, files=['figure1_multipanel.pdf', 'figure1_multipanel.png', 'figure1_multipanel.svg']",
+      "error": null,
+      "artifacts": [
+        "figure1_multipanel.pdf",
+        "figure1_multipanel.png",
+        "figure1_multipanel.svg"
+      ]
+    },
+    {
+      "name": "matplotlib_stylist_restyle",
+      "ok": true,
+      "msg": "re-styled + re-saved Nature format",
+      "error": null,
+      "artifacts": [
+        "figure1_multipanel_nature_styled.pdf",
+        "figure1_multipanel_nature_styled.png",
+        "figure1_multipanel_nature_styled.svg"
+      ]
+    },
+    {
+      "name": "seaborn_stylist_boxplot",
+      "ok": true,
+      "msg": "files=['panel_e_protein_boxplot.pdf', 'panel_e_protein_boxplot.png', 'panel_e_protein_boxplot.svg']",
+      "error": null,
+      "artifacts": [
+        "panel_e_protein_boxplot.pdf",
+        "panel_e_protein_boxplot.png",
+        "panel_e_protein_boxplot.svg"
+      ]
+    },
+    {
+      "name": "verify_artifacts",
+      "ok": true,
+      "msg": "all 18 files present, total 1266 KiB",
+      "error": null,
+      "artifacts": []
+    }
+  ],
+  "artifacts": [
+    "experiment.log",
+    "experiment_summary.json",
+    "figure1_multipanel.pdf",
+    "figure1_multipanel.png",
+    "figure1_multipanel.svg",
+    "figure1_multipanel_nature_styled.pdf",
+    "figure1_multipanel_nature_styled.png",
+    "figure1_multipanel_nature_styled.svg",
+    "panel_a_volcano.pdf",
+    "panel_a_volcano.png",
+    "panel_a_volcano.svg",
+    "panel_b_heatmap.pdf",
+    "panel_b_heatmap.png",
+    "panel_b_heatmap.svg",
+    "panel_c_kaplan_meier.pdf",
+    "panel_c_kaplan_meier.png",
+    "panel_c_kaplan_meier.svg",
+    "panel_d_correlation.pdf",
+    "panel_d_correlation.png",
+    "panel_d_correlation.svg",
+    "panel_e_protein_boxplot.pdf",
+    "panel_e_protein_boxplot.png",
+    "panel_e_protein_boxplot.svg",
+    "run_figure_experiment.py"
+  ]
+}

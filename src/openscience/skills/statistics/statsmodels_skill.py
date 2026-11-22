@@ -99,7 +99,6 @@ def ttest(
     Accepts raw arrays (``group1``/``group2``) or a ``parameters`` wrapper
     containing ``group1``/``group2`` (agents pass parameters through).
     """
-    from scipy import stats as sp_stats
     from statsmodels.stats.weightstats import CompareMeans, DescrStatsW
 
     if isinstance(group1, dict) and "group1" in group1:  # un-wrap parameters dict
@@ -113,8 +112,11 @@ def ttest(
         raise ValueError("ttest requires group1 and group2 arrays")
 
     g1, g2 = np.asarray(group1, dtype=float), np.asarray(group2, dtype=float)
-    cm = CompareMeans(DescrStatsW(g1), DescrStatsW(g2))
-    tstat, pval, df = cm.ttest_ind(alternative="two-sided", usevar="unequal" if not equal_var else "pooled")
+    # CompareMeans(d2, d1) so diff/t-stat = mean_group2 − mean_group1 (treatment − control).
+    cm = CompareMeans(DescrStatsW(g2), DescrStatsW(g1))
+    tstat, pval, df = cm.ttest_ind(
+        alternative="two-sided", usevar="unequal" if not equal_var else "pooled"
+    )
 
     # Effect sizes
     m1, m2 = g1.mean(), g2.mean()
@@ -129,8 +131,8 @@ def ttest(
 
     return {
         "test": "Welch t-test" if not equal_var else "Student t-test",
-        "n1": int(len(g1)),
-        "n2": int(len(g2)),
+        "n1": len(g1),
+        "n2": len(g2),
         "mean_group1": float(m1),
         "mean_group2": float(m2),
         "sd_group1": float(s1),
@@ -167,7 +169,7 @@ def ols(y: Any, X: Any, feature_names: Any = None, **kwargs: Any) -> dict[str, A
 
     return {
         "test": "OLS regression",
-        "n": int(len(y)),
+        "n": len(y),
         "r_squared": float(model.rsquared),
         "adj_r_squared": float(model.rsquared_adj),
         "f_statistic": float(model.fvalue),

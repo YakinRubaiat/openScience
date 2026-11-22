@@ -9,7 +9,9 @@ from collections import Counter, defaultdict
 from typing import Any
 
 
-def run(operation: str, parameters: dict = None, context: dict = None, **kwargs) -> dict:
+def run(
+    operation: str, parameters: dict | None = None, context: dict | None = None, **kwargs
+) -> dict:
     if operation != "run":
         raise ValueError(f"Unsupported operation: {operation}")
     parameters = parameters or {}
@@ -45,30 +47,51 @@ def _tfidf_topics(docs: list[str], n_topics: int, n_top_words: int) -> list[dict
         from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, TfidfVectorizer
 
         stop = list(ENGLISH_STOP_WORDS) + [
-            "crispr", "cas9", "cancer", "gene", "editing", "cell", "cells",
-            "therapy", "treatment", "tumor", "tumour", "patient", "patients",
-            "may", "using", "based", "study", "studies", "results", "however",
-            "also", "including", "used", "use", "review",
+            "crispr",
+            "cas9",
+            "cancer",
+            "gene",
+            "editing",
+            "cell",
+            "cells",
+            "therapy",
+            "treatment",
+            "tumor",
+            "tumour",
+            "patient",
+            "patients",
+            "may",
+            "using",
+            "based",
+            "study",
+            "studies",
+            "results",
+            "however",
+            "also",
+            "including",
+            "used",
+            "use",
+            "review",
         ]
         n_topics = max(1, min(n_topics, len(docs) - 1))
-        vec = TfidfVectorizer(
-            max_features=2000, stop_words=stop, ngram_range=(1, 2), min_df=1
-        )
+        vec = TfidfVectorizer(max_features=2000, stop_words=stop, ngram_range=(1, 2), min_df=1)
         X = vec.fit_transform(docs)
         if X.shape[1] < n_topics:
             n_topics = max(1, X.shape[1])
         nmf = NMF(n_components=n_topics, random_state=42, init="nndsvda", max_iter=400)
-        W = nmf.fit_transform(X)
+        nmf.fit_transform(X)
         H = nmf.components_
         feat = vec.get_feature_names_out()
         topics = []
         for i, row in enumerate(H):
             top_idx = row.argsort()[::-1][:n_top_words]
-            topics.append({
-                "topic_id": i,
-                "top_words": [feat[j] for j in top_idx],
-                "weight_sum": float(row.sum()),
-            })
+            topics.append(
+                {
+                    "topic_id": i,
+                    "top_words": [feat[j] for j in top_idx],
+                    "weight_sum": float(row.sum()),
+                }
+            )
         return topics
     except Exception:
         # Pure-python fallback: just term frequency
@@ -117,12 +140,14 @@ def _emerging(papers: list[dict], recent_years: int = 2) -> list[dict]:
         old_share = old_n / max(old_total, 1)
         new_share = new_n / max(new_total, 1)
         if new_share > old_share and new_n >= 2:
-            emerging.append({
-                "term": term,
-                "old_share": round(old_share, 4),
-                "new_share": round(new_share, 4),
-                "delta": round(new_share - old_share, 4),
-                "new_count": new_n,
-            })
+            emerging.append(
+                {
+                    "term": term,
+                    "old_share": round(old_share, 4),
+                    "new_share": round(new_share, 4),
+                    "delta": round(new_share - old_share, 4),
+                    "new_count": new_n,
+                }
+            )
     emerging.sort(key=lambda x: x["delta"], reverse=True)
     return emerging[:20]

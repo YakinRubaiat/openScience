@@ -1,0 +1,85 @@
+# Jekyll configuration for GitHub Pages
+title: openScience Documentation
+description: An open-source AI workbench for scientific research
+
+# Theme
+theme: just-the-docs
+
+# URL settings
+url: "https://yakinrubaiat.github.io"
+baseurl: "/openScience"
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+
+# Navigation
+aux_links:
+  "GitHub":
+    - "//github.com/YakinRubaiat/openScience"
+
+# Footer content
+footer_content: "Copyright &copy; 2025 openScience Contributors. MIT License."
+
+# Color scheme
+color_scheme: dark
+
+# Search
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s\-/]+/
+  rel_url: true
+
+# Heading anchors
+heading_anchors: true
+
+# Back to top
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Exclude from build
+exclude:
+  - "*.py"
+  - "*.sh"
+  - "*.ipynb"
+  - "*.mdx"
+  - .git/
+  - .github/
+  - venv/
+  - node_modules/
+
+# Collections (for examples as a group)
+collections:
+  examples:
+    output: false
+    permalink: /examples/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+  - scope:
+      path: "examples"
+    values:
+      layout: default
+      parent: Examples
+
+# Plugins (GitHub Pages supported)
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag

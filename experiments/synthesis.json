@@ -1,0 +1,955 @@
+{
+  "topic": "CRISPR gene editing in cancer therapy",
+  "n_papers": 60,
+  "n_summarized": 30,
+  "paper_summaries": [
+    {
+      "pmid": "35189910",
+      "title": "Current applications and future perspective of CRISPR/Cas9 gene editing in cancer.",
+      "year": 2022,
+      "journal": "Molecular cancer",
+      "authors": [
+        "Wang Si-Wei",
+        "Gao Chao",
+        "Zheng Yi-Min",
+        "Yi Li",
+        "Lu Jia-Cheng"
+      ],
+      "n_authors": 10,
+      "abstract_excerpt": "Clustered regularly interspaced short palindromic repeats (CRISPR) system provides adaptive immunity against plasmids and phages in prokaryotes. In addition, we introduce CRISPR/Cas9 system delivery vectors and finally demonstrate the potential of CRISPR/Cas9 engineering to enhance the effect of adoptive T cell therapy (ACT) and reduce adverse reactions..",
+      "mesh_terms": [
+        "Animals",
+        "CRISPR-Cas Systems",
+        "Gene Editing",
+        "Genomics",
+        "Humans",
+        "Neoplasms",
+        "Oncogenes"
+      ],
+      "doi": "10.1186/s12943-022-01518-8"
+    },
+    {
+      "pmid": "35194172",
+      "title": "CRISPR in cancer biology and therapy.",
+      "year": 2022,
+      "journal": "Nature reviews. Cancer",
+      "authors": [
+        "Katti Alyna",
+        "Diaz Bianca J",
+        "Caragine Christina M",
+        "Sanjana Neville E",
+        "Dow Lukas E"
+      ],
+      "n_authors": 5,
+      "abstract_excerpt": "Over the past decade, CRISPR has become as much a verb as it is an acronym, transforming biomedical research and providing entirely new approaches for dissecting all facets of cell biology. Here, we review the progress made in the development of CRISPR systems as a tool to study cancer, and the emerging adaptation of these technologies to improve diagnosis and treatment..",
+      "mesh_terms": [
+        "Biology",
+        "CRISPR-Cas Systems",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Gene Editing",
+        "Genome",
+        "Humans",
+        "Neoplasms"
+      ],
+      "doi": "10.1038/s41568-022-00441-w"
+    },
+    {
+      "pmid": "38003514",
+      "title": "CRISPR/Cas9-Mediated Genome Editing in Cancer Therapy.",
+      "year": 2023,
+      "journal": "International journal of molecular sciences",
+      "authors": [
+        "Ding Shuai",
+        "Liu Jinfeng",
+        "Han Xin",
+        "Tang Mengfan"
+      ],
+      "n_authors": 4,
+      "abstract_excerpt": "The Clustered Regularly Interspaced Short Palindromic Repeats/CRISPR-associated protein 9 (CRISPR/Cas9) system, an RNA-based adaptive immune system found in bacteria and archaea, has catalyzed the development and application of a new generation of gene editing tools. We also briefly discuss the primary challenges faced by CRISPR technology and existing solutions, intending to enhance the efficacy of this gene editing therapy and shed light on the underlying mechanisms of tumors..",
+      "mesh_terms": [
+        "Humans",
+        "Gene Editing",
+        "CRISPR-Cas Systems",
+        "CRISPR-Associated Protein 9",
+        "RNA",
+        "Neoplasms"
+      ],
+      "doi": "10.3390/ijms242216325"
+    },
+    {
+      "pmid": "40845844",
+      "title": "Genome-wide CRISPR screens identify critical targets to enhance CAR-NK cell antitumor potency.",
+      "year": 2025,
+      "journal": "Cancer cell",
+      "authors": [
+        "Biederst\u00e4dt Alexander",
+        "Basar Rafet",
+        "Park Jeong-Min",
+        "Uprety Nadima",
+        "Shrestha Rejeena"
+      ],
+      "n_authors": 36,
+      "abstract_excerpt": "Adoptive cell therapy using engineered natural killer (NK) cells is a promising approach for cancer treatment, with targeted gene editing offering the potential to further enhance their therapeutic efficacy. Through high-content genome-wide CRISPR screening in NK cells, this study reveals critical regulators of NK cell function and provides a valuable resource for engineering next-generation NK cell therapies with improved efficacy against cancer..",
+      "mesh_terms": [
+        "Humans",
+        "Killer Cells, Natural",
+        "Immunotherapy, Adoptive",
+        "Animals",
+        "Gene Editing",
+        "Mice",
+        "CRISPR-Cas Systems",
+        "Receptors, Chimeric Antigen"
+      ],
+      "doi": "10.1016/j.ccell.2025.07.021"
+    },
+    {
+      "pmid": "33339441",
+      "title": "Various Aspects of a Gene Editing System-CRISPR-Cas9.",
+      "year": 2020,
+      "journal": "International journal of molecular sciences",
+      "authors": [
+        "Janik Edyta",
+        "Niemcewicz Marcin",
+        "Ceremuga Michal",
+        "Krzowski Lukasz",
+        "Saluk-Bijak Joanna"
+      ],
+      "n_authors": 6,
+      "abstract_excerpt": "The discovery of clustered, regularly interspaced short palindromic repeats (CRISPR) and their cooperation with CRISPR-associated (Cas) genes is one of the greatest advances of the century and has marked their application as a powerful genome engineering tool. We also describe on the applications of this technology in gene regulation and genome editing; the treatment of cancer and other diseases; and limitations and concerns of the use of CRISPR-Cas9..",
+      "mesh_terms": [
+        "Animals",
+        "CRISPR-Cas Systems",
+        "Epigenesis, Genetic",
+        "Gene Editing",
+        "Genetic Therapy",
+        "Humans"
+      ],
+      "doi": "10.3390/ijms21249604"
+    },
+    {
+      "pmid": "36797756",
+      "title": "Recent advances and applications of CRISPR-Cas9 in cancer immunotherapy.",
+      "year": 2023,
+      "journal": "Molecular cancer",
+      "authors": [
+        "Liu Zaoqu",
+        "Shi Meixin",
+        "Ren Yuqing",
+        "Xu Hui",
+        "Weng Siyuan"
+      ],
+      "n_authors": 13,
+      "abstract_excerpt": "The incidence and mortality of cancer are the major health issue worldwide. Finally, we discuss the CRISPR-Cas9-based genome-wide screening for target identification, emphasis the potential of spatial CRISPR genomics, and present the comprehensive application and challenges in basic research, translational medicine and clinics of CRISPR-Cas9..",
+      "mesh_terms": [
+        "Humans",
+        "CRISPR-Cas Systems",
+        "Genetic Therapy",
+        "Gene Editing",
+        "Immunotherapy",
+        "Neoplasms"
+      ],
+      "doi": "10.1186/s12943-023-01738-6"
+    },
+    {
+      "pmid": "33238136",
+      "title": "CRISPR-Cas9: A Preclinical and Clinical Perspective for the Treatment of Human Diseases.",
+      "year": 2021,
+      "journal": "Molecular therapy : the journal of the American Society of Gene Therapy",
+      "authors": [
+        "Sharma Garima",
+        "Sharma Ashish Ranjan",
+        "Bhattacharya Manojit",
+        "Lee Sang-Soo",
+        "Chakraborty Chiranjib"
+      ],
+      "n_authors": 5,
+      "abstract_excerpt": "At present, the idea of genome modification has revolutionized the modern therapeutic research era. Finally, we discuss the different challenges, safety concerns, and strategies that can be applied to overcome the obstacles during CRISPR-Cas9-mediated therapeutic approaches..",
+      "mesh_terms": [
+        "Animals",
+        "CRISPR-Associated Protein 9",
+        "CRISPR-Cas Systems",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Drug Development",
+        "Gene Editing",
+        "Genetic Diseases, Inborn",
+        "Genetic Therapy"
+      ],
+      "doi": "10.1016/j.ymthe.2020.09.028"
+    },
+    {
+      "pmid": "39774325",
+      "title": "Deep CRISPR mutagenesis characterizes the functional diversity of TP53 mutations.",
+      "year": 2025,
+      "journal": "Nature genetics",
+      "authors": [
+        "Funk Julianne S",
+        "Klimovich Maria",
+        "Drangenstein Daniel",
+        "Pielhoop Ole",
+        "Hunold Pascal"
+      ],
+      "n_authors": 25,
+      "abstract_excerpt": "The mutational landscape of TP53, a tumor suppressor mutated in about half of all cancers, includes over 2,000 known missense mutations. These findings underscore the power of saturation genome editing in advancing clinical TP53 variant interpretation for genetic counseling and personalized cancer therapy..",
+      "mesh_terms": [
+        "Humans",
+        "Tumor Suppressor Protein p53",
+        "CRISPR-Cas Systems",
+        "Gene Editing",
+        "Neoplasms",
+        "Cell Line, Tumor",
+        "Mutagenesis",
+        "Mutation"
+      ],
+      "doi": "10.1038/s41588-024-02039-4"
+    },
+    {
+      "pmid": "32664329",
+      "title": "DNA Damage: From Threat to Treatment.",
+      "year": 2020,
+      "journal": "Cells",
+      "authors": [
+        "Carusillo Antonio",
+        "Mussolino Claudio"
+      ],
+      "n_authors": 2,
+      "abstract_excerpt": "DNA is the source of genetic information, and preserving its integrity is essential in order to sustain life. Lastly, we will report examples in which this knowledge has been instrumental to develop novel therapies based on genome editing technologies, such as CRISPR-Cas..",
+      "mesh_terms": [
+        "Animals",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "DNA Damage",
+        "DNA Repair",
+        "Gene Editing",
+        "Humans"
+      ],
+      "doi": "10.3390/cells9071665"
+    },
+    {
+      "pmid": "38727638",
+      "title": "CRISPR-Cas9 delivery strategies and applications: Review and update.",
+      "year": 2024,
+      "journal": "Genesis (New York, N.Y. : 2000)",
+      "authors": [
+        "Severi Ali Alizadeh",
+        "Akbari Bahman"
+      ],
+      "n_authors": 2,
+      "abstract_excerpt": "Nowadays, a significant part of the investigations carried out in the medical field belong to cancer treatment. This review reviews the CRISPR system, focusing on the history, classification, delivery methods, applications, new generations, and challenges of CRISPR-Cas9 technology..",
+      "mesh_terms": [
+        "CRISPR-Cas Systems",
+        "Humans",
+        "Gene Editing",
+        "Neoplasms",
+        "Animals",
+        "Genetic Therapy",
+        "Gene Transfer Techniques"
+      ],
+      "doi": "10.1002/dvg.23598"
+    },
+    {
+      "pmid": "39596309",
+      "title": "Endometriosis: Future Biological Perspectives for Diagnosis and Treatment.",
+      "year": 2024,
+      "journal": "International journal of molecular sciences",
+      "authors": [
+        "Garvey Mary"
+      ],
+      "n_authors": 1,
+      "abstract_excerpt": "Endometriosis is an oestrogen-dependent inflammatory disease affecting menstruating women, with varying levels of severity. Undoubtedly, reliable, reproducible, sensitive, and specific models of endometriosis in humans are urgently needed to investigate and detail the aetiology of this debilitating disease..",
+      "mesh_terms": [
+        "Endometriosis",
+        "Humans",
+        "Female",
+        "Biomarkers",
+        "Animals",
+        "Gene Editing"
+      ],
+      "doi": "10.3390/ijms252212242"
+    },
+    {
+      "pmid": "34582788",
+      "title": "In\u00a0vivo CRISPR screens identify the E3 ligase Cop1 as a modulator of macrophage infiltration and cancer immunotherapy target.",
+      "year": 2021,
+      "journal": "Cell",
+      "authors": [
+        "Wang Xiaoqing",
+        "Tokheim Collin",
+        "Gu Shengqing Stan",
+        "Wang Binbin",
+        "Tang Qin"
+      ],
+      "n_authors": 22,
+      "abstract_excerpt": "Despite remarkable clinical efficacy of immune checkpoint blockade (ICB) in cancer treatment, ICB benefits for triple-negative breast cancer (TNBC) remain limited. Our integrated approach implicates Cop1 as a target for improving cancer immunotherapy efficacy in TNBC by regulating chemokine secretion and macrophage infiltration in the tumor microenvironment..",
+      "mesh_terms": [
+        "Animals",
+        "CCAAT-Enhancer-Binding Protein-delta",
+        "CRISPR-Associated Protein 9",
+        "Cell Line, Tumor",
+        "Chemokines",
+        "Chemotaxis",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Disease Models, Animal"
+      ],
+      "doi": "10.1016/j.cell.2021.09.006"
+    },
+    {
+      "pmid": "39426588",
+      "title": "CRISPR innovations in tissue engineering and gene editing.",
+      "year": 2024,
+      "journal": "Life sciences",
+      "authors": [
+        "Razavi ZahraSadat",
+        "Soltani Madjid",
+        "Souri Mohammad",
+        "van Wijnen Andre J"
+      ],
+      "n_authors": 4,
+      "abstract_excerpt": "The CRISPR/Cas9 system is a powerful tool for genome editing, utilizing the Cas9 nuclease and programmable single guide RNA (sgRNA). Overall, this review highlights the potential of CRISPR in advancing regenerative medicine and offers insights into its application in various areas of research and therapy..",
+      "mesh_terms": [
+        "Gene Editing",
+        "Humans",
+        "Tissue Engineering",
+        "Animals",
+        "CRISPR-Cas Systems",
+        "Regenerative Medicine",
+        "Clustered Regularly Interspaced Short Palindromic Repeats"
+      ],
+      "doi": "10.1016/j.lfs.2024.123120"
+    },
+    {
+      "pmid": "37356052",
+      "title": "Progress and Perspective of CRISPR-Cas9 Technology in Translational Medicine.",
+      "year": 2023,
+      "journal": "Advanced science (Weinheim, Baden-Wurttemberg, Germany)",
+      "authors": [
+        "Zheng Ruixuan",
+        "Zhang Lexiang",
+        "Parvin Rokshana",
+        "Su Lihuang",
+        "Chi Junjie"
+      ],
+      "n_authors": 8,
+      "abstract_excerpt": "Translational medicine aims to improve human health by exploring potential treatment methods developed during basic scientific research and applying them to the treatment of patients in clinical settings. Finally, some clinical challenges including off-target effects, in vivo vectors, and ethical problems, and future perspective are also discussed..",
+      "mesh_terms": [
+        "Humans",
+        "CRISPR-Cas Systems",
+        "Translational Science, Biomedical",
+        "Gene Editing",
+        "Genetic Therapy",
+        "Genomics"
+      ],
+      "doi": "10.1002/advs.202300195"
+    },
+    {
+      "pmid": "40993381",
+      "title": "In vivo CRISPR screens identify modifiers of CAR T cell function in myeloma.",
+      "year": 2025,
+      "journal": "Nature",
+      "authors": [
+        "Knudsen Nelson H",
+        "Escobar Giulia",
+        "Korell Felix",
+        "Kienka Tamina",
+        "Nobrega Celeste"
+      ],
+      "n_authors": 29,
+      "abstract_excerpt": "Chimeric antigen receptor (CAR) T cells are highly effective in haematological malignancies1. Our findings reveal differing effects of gene perturbation on CAR T cells over time and in different environments, highlight CDKN1B as a promising target to generate highly effective CAR T cells for multiple myeloma and underscore the potential of in vivo screening for identifying genes to enhance CAR T cell efficacy..",
+      "mesh_terms": [
+        "Multiple Myeloma",
+        "Animals",
+        "Humans",
+        "Mice",
+        "Receptors, Chimeric Antigen",
+        "T-Lymphocytes",
+        "CRISPR-Cas Systems",
+        "Female"
+      ],
+      "doi": "10.1038/s41586-025-09489-8"
+    },
+    {
+      "pmid": "32080622",
+      "title": "Cytochrome P450 oxidoreductase contributes to phospholipid peroxidation in ferroptosis.",
+      "year": 2020,
+      "journal": "Nature chemical biology",
+      "authors": [
+        "Zou Yilong",
+        "Li Haoxin",
+        "Graham Emily T",
+        "Deik Amy A",
+        "Eaton John K"
+      ],
+      "n_authors": 10,
+      "abstract_excerpt": "Ferroptosis is widely involved in degenerative diseases in various tissues including kidney, liver and brain, and is a targetable vulnerability in multiple primary and therapy-resistant cancers. Hence, our work suggests that POR is a key mediator of ferroptosis and potential druggable target for developing antiferroptosis therapeutics..",
+      "mesh_terms": [
+        "Cell Death",
+        "Cell Line, Tumor",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Cytochrome P-450 Enzyme System",
+        "Ferroptosis",
+        "Glutathione Peroxidase",
+        "Humans",
+        "Iron"
+      ],
+      "doi": "10.1038/s41589-020-0472-6"
+    },
+    {
+      "pmid": "36037300",
+      "title": "Genome-Scale CRISPR screen identifies LAPTM5 driving lenvatinib resistance in hepatocellular carcinoma.",
+      "year": 2023,
+      "journal": "Autophagy",
+      "authors": [
+        "Pan Jiaomeng",
+        "Zhang Mao",
+        "Dong Liangqing",
+        "Ji Shuyi",
+        "Zhang Juan"
+      ],
+      "n_authors": 14,
+      "abstract_excerpt": "cld-CASP3: cleaved caspase 3; cld-PARP: cleaved PARP; DTP: drug tolerant persister; GO: Gene Ontology; GTEx: The Genotype-Tissue Expression; HCC: hepatocellular carcinoma; HCQ: hydroxychloroquine; IC50: half maximal inhibitory concentration value; KEGG: Kyoto Encyclopedia of Genes and Genomes; LAPTM5: lysosomal protein transmembrane 5; NT: non-targeting; PDC: patient-derived primary cell lines; PDO: patient-derived primary organoid; TCGA: The Cancer Genome Atlas..",
+      "mesh_terms": [
+        "Humans",
+        "Carcinoma, Hepatocellular",
+        "Liver Neoplasms",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Poly(ADP-ribose) Polymerase Inhibitors",
+        "Autophagy",
+        "Membrane Proteins",
+        "Phenylurea Compounds"
+      ],
+      "doi": "10.1080/15548627.2022.2117893"
+    },
+    {
+      "pmid": "35276062",
+      "title": "A genome-scale gain-of-function CRISPR screen in CD8 T\u00a0cells identifies proline metabolism as a means to enhance CAR-T therapy.",
+      "year": 2022,
+      "journal": "Cell metabolism",
+      "authors": [
+        "Ye Lupeng",
+        "Park Jonathan J",
+        "Peng Lei",
+        "Yang Quanjun",
+        "Chow Ryan D"
+      ],
+      "n_authors": 20,
+      "abstract_excerpt": "Chimeric antigen receptor (CAR)-T cell-based immunotherapy for cancer and immunological diseases has made great strides, but it still faces multiple hurdles. Together, these findings provide a system for identification of GOF immune boosters and demonstrate PRODH2 as a target to enhance CAR-T efficacy..",
+      "mesh_terms": [
+        "CD8-Positive T-Lymphocytes",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Gain of Function Mutation",
+        "Humans",
+        "Neoplasms",
+        "Proline",
+        "Receptors, Chimeric Antigen"
+      ],
+      "doi": "10.1016/j.cmet.2022.02.009"
+    },
+    {
+      "pmid": "42587162",
+      "title": "In vivo genome-wide CRISPR screens of human T cells in solid tumours.",
+      "year": 2026,
+      "journal": "Nature",
+      "authors": [
+        "Liu Qi",
+        "Chen Peixin Amy",
+        "Urs Esha",
+        "Zhang Shimin",
+        "Arce Maya M"
+      ],
+      "n_authors": 33,
+      "abstract_excerpt": "Large-scale CRISPR screening in human T cells holds significant promise for identifying genetic modifications that enhance cellular immunotherapy. This flexible, scalable platform can be adapted for systematic discovery of genetic strategies to improve solid tumour T cell therapies..",
+      "mesh_terms": [
+        "Humans",
+        "Animals",
+        "T-Lymphocytes",
+        "Mice",
+        "Neoplasms",
+        "CRISPR-Cas Systems",
+        "GTP-Binding Protein alpha Subunits, Gs",
+        "Genome, Human"
+      ],
+      "doi": "10.1038/s41586-026-10906-9"
+    },
+    {
+      "pmid": "32302591",
+      "title": "Pooled Knockin Targeting for Genome Engineering of Cellular Immunotherapies.",
+      "year": 2020,
+      "journal": "Cell",
+      "authors": [
+        "Roth Theodore L",
+        "Li P Jonathan",
+        "Blaeschke Franziska",
+        "Nies Jasper F",
+        "Apathy Ryan"
+      ],
+      "n_authors": 19,
+      "abstract_excerpt": "Adoptive transfer of genetically modified immune cells holds great promise for cancer immunotherapy. Pooled knockin screening enables parallelized re-writing of endogenous genetic sequences to accelerate discovery of knockin programs for cell therapies..",
+      "mesh_terms": [
+        "Animals",
+        "Blood Cells",
+        "CRISPR-Cas Systems",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Gene Knock-In Techniques",
+        "Genetic Engineering",
+        "Humans",
+        "Immunotherapy"
+      ],
+      "doi": "10.1016/j.cell.2020.03.039"
+    },
+    {
+      "pmid": "39455854",
+      "title": "Leveraging CRISPR gene editing technology to optimize the efficacy, safety and accessibility of CAR T-cell therapy.",
+      "year": 2024,
+      "journal": "Leukemia",
+      "authors": [
+        "Lei Tao",
+        "Wang Yazhuo",
+        "Zhang Yuchen",
+        "Yang Yufei",
+        "Cao Jiaying"
+      ],
+      "n_authors": 13,
+      "abstract_excerpt": "Chimeric Antigen Receptor (CAR)-T-cell therapy has revolutionized cancer immune therapy. We discuss challenges facing CRISPR gene editing and propose solutions highlighting future research directions in CAR T-cell therapy..",
+      "mesh_terms": [
+        "Humans",
+        "Gene Editing",
+        "Immunotherapy, Adoptive",
+        "CRISPR-Cas Systems",
+        "Receptors, Chimeric Antigen",
+        "Neoplasms",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "T-Lymphocytes"
+      ],
+      "doi": "10.1038/s41375-024-02444-y"
+    },
+    {
+      "pmid": "33147444",
+      "title": "Genome-wide CRISPR Screens Reveal Host Factors Critical for SARS-CoV-2 Infection.",
+      "year": 2021,
+      "journal": "Cell",
+      "authors": [
+        "Wei Jin",
+        "Alfajaro Mia Madel",
+        "DeWeirdt Peter C",
+        "Hanna Ruth E",
+        "Lu-Culligan William J"
+      ],
+      "n_authors": 31,
+      "abstract_excerpt": "Identification of host genes essential for severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) infection may reveal novel therapeutic targets and inform our understanding of coronavirus disease 2019 (COVID-19) pathogenesis. This identifies potential therapeutic targets for SARS-CoV-2 and reveals SARS lineage-specific and pan-CoV host factors that regulate susceptibility to highly pathogenic CoVs..",
+      "mesh_terms": [
+        "Angiotensin-Converting Enzyme 2",
+        "Animals",
+        "COVID-19",
+        "Cell Line",
+        "Chlorocebus aethiops",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Coronavirus",
+        "Coronavirus Infections"
+      ],
+      "doi": "10.1016/j.cell.2020.10.028"
+    },
+    {
+      "pmid": "37832549",
+      "title": "Genome-wide CRISPR activation screening in senescent cells reveals SOX5 as a driver and therapeutic target of rejuvenation.",
+      "year": 2023,
+      "journal": "Cell stem cell",
+      "authors": [
+        "Jing Yaobin",
+        "Jiang Xiaoyu",
+        "Ji Qianzhao",
+        "Wu Zeming",
+        "Wang Wei"
+      ],
+      "n_authors": 19,
+      "abstract_excerpt": "Our understanding of the molecular basis for cellular senescence remains incomplete, limiting the development of strategies to ameliorate age-related pathologies by preventing stem cell senescence. Our study generated a comprehensive list of rejuvenators, pinpointing SOX5 as a potent driver for rejuvenation both in\u00a0vitro and in\u00a0vivo..",
+      "mesh_terms": [
+        "Humans",
+        "Mice",
+        "Animals",
+        "Rejuvenation",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "HMGB2 Protein",
+        "Cellular Senescence",
+        "Transcription Factors"
+      ],
+      "doi": "10.1016/j.stem.2023.09.007"
+    },
+    {
+      "pmid": "38951519",
+      "title": "CRISPR screens reveal convergent targeting strategies against evolutionarily distinct chemoresistance in cancer.",
+      "year": 2024,
+      "journal": "Nature communications",
+      "authors": [
+        "Zhong Chunge",
+        "Jiang Wen-Jie",
+        "Yao Yingjia",
+        "Li Zexu",
+        "Li You"
+      ],
+      "n_authors": 35,
+      "abstract_excerpt": "Resistance to chemotherapy has been a major hurdle that limits therapeutic benefits for many types of cancer. Our study not only provides resources and insights into the molecular basis of chemoresistance, but also proposes potential biomarkers and therapeutic strategies against such resistance..",
+      "mesh_terms": [
+        "Drug Resistance, Neoplasm",
+        "Humans",
+        "Cell Line, Tumor",
+        "Antineoplastic Agents",
+        "Oxaliplatin",
+        "Irinotecan",
+        "CRISPR-Cas Systems",
+        "Protein Serine-Threonine Kinases"
+      ],
+      "doi": "10.1038/s41467-024-49673-4"
+    },
+    {
+      "pmid": "33328215",
+      "title": "CRISPR Screening of CAR T Cells and Cancer Stem Cells Reveals Critical Dependencies for Cell-Based Therapies.",
+      "year": 2021,
+      "journal": "Cancer discovery",
+      "authors": [
+        "Wang Dongrui",
+        "Prager Briana C",
+        "Gimple Ryan C",
+        "Aguilar Brenda",
+        "Alizadeh Darya"
+      ],
+      "n_authors": 19,
+      "abstract_excerpt": "Glioblastoma (GBM) contains self-renewing GBM stem cells (GSC) potentially amenable to immunologic targeting, but chimeric antigen receptor (CAR) T-cell therapy has demonstrated limited clinical responses in GBM. 995..",
+      "mesh_terms": [
+        "Brain Neoplasms",
+        "Cell Line, Tumor",
+        "Cell- and Tissue-Based Therapy",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Glioblastoma",
+        "Humans",
+        "Neoplastic Stem Cells",
+        "Receptors, Chimeric Antigen"
+      ],
+      "doi": "10.1158/2159-8290.CD-20-1243"
+    },
+    {
+      "pmid": "41022734",
+      "title": "In vivo CRISPR screening in head and neck cancer reveals Uchl5 as an immunotherapy target.",
+      "year": 2025,
+      "journal": "Nature communications",
+      "authors": [
+        "Fu Cong",
+        "Saddawi-Konefka Robert",
+        "Chinai Jordan M",
+        "Kim Sarah Y",
+        "Kammula Ashwin V"
+      ],
+      "n_authors": 29,
+      "abstract_excerpt": "Recurrent/metastatic head and neck squamous cell carcinoma (HNSCC) is an aggressive malignancy with a significant unmet need for enhancing immunotherapy response given current modest efficacy. Our findings suggest an unappreciated role for UCHL5 in promoting EMT in HNSCC and highlight ECM modulation as a strategy to improve immunotherapy responses..",
+      "mesh_terms": [
+        "Animals",
+        "Humans",
+        "Ubiquitin Thiolesterase",
+        "Mice",
+        "Head and Neck Neoplasms",
+        "Immunotherapy",
+        "Squamous Cell Carcinoma of Head and Neck",
+        "Epithelial-Mesenchymal Transition"
+      ],
+      "doi": "10.1038/s41467-025-63592-y"
+    },
+    {
+      "pmid": "33626327",
+      "title": "Quantitative evaluation of chromosomal rearrangements in gene-edited human stem cells by CAST-Seq.",
+      "year": 2021,
+      "journal": "Cell stem cell",
+      "authors": [
+        "Turchiano Giandomenico",
+        "Andrieux Geoffroy",
+        "Klermund Julia",
+        "Blattner Georges",
+        "Pennucci Valentina"
+      ],
+      "n_authors": 12,
+      "abstract_excerpt": "Genome editing has shown great promise for clinical translation but also revealed the risk of genotoxicity caused by off-target effects of programmable nucleases. CAST-Seq analyses may be particularly relevant for therapeutic genome editing to enable thorough risk assessment before clinical application of gene-edited products..",
+      "mesh_terms": [
+        "CRISPR-Cas Systems",
+        "Chromosome Aberrations",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "Gene Editing",
+        "Humans",
+        "Stem Cells"
+      ],
+      "doi": "10.1016/j.stem.2021.02.002"
+    },
+    {
+      "pmid": "31913353",
+      "title": "ARID1A influences HDAC1/BRD4 activity, intrinsic proliferative capacity and breast cancer treatment response.",
+      "year": 2020,
+      "journal": "Nature genetics",
+      "authors": [
+        "Nagarajan Sankari",
+        "Rao Shalini V",
+        "Sutton Joseph",
+        "Cheeseman Danya",
+        "Dunn Shanade"
+      ],
+      "n_authors": 23,
+      "abstract_excerpt": "Using genome-wide clustered regularly interspaced short palindromic repeats (CRISPR) screens to understand endocrine drug resistance, we discovered ARID1A and other SWI/SNF complex components as the factors most critically required for response to two classes of estrogen receptor-alpha (ER) antagonists. ARID1A mutations are more frequent in treatment-resistant disease, and our findings provide mechanistic insight into this process while revealing rational treatment strategies for these patients..",
+      "mesh_terms": [
+        "Acetylation",
+        "Animals",
+        "Breast Neoplasms",
+        "Cell Cycle Proteins",
+        "Cell Proliferation",
+        "Clustered Regularly Interspaced Short Palindromic Repeats",
+        "DNA-Binding Proteins",
+        "Drug Resistance, Neoplasm"
+      ],
+      "doi": "10.1038/s41588-019-0541-5"
+    },
+    {
+      "pmid": "38918616",
+      "title": "In vivo AAV-SB-CRISPR screens of tumor-infiltrating primary NK cells identify genetic checkpoints of CAR-NK therapy.",
+      "year": 2025,
+      "journal": "Nature biotechnology",
+      "authors": [
+        "Peng Lei",
+        "Renauer Paul A",
+        "Sferruzza Giacomo",
+        "Yang Luojia",
+        "Zou Yongji"
+      ],
+      "n_authors": 16,
+      "abstract_excerpt": "Natural killer (NK) cells have clinical potential against cancer; however, multiple limitations hinder the success of NK cell therapy. These data identify endogenous genetic checkpoints that naturally limit NK cell function and demonstrate the use of CALHM2 KO for engineering enhanced NK cell-based immunotherapies..",
+      "mesh_terms": [
+        "Killer Cells, Natural",
+        "Animals",
+        "Humans",
+        "Mice",
+        "Dependovirus",
+        "Receptors, Chimeric Antigen",
+        "Immunotherapy, Adoptive",
+        "Clustered Regularly Interspaced Short Palindromic Repeats"
+      ],
+      "doi": "10.1038/s41587-024-02282-4"
+    },
+    {
+      "pmid": "41071884",
+      "title": "Genome-wide CRISPR screen identifies splicing factor SF3B4 in driving hepatocellular carcinoma.",
+      "year": 2025,
+      "journal": "Science advances",
+      "authors": [
+        "Guo Yue",
+        "Xu Mingjing",
+        "Xue Hua",
+        "Ding Xiaofan",
+        "Wong Alissa M"
+      ],
+      "n_authors": 11,
+      "abstract_excerpt": "Although genome sequencings have recognized many cancer-associated genes in hepatocellular carcinoma (HCC), distinguishing their functional effect remains challenging. Our findings highlighted vital roles of SF3B4 in HCC cell survival and tumor progression, and the phenomenon of ferroptosis resistance in patients unresponsive to first-line agent lenvatinib..",
+      "mesh_terms": [
+        "Carcinoma, Hepatocellular",
+        "Humans",
+        "Liver Neoplasms",
+        "Animals",
+        "Mice",
+        "RNA Splicing Factors",
+        "Ferroptosis",
+        "Gene Expression Regulation, Neoplastic"
+      ],
+      "doi": "10.1126/sciadv.adw7181"
+    }
+  ],
+  "synthesis": {
+    "topic": "CRISPR gene editing in cancer therapy",
+    "years": [
+      [
+        2020,
+        9
+      ],
+      [
+        2021,
+        11
+      ],
+      [
+        2022,
+        5
+      ],
+      [
+        2023,
+        11
+      ],
+      [
+        2024,
+        9
+      ],
+      [
+        2025,
+        12
+      ],
+      [
+        2026,
+        3
+      ]
+    ],
+    "top_journals": [
+      [
+        "Nature communications",
+        5
+      ],
+      [
+        "International journal of molecular sciences",
+        4
+      ],
+      [
+        "Nature genetics",
+        4
+      ],
+      [
+        "Molecular cancer",
+        3
+      ],
+      [
+        "Cell",
+        3
+      ],
+      [
+        "Cell stem cell",
+        3
+      ],
+      [
+        "Nature",
+        2
+      ],
+      [
+        "Nature biotechnology",
+        2
+      ],
+      [
+        "Blood advances",
+        2
+      ],
+      [
+        "Cellular & molecular biology letters",
+        2
+      ]
+    ],
+    "top_mesh_terms": [
+      [
+        "humans",
+        55
+      ],
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        42
+      ],
+      [
+        "crispr-cas systems",
+        40
+      ],
+      [
+        "animals",
+        32
+      ],
+      [
+        "neoplasms",
+        31
+      ],
+      [
+        "gene editing",
+        29
+      ],
+      [
+        "mice",
+        17
+      ],
+      [
+        "cell line, tumor",
+        16
+      ],
+      [
+        "genetic therapy",
+        14
+      ],
+      [
+        "female",
+        9
+      ],
+      [
+        "receptors, chimeric antigen",
+        8
+      ],
+      [
+        "immunotherapy, adoptive",
+        7
+      ],
+      [
+        "immunotherapy",
+        7
+      ],
+      [
+        "genomics",
+        5
+      ],
+      [
+        "t-lymphocytes",
+        5
+      ],
+      [
+        "gene expression regulation, neoplastic",
+        5
+      ],
+      [
+        "xenograft model antitumor assays",
+        4
+      ],
+      [
+        "epigenesis, genetic",
+        4
+      ],
+      [
+        "male",
+        4
+      ],
+      [
+        "precision medicine",
+        4
+      ]
+    ],
+    "publication_types": [
+      [
+        "Journal Article",
+        59
+      ],
+      [
+        "Review",
+        30
+      ],
+      [
+        "Research Support, Non-U.S. Gov't",
+        29
+      ],
+      [
+        "Research Support, N.I.H., Extramural",
+        10
+      ],
+      [
+        "Research Support, U.S. Gov't, Non-P.H.S.",
+        3
+      ],
+      [
+        "Clinical Trial, Phase III",
+        2
+      ],
+      [
+        "Multicenter Study",
+        2
+      ],
+      [
+        "Retracted Publication",
+        1
+      ],
+      [
+        "Letter",
+        1
+      ],
+      [
+        "Research Support, U.S. Gov't, P.H.S.",
+        1
+      ]
+    ]
+  }
+}

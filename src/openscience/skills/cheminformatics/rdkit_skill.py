@@ -12,12 +12,22 @@ from typing import Any
 from rdkit import Chem, DataStructs
 from rdkit.Chem import (
     QED,
-    AllChem,
     Crippen,
     Descriptors,
     Lipinski,
+    rdFingerprintGenerator,
     rdMolDescriptors,
 )
+
+_MORGAN_GEN = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)
+
+
+def _morgan_fp(mol, radius: int = 2, n_bits: int = 2048):
+    if radius == 2 and n_bits == 2048:
+        return _MORGAN_GEN.GetFingerprint(mol)
+    return rdFingerprintGenerator.GetMorganGenerator(radius=radius, fpSize=n_bits).GetFingerprint(
+        mol
+    )
 
 
 def calculate_descriptors(smiles: str) -> dict[str, Any]:
@@ -86,7 +96,7 @@ def calculate_fingerprint(smiles: str, radius: int = 2, n_bits: int = 2048) -> d
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         raise ValueError(f"Invalid SMILES: {smiles}")
-    fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=n_bits)
+    fp = _morgan_fp(mol, radius, n_bits)
     return {
         "smiles": smiles,
         "radius": radius,
@@ -106,7 +116,7 @@ def batch_fingerprints(
         mol = Chem.MolFromSmiles(smi)
         if mol is None:
             continue
-        fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=n_bits)
+        fp = _morgan_fp(mol, radius, n_bits)
         arr = np.zeros((n_bits,), dtype=np.int8)
         DataStructs.ConvertToNumpyArray(fp, arr)
         valid_smiles.append(smi)
@@ -122,8 +132,8 @@ def tanimoto(smiles_a: str, smiles_b: str, radius: int = 2, n_bits: int = 2048) 
     mol_b = Chem.MolFromSmiles(smiles_b)
     if mol_a is None or mol_b is None:
         raise ValueError("Invalid SMILES")
-    fp_a = AllChem.GetMorganFingerprintAsBitVect(mol_a, radius, nBits=n_bits)
-    fp_b = AllChem.GetMorganFingerprintAsBitVect(mol_b, radius, nBits=n_bits)
+    fp_a = _morgan_fp(mol_a, radius, n_bits)
+    fp_b = _morgan_fp(mol_b, radius, n_bits)
     return float(DataStructs.TanimotoSimilarity(fp_a, fp_b))
 
 

@@ -1,81 +1,308 @@
-# Example: Publication Figures
+---
+layout: default
+title: "Example: Publication Figures"
+parent: Examples
+nav_order: 3
+description: "Multi-panel, journal-formatted figures with openScience"
+---
 
-Compose a multi-panel, journal-formatted figure from analysis results —
-the kind of figure that goes straight into a submission.
+# Publication Figures
 
-**Agents used:** `layout_composer` → `matplotlib_stylist` →
-`annotation_specialist` → `publication_formatter`
+Build a multi-panel, journal-ready figure from analysis outputs — with correct fonts, colors, lettered panels, and export at print resolution.
 
-## Workflow
+---
+
+## 🎯 The Goal
+
+Turn three analysis outputs into a **Nature-format composite figure** with:
+
+- UMAP (panel a)
+- Marker heatmap (panel b)
+- GSEA dotplot (panel c)
+- Stylistic consistency (fonts, palette, panel letters)
+- Vector output (PDF/SVG) at final print size
+
+**Time**: ~10 minutes
+
+---
+
+## 📋 Prerequisites
+
+- Results from [Single-Cell Analysis](single-cell-analysis.md) (or any three figures)
+- openScience with the `viz` extras for interactive plots (optional)
+
+---
+
+## ✅ Step keys: Plan the Layout
+
+Journal figures are typically **178 mm wide (two-column)** with panels arranged in a grid.
 
 ```python
 from openscience import ScienceSession
 
-session = ScienceSession()
-session.load_data("data/pbmc_10k.h5ad", format="anndata")
+session = ScienceSession(project_dir=".")
 
-# Run (or reload) the analyses that produce source figures
-analysis = session.analyze(
-    task="Cluster and identify cell types",
-    specialist="scanpy_specialist",
-)
-de = session.analyze(
-    task="Differential expression between CD14 and FCGR3A monocytes",
-    specialist="deseq2_specialist",
-)
+# Load pre-computed results
+session.load_data("data/processed/adata_annotated.h5ad", format="anndata", name="pbmc")
+markers = session.load_data("results/markers_per_cluster.csv", format="csv", name="markers")
+gsea = session.load_data("results/gsea_results.csv", format="csv", name="gsea")
+```
 
-# 1. Generate the individual panels
-umap = session.visualize(analysis, type="umap", color="cell_type")
-dotplot = session.visualize(analysis, type="dotplot")
-volcano = session.visualize(de, type="volcano")
+**Layout plan** (178 × 160 mm):
 
-# 2. Compose a multi-panel figure with shared captions
-figure = session.compose_figure(
-    panels=[umap, dotplot, volcano],
-    layout="1x3",
-    panel_labels=["A", "B", "C"],
-    specialist="layout_composer",
-)
+```
+┌─────────────────────────┬────────────┐
+│                         │            │
+│   a) UMAP               │ b) Heatmap │
+│   (100 × 110 mm)        │ (78 × 110) │
+│                         │            │
+├─────────────────────────┴────────────┤
+│                                      │
+│   c) GSEA dotplot (178 × 50 mm)      │
+│                                      │
+└──────────────────────────────────────┘
+```
 
-# 3. Style: consistent fonts, accessible palette
-styled = session.style_figure(
-    figure,
-    font="Arial",
-    palette="colorblind-safe",
-    specialist="matplotlib_stylist",
-)
+---
 
-# 4. Annotate: scale bars, significance stars, panel titles
-annotated = session.annotate_figure(
-    styled,
-    titles=["Cell types", "Marker expression", "DE: CD14 vs FCGR3A"],
-    specialist="annotation_specialist",
-)
+## ✅ Step 1 — Build individual panels
 
-# 5. Format to journal specs (width, DPI, file type)
-final = session.format_figure(
-    annotated,
-    journal="Nature",
-    width_mm=180,
-    dpi=300,
-    output="figures/figure_3.pdf",
+```python
+# Panel a — UMAP
+umap = session.analyze(
+    task="UMAP colored by cell_type, large points, no frame, legend on data",
     specialist="publication_formatter",
+    style="nature",                  # sets fonts (Arial 7), linewidths
+    data=session._data["pbmc"],
+    panel_label="a",
+)
+
+# Panel b — Heatmap of top 10 markers
+heat = session.analyze(
+    task="Heatmap of top 10 markers per cell type, dendrogram on genes only",
+    specialist="seaborn_stylist",
+    data=session._data["markers"],
+    n_genes=10,
+    cmap="RdBu_r",
+    panel_label="b",
+)
+
+# Panel c — GSEA dotplot
+gsea_plot = session.analyze(
+    task="Dotplot of top 5 enriched pathways per cell type, size=NES, color=FDR",
+    specialist="publication_formatter",
+    data=session._data["gsea"],
+    top_n=5,
+    panel_label="c",
 )
 ```
 
-## Expected Artifacts
+`style="nature"` applies:
 
-| Artifact | Description |
-|----------|-------------|
-| `figures/panels/umap.pdf` | Source panels (with provenance) |
-| `figures/figure_3.pdf` | Composed, journal-formatted figure |
-| `figures/figure_3.svg` | Vector version for post-editing |
-| `figures/figure_3.spec.json` | Reproducible spec: fonts, palette, layout |
+- Font: Arial, 7 pt (base size)
+- Line width: 0.5 pt
+- Panel label: bold, **not** followed by a period
+- Palette: colorblind-safe (`colorblind` from seaborn)
 
-## Tips
+Other built-in styles: `science`, `cell`, `plos`, `nejm`.
 
-- Always export SVG alongside PDF so vector edits remain possible.
-- The `color_palette_designer` agent checks palettes for color-vision
-  accessibility before you commit to them.
-- Journal presets live with the `publication_formatter` agent — see the
-  [Agent Catalog](../agents.md#figure-generation-agents-15).
+---
+
+## ✅ Step 2 — Compose the multi-panel figure
+
+```python
+composite = session.analyze(
+    task="Compose panels into 178 mm wide figure: a+b top row, c full-width bottom row",
+    specialist="layout_composer",
+    panels=[umap, heat, gsea_plot],
+    layout=[
+        ["a", "b"],
+        ["c", "c"],
+    ],
+    width_mm=178,
+    height_mm=160,
+    panel_label_fontsize=8,
+    column_ratios=[100, 78],
+    row_ratios=[110, 50],
+    hspace_mm=4,
+    wspace_mm=8,
+)
+
+session.analyze(
+    task="Export composite as PDF and SVG",
+    specialist="vector_graphics_editor",
+    figure=composite,
+    outputs=["figures/fig1.pdf", "figures/fig1.svg"],
+    raster_dpi=600,          # embedded raster panels at 600 dpi
+    fonts_embed=True,        # embed fonts for portability
+)
+```
+
+The `layout_composer` agent:
+
+- Places panels on a millimeter grid
+- Auto-adds panel letters
+- Aligns y labels and titles across panels
+- Reruns `tight_layout` with mm units
+
+---
+
+## ✅ Step 3 — Verify accessibility
+
+```python
+# Check colorblind-friendliness
+check = session.analyze(
+    task="Audit figure for accessibility: colorblind simulation, minimum font size",
+    specialist="data_viz_consultant",
+    figure=composite,
+)
+
+print(check.data["report"])
+# 'UMAP palette is colorblind-safe'
+# 'Min font size: 7 pt (OK for Nature)'
+# 'Contrast ratio on heatmap: 4.6:1 (OK)'
+```
+
+If the report flags issues, the `color_palette_designer` agent proposes alternatives:
+
+```python
+palette = session.analyze(
+    task="Propose a colorblind-safe palette for 6 cell types",
+    specialist="color_palette_designer",
+    n_colors=6,
+    style="categorical",
+)
+```
+
+---
+
+## ✅ Step 4 — Interactive variant (optional)
+
+For the online version of the paper, generate an interactive companion:
+
+```python
+interactive = session.analyze(
+    task="Interactive UMAP: hover for cell metadata, toggle gene expression overlay",
+    specialist="interactive_dashboard",
+    data=session._data["pbmc"],
+    port=8050,
+)
+```
+
+Visit `http://localhost:8050` to explore.
+
+---
+
+## ✅ Step 5 — Captions and source data
+
+```python
+# Caption
+caption = session.analyze(
+    task=(
+        "Write figure caption: one sentence title, then one sentence per panel. "
+        "Include n (cells), statistical tests, software versions."
+    ),
+    specialist="abstract_writer",   # caption style is similar
+    figure=composite,
+)
+with open("figures/fig1_caption.txt", "w") as f:
+    f.write(caption.data["caption"])
+
+# Source data (required by many journals)
+session.analyze(
+    task="Export source data workbook for all panels",
+    specialist="dataset_descriptor",
+    outputs=["figures/source_data_fig1.xlsx"],
+    include_provenance=True,
+)
+```
+
+---
+
+## 📂 Output Bundle
+
+```
+figures/
+├── fig1.pdf                    ← print submission
+├── fig1.svg                    ← vector for editing
+├── fig1_caption.txt
+├── source_data_fig1.xlsx       ← Nature's Source Data requirement
+├── umap_panel.a.pdf            ← individual panels (kept)
+├── heatmap_panel.b.pdf
+└── gsea_dotplot_panel.c.pdf
+```
+
+---
+
+## 🎨 Style Guide: Journal Differences
+
+| Element | Nature | Science | Cell | PLOS |
+|---------|--------|---------|------|------|
+| Font | Arial | Helvetica | Arial | Arial |
+| Min size | 5 pt | 5 pt | 6 pt | 6 pt |
+| Panel labels | a, b, c | (A), (B) | A, B | A, B |
+| Line width | 0.5–1 pt | 0.5–1 pt | 0.5–1.5 pt | 0.5–1 pt |
+| Max width | 178 mm | 174 mm | 174 mm | 180 mm |
+
+Switch styles via `style="science"`, etc.
+
+---
+
+## ⚠️ Common Pitfalls
+
+| Pitfall | Fix |
+|---------|-----|
+| Text truncated in the PDF | Pass `bbox_inches="tight"` during export |
+| Fonts not embedded | `fonts_embed=True`; verify with `pdffonts fig1.pdf` |
+| Different font sizes across panels | Compose with `layout_composer` — it normalizes font scales |
+| Raster panel looks blurry | Pass `raster_dpi=600` during export |
+| Colors shift between screen and print | Export to PDF with CMYK profile: `color_profile="cmyk"` |
+| Figure too heavy for editorial system | Export PNG at 300 dpi as a fallback |
+
+---
+
+## 🚀 Variations
+
+### Add a schematic (biological illustration)
+
+```python
+schematic = session.analyze(
+    task="Schematic of the experimental design: cells → editing → transplantation",
+    specialist="schematic_illustrator",
+)
+```
+
+### 3D structure inset
+
+```python
+structure = session.analyze(
+    task="Render HBB protein with mutation highlighted",
+    specialist="3d_visualizer",
+    pdb_id="1A00",
+    style="cartoon",
+)
+```
+
+### Animated supplement
+
+```python
+session.analyze(
+    task="Animate UMAP colored by pseudotime",
+    specialist="animation_generator",
+    frames=60,
+    output="figures/supplement_movie.mp4",
+)
+```
+
+---
+
+## ➡️ Wrap-Up
+
+You now have:
+
+- A composite, journal-spec figure
+- Source data workbook
+- Accessibility-checked palette
+- Reproducible caption
+
+Return to the [tutorials hub](../index.md#-tutorial-examples) for more workflows.

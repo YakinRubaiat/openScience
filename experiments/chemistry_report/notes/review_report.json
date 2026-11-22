@@ -1,0 +1,228 @@
+{
+  "agent_invocation": {
+    "agent": "security_reviewer",
+    "orchestrator_stubbed_skills": true,
+    "summary": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "recommendations": [],
+    "note": "bandit/safety/semgrep skills are stubs in the default orchestrator. To produce real vulnerability findings, bind those skills as we did for 'rdkit' via the RDKitOrchestrator subclass."
+  },
+  "chemical_safety_scan": {
+    "common_drugs_flagged": [
+      {
+        "name": "Warfarin",
+        "smiles": "CC(=O)C[C@@H](c1ccccc1)c1c(O)c2ccccc2oc1=O",
+        "issues": [
+          "note: anticoagulant, narrow therapeutic index \u2014 medical handling"
+        ],
+        "mw": 308.10485899199995
+      },
+      {
+        "name": "Diazepam",
+        "smiles": "CN1C(=O)CN=C(c2ccccc2)c2cc(Cl)ccc21",
+        "issues": [
+          "note: benzodiazepine, DEA Schedule IV \u2014 controlled substance"
+        ],
+        "mw": 284.07164071600005
+      }
+    ],
+    "esol_with_structural_alerts_first_25": [
+      {
+        "compound_id": "Amigdalin",
+        "smiles": "N#CC(OC1OC(COC2OC(CO)C(O)C(O)C2O)C(O)C(O)C1O)c1ccccc1",
+        "alerts": [
+          "cyanide"
+        ]
+      },
+      {
+        "compound_id": "citral",
+        "smiles": "CC(C)=CCCC(C)=CC=O",
+        "alerts": [
+          "michael_acceptor"
+        ]
+      },
+      {
+        "compound_id": "Benzonitrile",
+        "smiles": "N#Cc1ccccc1",
+        "alerts": [
+          "cyanide"
+        ]
+      },
+      {
+        "compound_id": "1-Iodoheptane",
+        "smiles": "CCCCCCCI",
+        "alerts": [
+          "alkyl_chloride"
+        ]
+      },
+      {
+        "compound_id": "nifedipine",
+        "smiles": "COC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1ccccc1[N+](=O)[O-]",
+        "alerts": [
+          "nitro_aromatic",
+          "michael_acceptor"
+        ]
+      },
+      {
+        "compound_id": "Triamcinolone",
+        "smiles": "CC12C=CC(=O)C=C1CCC1C3CC(O)C(O)(C(=O)CO)C3(C)CC(O)C12F",
+        "alerts": [
+          "michael_acceptor"
+        ]
+      },
+      {
+        "compound_id": "Benznidazole",
+        "smiles": "O=C(Cn1ccnc1[N+](=O)[O-])NCc1ccccc1",
+        "alerts": [
+          "nitro_aromatic"
+        ]
+      },
+      {
+        "compound_id": "Atovaquone(0,430mg/ml) - neutral",
+        "smiles": "O=C1C(O)=C(C2CCC(c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21",
+        "alerts": [
+          "michael_acceptor"
+        ]
+      },
+      {
+        "compound_id": "nitrofurantoin",
+        "smiles": "O=C1CN(N=Cc2ccc([N+](=O)[O-])o2)C(=O)N1",
+        "alerts": [
+          "nitro_aromatic",
+          "hydrazine"
+        ]
+      },
+      {
+        "compound_id": "Nitrofen",
+        "smiles": "O=[N+]([O-])c1ccc(Oc2ccc(Cl)cc2Cl)cc1",
+        "alerts": [
+          "nitro_aromatic"
+        ]
+      },
+      {
+        "compound_id": "1-Bromopropane",
+        "smiles": "CCCBr",
+        "alerts": [
+          "alkyl_chloride"
+        ]
+      },
+      {
+        "compound_id": "Flucythrinate",
+        "smiles": "CC(C)C(C(=O)OC(C#N)c1cccc(Oc2ccccc2)c1)c1ccc(OC(F)F)cc1",
+        "alerts": [
+          "cyanide"
+        ]
+      },
+      {
+        "compound_id": "2,3-Dichloronitrobenzene",
+        "smiles": "O=[N+]([O-])c1cccc(Cl)c1Cl",
+        "alerts": [
+          "nitro_aromatic"
+        ]
+      },
+      {
+        "compound_id": "Chlorothalonil",
+        "smiles": "N#Cc1c(Cl)c(Cl)c(Cl)c(C#N)c1Cl",
+        "alerts": [
+          "cyanide"
+        ]
+      },
+      {
+        "compound_id": "Deoxycorticosterone",
+        "smiles": "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+        "alerts": [
+          "michael_acceptor"
+        ]
+      },
+      {
+        "compound_id": "Dichloromethane",
+        "smiles": "ClCCl",
+        "alerts": [
+          "alkyl_chloride"
+        ]
+      },
+      {
+        "compound_id": "o-Nitrophenol",
+        "smiles": "O=[N+]([O-])c1ccccc1O",
+        "alerts": [
+          "nitro_aromatic"
+        ]
+      },
+      {
+        "compound_id": "Ioxynil",
+        "smiles": "N#Cc1cc(I)c(O)c(I)c1",
+        "alerts": [
+          "cyanide"
+        ]
+      },
+      {
+        "compound_id": "Niclosamide",
+        "smiles": "O=C(Nc1ccc([N+](=O)[O-])cc1Cl)c1cc(Cl)ccc1O",
+        "alerts": [
+          "nitro_aromatic"
+        ]
+      },
+      {
+        "compound_id": "m-Nitrophenol",
+        "smiles": "O=[N+]([O-])c1cccc(O)c1",
+        "alerts": [
+          "nitro_aromatic"
+        ]
+      },
+      {
+        "compound_id": "Cyfluthrin",
+        "smiles": "CC1(C)C(C=C(Cl)Cl)C1C(=O)OC(C#N)c1ccc(F)c(Oc2ccccc2)c1",
+        "alerts": [
+          "cyanide"
+        ]
+      },
+      {
+        "compound_id": "1-Bromoheptane",
+        "smiles": "CCCCCCCBr",
+        "alerts": [
+          "alkyl_chloride"
+        ]
+      },
+      {
+        "compound_id": "Fludrocortisone",
+        "smiles": "CC12CCC(=O)C=C1CCC1C3CCC(O)(C(=O)CO)C3(C)CC(O)C12F",
+        "alerts": [
+          "michael_acceptor"
+        ]
+      },
+      {
+        "compound_id": "1-Chloropentane",
+        "smiles": "CCCCCCl",
+        "alerts": [
+          "alkyl_chloride"
+        ]
+      },
+      {
+        "compound_id": "chloroacetamide",
+        "smiles": "NC(=O)CCl",
+        "alerts": [
+          "alkyl_chloride"
+        ]
+      }
+    ],
+    "alert_dictionary": {
+      "benzidine_like": "c1cc(N)ccc1-c1ccc(N)cc1",
+      "nitro_aromatic": "[O-][N+](=O)c",
+      "nitrosamine": "N(N=O)",
+      "alkyl_chloride": "[CH2][Cl,Br,I]",
+      "epoxide": "[OX2r]1[CH2r][CH2r]1",
+      "michael_acceptor": "C=CC(=O)",
+      "acyl_halide": "C(=O)[Cl,Br]",
+      "peroxide": "OO",
+      "aniline": "c[#7H2]",
+      "hydrazine": "NN",
+      "thiol": "[SH]",
+      "cyanide": "C#N"
+    },
+    "methodology": "SMARTS substructure matching via RDKit Chem.MolFromSmarts + HasSubstructMatch. Alerts based on Brenk PAINS (2010), ICH M7 mutagenicity guidance, and common chemistry-lab hazard classes."
+  }
+}

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Security Policies
-nav_order: 9
+nav_order: 10
 description: "Security architecture, policies, and best practices"
 ---
 

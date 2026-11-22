@@ -45,6 +45,14 @@ def _fmt(p: dict[str, Any], key: str, default: str = "") -> str:
     return str(val)
 
 
+def _end_period(text: str) -> str:
+    """Ensure ``text`` ends with terminal punctuation."""
+    text = text.rstrip()
+    if text and text[-1] not in ".!?":
+        return text + "."
+    return text
+
+
 # ---------------------------------------------------------------------------
 # abstract
 # ---------------------------------------------------------------------------
@@ -69,14 +77,15 @@ def _write_abstract(content: Any, journal: str, word_limit: int) -> dict[str, An
         }
 
     c = content or {}
-    abstract = ABSTRACT_TEMPLATE.format(
-        background=_fmt(c, "background"),
-        gap=_fmt(c, "gap"),
-        aim=_fmt(c, "aim"),
-        methods=_fmt(c, "methods"),
-        results=_fmt(c, "results"),
-        conclusion=_fmt(c, "conclusion"),
-    )
+    parts = [
+        _fmt(c, "background"),
+        _fmt(c, "gap"),
+        _fmt(c, "aim"),
+        _fmt(c, "methods"),
+        _fmt(c, "results"),
+        _fmt(c, "conclusion"),
+    ]
+    abstract = " ".join(_end_period(part) for part in parts if part)
     abstract = re.sub(r"\s+", " ", abstract).strip()
     abstract = _trim_to_limit(abstract, word_limit)
     return {
@@ -117,18 +126,20 @@ def _write_introduction(params: dict[str, Any]) -> str:
         else f"{field} has been the focus of sustained investigation over the past decades, "
         f"and a substantial body of work now defines its conceptual and methodological foundations."
     )
-    para2 = f"However, {gap}" if gap else "However, important questions remain unresolved."
+    para2 = (
+        _end_period(f"However, {gap}") if gap else "However, important questions remain unresolved."
+    )
     if significance:
-        para2 += f" Addressing this gap is significant because {significance}"
+        para2 += " " + _end_period(f"Addressing this gap is significant because {significance}")
     para3 = (
-        f"Here, we set out to {aim}"
+        _end_period(f"Here, we set out to {aim}")
         if aim
         else "Here, we describe a study designed to address this question."
     )
     if approach:
-        para3 += f" To this end, {approach}"
+        para3 += " " + _end_period(f"To this end, {approach}")
     if finding:
-        para3 += f" We show that {finding}"
+        para3 += " " + _end_period(f"We show that {finding}")
 
     return INTRO_TEMPLATE.format(para1_field=para1, para2_gap=para2, para3_aim=para3).strip()
 
@@ -142,7 +153,10 @@ def _write_methods(result: Any, journal: str, citation_format: str) -> str:
     """Render a methods section from an analysis_result structure."""
     if isinstance(result, str):
         return result
-    r = result or {}
+    # Accept framework ``Result`` objects as well as raw dict payloads.
+    r = getattr(result, "data", None) if result is not None else None
+    if not isinstance(r, dict):
+        r = result if isinstance(result, dict) else {}
     paragraphs: list[str] = []
 
     if design := r.get("study_design"):
@@ -207,27 +221,21 @@ def _write_discussion(params: dict[str, Any]) -> str:
 
     paras = []
     if principal:
-        paras.append(
-            f"In this study, {principal} {interpretation}".strip()
-        )
+        sentence = _end_period(f"In this study, {principal}")
+        if interpretation:
+            sentence += " " + _end_period(interpretation)
+        paras.append(sentence)
     if comparison:
-        paras.append(comparison)
+        paras.append(_end_period(comparison))
     if mechanism:
-        paras.append(f"Mechanistically, {mechanism}")
+        paras.append(_end_period(f"Mechanistically, {mechanism}"))
     if limitations:
-        lim = " ".join(
-            f if f.lower().startswith(("our study", "this study", "several", "first", "second", "finally"))
-            else f"Our study has limitations: {f}"
-            for f in limitations
-        )
-        paras.append(
-            lim if lim.lower().startswith(("our study", "this study", "several"))
-            else f"Our study has limitations. {lim}"
-        )
+        items = [_end_period(f) for f in limitations]
+        paras.append("Our study has limitations. " + " ".join(items))
     if future:
-        paras.append(future)
+        paras.append(_end_period(future))
     if conclusion:
-        paras.append(f"In conclusion, {conclusion}")
+        paras.append(_end_period(f"In conclusion, {conclusion}"))
     return "\n\n".join(paras).strip()
 
 

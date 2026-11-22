@@ -23,7 +23,7 @@ def _to_bibtex_key(ref: dict[str, Any]) -> str:
 def _vancouver(ref: dict[str, Any]) -> str:
     authors = ref.get("authors") or []
     if len(authors) > 6:
-        author_str = ", ".join(authors[:6]) + ", et al."
+        author_str = ", ".join(authors[:6]) + ", et al"
     else:
         author_str = ", ".join(authors)
     year = ref.get("year", "")

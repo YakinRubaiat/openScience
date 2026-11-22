@@ -11,11 +11,16 @@ _AGENT_NAME_RE = re.compile(r"^[a-zA-Z0-9_\-]+$")
 
 
 def _validate_safe_path(value: str) -> str:
-    """Reject path traversal and absolute-path escape attempts."""
+    """Reject path traversal, absolute paths, and null bytes."""
     if not value or "\x00" in value:
         raise ValueError("Invalid path")
+    # Disallow Windows-style separators up front so ``..`` cannot hide on
+    # either platform (``PurePath`` on POSIX treats ``\`` as a literal).
+    if "\\" in value:
+        raise ValueError("Backslashes are not allowed in paths")
     normalized = Path(value)
-    # Reject obvious traversal segments.
+    if normalized.is_absolute():
+        raise ValueError("Absolute paths are not allowed")
     if ".." in normalized.parts:
         raise ValueError("Path traversal is not allowed")
     if len(value) > 1024:

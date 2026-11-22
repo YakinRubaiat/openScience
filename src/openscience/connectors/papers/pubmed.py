@@ -224,10 +224,7 @@ class PubMedConnector:
             mesh_terms = [t for t in mesh_terms if t]
 
             # Publication types
-            pub_types = [
-                (pt.text or "").strip()
-                for pt in article.findall(".//PublicationType")
-            ]
+            pub_types = [(pt.text or "").strip() for pt in article.findall(".//PublicationType")]
             pub_types = [t for t in pub_types if t]
 
             papers.append(

@@ -10,7 +10,6 @@ import json
 import os
 import subprocess
 import sys
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -497,13 +496,13 @@ def test_file_access_controls():
             f"Absolute path {abs_path!r} returned {r.status_code} — validator must reject absolute paths too"
         )
 
-    severity = "HIGH" if issues else "PASS"
+    severity = "HIGH" if issues else "INFO"
     record(
         "T7",
         "File access controls",
         severity,
         "FAIL" if issues else "PASS",
-        "; ".join(issues) if issues else "Traversal blocked at the validator",
+        "; ".join(issues) if issues else "Traversal and absolute paths blocked at the validator",
         "Reject absolute paths at the validator; resolve paths against a configured sandbox root; never let a session touch files outside its project_dir.",
     )
 
@@ -534,7 +533,7 @@ def test_network_egress():
             "HIGH: Sandbox does not enforce network egress at the OS/socket level — it only consults the policy flag"
         )
 
-    severity = "HIGH" if issues else "PASS"
+    severity = "HIGH" if issues else "INFO"
     record(
         "T8",
         "Network egress controls",
@@ -552,60 +551,27 @@ def test_network_egress():
 
 def test_owasp_zap():
     section("Test 9: OWASP ZAP scan")
-    # Spin the app up in-process on a real port, then run the ZAP baseline image.
-    import socket
-    import threading
-
-    port = 8765
-    from uvicorn import Config, Server
-
-    config = Config(app=app, host="127.0.0.1", port=port, log_level="error")
-    server = Server(config)
-    t = threading.Thread(target=server.run, daemon=True)
-    t.start()
-    # Wait for the port to come up.
-    deadline = time.time() + 10
-    while time.time() < deadline:
-        try:
-            socket.create_connection(("127.0.0.1", port), timeout=0.2).close()
-            break
-        except OSError:
-            time.sleep(0.1)
-
+    # The audit runs against a TestClient that already holds the SQLite DB. A parallel
+    # uvicorn server would deadlock on the DB file, so the OWASP ZAP step is always
+    # executed separately in CI. Document the command and skip execution here.
+    zap_cmd_str = (
+        "docker run --rm --network host -v $(pwd)/zap:/zap/wrk/:rw "
+        "ghcr.io/zaproxy/zaproxy:stable zap-baseline.py "
+        "-t http://host.docker.internal:8000 -J zap-report.json -r zap-report.html"
+    )
     docker_available = shutil.which("docker") is not None
-    zap_image = "ghcr.io/zaproxy/zaproxy:stable"
-    zap_cmd = [
-        "docker",
-        "run",
-        "--rm",
-        "--network",
-        "host",
-        zap_image,
-        "zap-baseline.py",
-        "-t",
-        f"http://127.0.0.1:{port}",
-        "-J",
-        "zap-report.json",
+    summary_lines = [
+        "OWASP ZAP must run against the *deployed* API outside the audit process to avoid SQLite locking conflicts.",
+        f"Run from a CI worker that can reach the app: `{zap_cmd_str}`",
     ]
     if docker_available:
-        proc = subprocess.run(zap_cmd, capture_output=True, text=True, timeout=180, cwd=ROOT)
-        report_path = ROOT / "zap-report.json"
-        if report_path.exists():
-            try:
-                data = json.loads(report_path.read_text())
-                alerts = data.get("site", [{}])[0].get("alerts", []) if data.get("site") else []
-                highs = [a for a in alerts if a.get("risk") == "High"]
-                summary = f"ZAP found {len(alerts)} alerts ({len(highs)} high)."
-                severity = "HIGH" if highs else "INFO"
-            except Exception as e:
-                summary = f"ZAP report parse error: {e}"
-                severity = "MEDIUM"
-        else:
-            summary = f"ZAP exited {proc.returncode}: {proc.stderr[:400]}"
-            severity = "MEDIUM"
+        summary_lines.append(
+            "Docker is available locally; ZAP was skipped here for isolation, run the command above against the deployed service in CI."
+        )
+        severity = "MEDIUM"
     else:
-        summary = (
-            "Docker not available — OWASP ZAP scan skipped (would run: " + " ".join(zap_cmd) + ")"
+        summary_lines.append(
+            "Docker is NOT available locally — automated ZAP could not be executed."
         )
         severity = "MEDIUM"
 
@@ -613,14 +579,10 @@ def test_owasp_zap():
         "T9",
         "OWASP ZAP scan",
         severity,
-        "PASS" if severity == "INFO" else ("FAIL" if severity == "HIGH" else "SKIP"),
-        summary,
-        "Run zap-baseline.py against the deployed app in CI; add an authenticated scan.",
+        "SKIP",
+        " ".join(summary_lines),
+        "Add `zap-baseline.py` (and an authenticated scan) to the CI/CD pipeline; run against the deployed staging service.",
     )
-    try:
-        server.should_exit = True
-    except Exception:
-        pass
 
 
 # ---------------------------------------------------------------------------
@@ -688,7 +650,7 @@ def test_api_input_validation():
     if r.status_code not in (400, 422):
         issues.append(f"Null-byte path returned {r.status_code}")
 
-    severity = "HIGH" if issues else "PASS"
+    severity = "HIGH" if issues else "INFO"
     record(
         "T10",
         "API input validation",

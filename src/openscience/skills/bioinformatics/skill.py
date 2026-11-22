@@ -63,17 +63,20 @@ class BioinformaticsSkill:
             raise FileNotFoundError(f"Data file not found: {path}")
 
         if fmt == "mtx":
-            # A bare .mtx file — needs sibling genes/barcodes (10x layout)
+            # A bare .mtx file — needs sibling genes/barcodes (10x layout).
+            # 10x matrices are genes x cells; scanpy reads them literally, so
+            # transpose to the AnnData convention of cells (obs) x genes (var).
             import scanpy as sc
 
-            adata = sc.read_mtx(path)
+            adata = sc.read_mtx(path).T
             genes = path.parent / "genes.tsv"
             barcodes = path.parent / "barcodes.tsv"
             if genes.exists():
                 g = pd.read_csv(genes, sep="\t", header=None)
-                adata.var_names = g[0].astype(str).values
-                if g.shape[1] > 1:
-                    adata.var["gene_symbols"] = g[1].astype(str).values
+                ensembl = g[0].astype(str).values
+                symbols = g[1].astype(str).values if g.shape[1] > 1 else ensembl
+                adata.var["ensembl_ids"] = ensembl
+                adata.var_names = pd.Index(symbols)
             if barcodes.exists():
                 adata.obs_names = pd.read_csv(barcodes, sep="\t", header=None)[0].astype(str).values
             adata.var_names_make_unique()
@@ -107,7 +110,6 @@ class BioinformaticsSkill:
     # scanpy — QC / clustering
     # ------------------------------------------------------------------ #
     def _scanpy(self, operation: str, context: dict, **kwargs):
-        import scanpy as sc
 
         adata = self._require_adata(context, kwargs)
 
@@ -121,7 +123,15 @@ class BioinformaticsSkill:
         import scanpy as sc
 
         # ---- metrics --------------------------------------------------- #
-        adata.var["mt"] = adata.var_names.str.upper().str.startswith("MT-")
+        # Gene symbols are used as var_names (10x references); MT genes
+        # are the MT-* prefix on symbols. Fall back to a gene_symbols
+        # column when symbols were not promoted to var_names.
+        names = (
+            pd.Index(adata.var_names.astype(str))
+            if "gene_symbols" not in adata.var.columns
+            else pd.Index(adata.var["gene_symbols"].astype(str))
+        )
+        adata.var["mt"] = pd.Series(names).str.upper().str.startswith("MT-").to_numpy()
         sc.pp.calculate_qc_metrics(
             adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
         )
@@ -181,7 +191,7 @@ class BioinformaticsSkill:
             sc.pp.normalize_total(adata, target_sum=1e4)
             sc.pp.log1p(adata)
 
-        n_top = int(kwargs.get("n_top_genes", 2000))
+        int(kwargs.get("n_top_genes", 2000))
         sc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5)
         n_hvg = int(adata.var["highly_variable"].sum())
         adata.raw = adata
@@ -210,14 +220,13 @@ class BioinformaticsSkill:
                 names = adata.uns["rank_genes_groups"]["names"][group]
                 scores = adata.uns["rank_genes_groups"]["scores"][group]
                 markers[str(group)] = [
-                    {"gene": str(n), "score": float(s)}
-                    for n, s in zip(names[:5], scores[:5])
+                    {"gene": str(n), "score": float(s)} for n, s in zip(names[:5], scores[:5])
                 ]
         except Exception as exc:  # pragma: no cover - don't kill pipeline on marker failure
             markers = {"error": str(exc)}
 
         result = {
-            "n_clusters": int(len(cluster_sizes)),
+            "n_clusters": len(cluster_sizes),
             "cluster_sizes": cluster_sizes,
             "n_hvg": n_hvg,
             "n_pcs": n_comps,
@@ -291,7 +300,7 @@ class BioinformaticsSkill:
 class BioinformaticsSkillJSONEncoder(json.JSONEncoder):
     """JSON encoder that survives numpy/pandas types in skill results."""
 
-    def default(self, obj):  # noqa: D102
+    def default(self, obj):
         if isinstance(obj, (np.integer,)):
             return int(obj)
         if isinstance(obj, (np.floating,)):

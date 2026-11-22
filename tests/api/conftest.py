@@ -24,16 +24,13 @@ os.environ["OPENSCIENCE_API_DATABASE_URL"] = f"sqlite:///{TEST_DB}"
 os.environ["OPENSCIENCE_API_SECRET_KEY"] = "test-secret-key"
 os.environ["OPENSCIENCE_API_RATE_LIMIT_ENABLED"] = "false"
 
-from openscience.api.database import reset_engine
+from openscience.api.database import Base, get_engine, reset_engine
 from openscience.api.main import create_app
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def app():
-    # Reset state so every test gets a clean database and settings.
-    reset_engine()
-    if TEST_DB.exists():
-        TEST_DB.unlink()
+    """Session-scoped app; the DB file lives for the whole test session."""
     application = create_app()
     yield application
     reset_engine()
@@ -41,8 +38,17 @@ def app():
         TEST_DB.unlink()
 
 
+@pytest.fixture(autouse=True)
+def _clean_db(app):
+    """Isolate tests by recreating all tables on a live engine."""
+    engine = get_engine()
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
 @pytest.fixture()
-def client(app):
+def client(app, _clean_db):
     # ``with`` ensures startup/shutdown handlers run.
     with TestClient(app) as test_client:
         yield test_client

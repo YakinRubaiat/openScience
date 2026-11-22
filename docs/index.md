@@ -29,7 +29,7 @@ openScience automates the toil between scientific questions and answers — hand
 ### Architecture and Design
 
 - **[Architecture Deep-Dive](architecture.md)** — System design, components, and data flow
-- **[Agent Catalog](agents.md)** — Complete reference for all 100 specialized agents
+- **[Agent Catalog](agents.md)** — Complete reference for all 111 specialized agents
 - **[API Reference](api.md)** — Python API, REST API, and CLI documentation
 
 ### Deployment and Operations
@@ -66,12 +66,13 @@ openScience automates the toil between scientific questions and answers — hand
 
 ---
 
-## The Six Workflow Archetypes
+## Agent Categories
 
-openScience organizes its **100 specialized agents** into six categories covering the research lifecycle:
+openScience includes **111 specialized agents** organized into seven categories covering the research lifecycle:
 
 | Category | Agents | What it covers |
 |----------|:------:|----------------|
+| 🔍 [Review](agents.md#review-agents-11) | 11 | Security, quality, architecture auditing |
 | 📚 [Literature Review](agents.md#literature-review-agents-15) | 15 | Systematic search, summarization, synthesis, citation graphs |
 | 🧪 [Experiment Planning](agents.md#experiment-planning-agents-15) | 15 | Power analysis, protocol design, feasibility, preregistration |
 | 💾 [Data Management](agents.md#data-management-agents-15) | 15 | Ingestion, validation, batch correction, provenance |
@@ -99,7 +100,7 @@ methods = session.write_methods(result)
 
 ```bash
 openscience init                    # Set up a new project
-openscience agents                  # List all 100 agents
+openscience agents                  # List all 111 agents
 openscience start --port 8080       # Start the server
 ```
 

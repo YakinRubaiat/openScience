@@ -1,6 +1,29 @@
+---
+layout: default
+title: Agent Catalog
+nav_order: 4
+description: "Complete catalog of all 111 specialized agents in openScience"
+---
+
 # Agent Catalog
 
-This document provides a complete catalog of all 111 specialized agents in openScience.
+This document provides a complete catalog of all 111 specialized agents in openScience, organized into seven workflow categories.
+
+## Overview
+
+| Category | Count | Focus |
+|----------|:-----:|-------|
+| [Review](#review-agents-11) | 11 | Code security, quality, architecture review |
+| [Literature Review](#literature-review-agents-15) | 15 | Search, summarize, synthesize, citations |
+| [Experiment Planning](#experiment-planning-agents-15) | 15 | Power, design, feasibility, preregistration |
+| [Data Management](#data-management-agents-15) | 15 | Import, validate, integrate, track |
+| [Data Analysis](#data-analysis-agents-20) | 20 | QC, modeling, interpretation |
+| [Figure Generation](#figure-generation-agents-15) | 15 | Publication-quality visuals |
+| [Scientific Writing](#scientific-writing-agents-20) | 20 | Abstracts, methods, grants, reviews |
+
+Each entry lists: category, description, required skills, input types, and output types.
+
+For usage examples see the [tutorials](examples/literature-review.md). To build your own agent, see [Contributing](contributing.md#adding-a-new-agent).
 
 ## Review Agents (11)
 

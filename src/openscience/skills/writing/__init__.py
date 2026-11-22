@@ -1,1 +1,1 @@
-"""Writing skills: template-engine backed scientific text generation."""
+"""Writing skills."""

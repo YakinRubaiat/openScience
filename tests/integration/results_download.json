@@ -1,0 +1,4 @@
+{
+  "result": "Result(data={'skill': 'scanpy', 'operation': 'qc_analysis', 'status': 'ok', 'data': {'data': {}}}, metadata={'agent': 'qc_analyzer'}, artifacts=[])",
+  "status": "success"
+}

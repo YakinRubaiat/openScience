@@ -27,7 +27,7 @@
       "SELECT * FROM users WHERE id = :bad_id  -- with :bad_id NOT NULL"
     ],
     "checks": [
-      "INSERT user id=dd99a2e3-52af-4b31-9c4a-99d545a45c93 committed",
+      "INSERT user id=903234fe-1962-4eb4-b176-3a36c19bd2ca committed",
       "SELECT by username -> found",
       "defaults: is_active=True (expected True), is_admin=False (expected False), created_at set=True",
       "UPDATE email -> updated@example.com (expected updated@example.com)",
@@ -47,7 +47,7 @@
       "SELECT COUNT(*) FROM tasks WHERE session_id = :id  -- orphan check"
     ],
     "checks": [
-      "INSERT session id=eec7b754-40c0-489b-bafc-e4d56c81323a with data_keys=['counts', 'metadata']",
+      "INSERT session id=ad702439-aed7-44c5-8550-74b7937412fd with data_keys=['counts', 'metadata']",
       "owner.sessions -> ['exp-05'] (expected ['exp-05'])",
       "defaults: status='active', compute_backend='local'",
       "UPDATE status -> 'archived'; updated_at changed: True",
@@ -65,7 +65,7 @@
       "DELETE FROM tasks WHERE id = :id"
     ],
     "checks": [
-      "INSERT task id=5998cfa3-db60-484f-898f-5d83fe6ed874 status='running' params={'threshold': 0.8}",
+      "INSERT task id=bdc4d359-b7af-42df-8da3-802d6158f0ce status='running' params={'threshold': 0.8}",
       "SELECT -> result={'accuracy': 0.95} (type dict)",
       "JSON column round-trip -> {'accuracy': 0.95}",
       "session.tasks ordered by created_at -> ['analysis', 'plot']",
@@ -85,7 +85,7 @@
       "DELETE FROM agents WHERE id = :id"
     ],
     "checks": [
-      "INSERT agent id=dec17b64-c905-4656-89d4-c24d20a114d0 name='qc_analyzer'",
+      "INSERT agent id=2f812f73-8ea7-4af4-bdb1-9a038974994f name='qc_analyzer'",
       "SELECT by name -> found",
       "JSON lists: required_skills=['fastqc', 'metrics'], input_types=['fastq'], output_types=['report']",
       "UPDATE description -> 'Updated description'",
@@ -166,7 +166,7 @@
       "writer errors: none",
       "total tasks = 200 (expected 200)",
       "distinct ids = 200 (equal to total: True)",
-      "reader saw monotonically consistent counts (min=2, max=76, all int: True)"
+      "reader saw monotonically consistent counts (min=4, max=18, all int: True)"
     ]
   }
 }

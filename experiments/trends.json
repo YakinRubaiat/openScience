@@ -1,0 +1,688 @@
+{
+  "n_papers": 60,
+  "topics": [
+    {
+      "topic_id": 0,
+      "top_words": [
+        "cas",
+        "applications",
+        "systems",
+        "genetic",
+        "delivery",
+        "cas systems",
+        "technology",
+        "viral",
+        "genome",
+        "immune"
+      ],
+      "weight_sum": 31.37870165685375
+    },
+    {
+      "topic_id": 1,
+      "top_words": [
+        "car",
+        "nk",
+        "antigen",
+        "function",
+        "chimeric antigen",
+        "chimeric",
+        "efficacy",
+        "vivo",
+        "immunotherapy",
+        "screens"
+      ],
+      "weight_sum": 20.253932791408868
+    },
+    {
+      "topic_id": 2,
+      "top_words": [
+        "quality life",
+        "quality",
+        "life",
+        "adults",
+        "eq",
+        "adolescents",
+        "fact",
+        "5d",
+        "eq 5d",
+        "exa cel"
+      ],
+      "weight_sum": 14.663677562944699
+    },
+    {
+      "topic_id": 3,
+      "top_words": [
+        "carcinoma",
+        "hcc",
+        "hepatocellular",
+        "resistance",
+        "ferroptosis",
+        "pooled",
+        "mice",
+        "organoids",
+        "screens",
+        "primary"
+      ],
+      "weight_sum": 26.33056278216914
+    },
+    {
+      "topic_id": 4,
+      "top_words": [
+        "dna",
+        "repair",
+        "ssa",
+        "dna repair",
+        "dna damage",
+        "damage",
+        "ddr",
+        "stranded",
+        "sclc",
+        "dsbs"
+      ],
+      "weight_sum": 14.031359561512598
+    },
+    {
+      "topic_id": 5,
+      "top_words": [
+        "medicine",
+        "regenerative",
+        "regenerative medicine",
+        "precision medicine",
+        "translational",
+        "research",
+        "precision",
+        "clinical",
+        "translational medicine",
+        "ngs"
+      ],
+      "weight_sum": 17.1294823150657
+    }
+  ],
+  "mesh_by_year": {
+    "2020": [
+      [
+        "humans",
+        8
+      ],
+      [
+        "animals",
+        6
+      ],
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        6
+      ],
+      [
+        "crispr-cas systems",
+        5
+      ],
+      [
+        "gene editing",
+        3
+      ],
+      [
+        "genetic therapy",
+        2
+      ],
+      [
+        "cell line, tumor",
+        2
+      ],
+      [
+        "mice",
+        2
+      ],
+      [
+        "mice, inbred nod",
+        2
+      ],
+      [
+        "rna, guide, crispr-cas systems",
+        2
+      ],
+      [
+        "xenograft model antitumor assays",
+        2
+      ],
+      [
+        "neoplasms",
+        2
+      ],
+      [
+        "epigenesis, genetic",
+        1
+      ],
+      [
+        "dna damage",
+        1
+      ],
+      [
+        "dna repair",
+        1
+      ]
+    ],
+    "2021": [
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        10
+      ],
+      [
+        "humans",
+        9
+      ],
+      [
+        "animals",
+        5
+      ],
+      [
+        "neoplasms",
+        5
+      ],
+      [
+        "crispr-cas systems",
+        4
+      ],
+      [
+        "gene editing",
+        4
+      ],
+      [
+        "cell line, tumor",
+        3
+      ],
+      [
+        "crispr-associated protein 9",
+        2
+      ],
+      [
+        "genetic therapy",
+        2
+      ],
+      [
+        "immunotherapy",
+        2
+      ],
+      [
+        "mice, inbred balb c",
+        2
+      ],
+      [
+        "mice, inbred c57bl",
+        2
+      ],
+      [
+        "mice",
+        2
+      ],
+      [
+        "gene knockout techniques",
+        2
+      ],
+      [
+        "genetic vectors",
+        2
+      ]
+    ],
+    "2022": [
+      [
+        "humans",
+        5
+      ],
+      [
+        "neoplasms",
+        5
+      ],
+      [
+        "crispr-cas systems",
+        4
+      ],
+      [
+        "gene editing",
+        4
+      ],
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        2
+      ],
+      [
+        "genome",
+        2
+      ],
+      [
+        "animals",
+        1
+      ],
+      [
+        "genomics",
+        1
+      ],
+      [
+        "oncogenes",
+        1
+      ],
+      [
+        "biology",
+        1
+      ],
+      [
+        "cd8-positive t-lymphocytes",
+        1
+      ],
+      [
+        "gain of function mutation",
+        1
+      ],
+      [
+        "proline",
+        1
+      ],
+      [
+        "receptors, chimeric antigen",
+        1
+      ],
+      [
+        "high-throughput nucleotide sequencing",
+        1
+      ]
+    ],
+    "2023": [
+      [
+        "humans",
+        9
+      ],
+      [
+        "gene editing",
+        6
+      ],
+      [
+        "crispr-cas systems",
+        6
+      ],
+      [
+        "neoplasms",
+        6
+      ],
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        4
+      ],
+      [
+        "genetic therapy",
+        3
+      ],
+      [
+        "immunotherapy",
+        2
+      ],
+      [
+        "epigenesis, genetic",
+        2
+      ],
+      [
+        "crispr-associated protein 9",
+        1
+      ],
+      [
+        "rna",
+        1
+      ],
+      [
+        "translational science, biomedical",
+        1
+      ],
+      [
+        "genomics",
+        1
+      ],
+      [
+        "carcinoma, hepatocellular",
+        1
+      ],
+      [
+        "liver neoplasms",
+        1
+      ],
+      [
+        "poly(adp-ribose) polymerase inhibitors",
+        1
+      ]
+    ],
+    "2024": [
+      [
+        "humans",
+        9
+      ],
+      [
+        "crispr-cas systems",
+        8
+      ],
+      [
+        "gene editing",
+        8
+      ],
+      [
+        "animals",
+        8
+      ],
+      [
+        "neoplasms",
+        6
+      ],
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        6
+      ],
+      [
+        "genetic therapy",
+        4
+      ],
+      [
+        "regenerative medicine",
+        2
+      ],
+      [
+        "immunotherapy, adoptive",
+        2
+      ],
+      [
+        "receptors, chimeric antigen",
+        2
+      ],
+      [
+        "cell line, tumor",
+        2
+      ],
+      [
+        "mice",
+        2
+      ],
+      [
+        "gene transfer techniques",
+        1
+      ],
+      [
+        "endometriosis",
+        1
+      ],
+      [
+        "female",
+        1
+      ]
+    ],
+    "2025": [
+      [
+        "humans",
+        12
+      ],
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        11
+      ],
+      [
+        "crispr-cas systems",
+        10
+      ],
+      [
+        "animals",
+        8
+      ],
+      [
+        "cell line, tumor",
+        8
+      ],
+      [
+        "mice",
+        7
+      ],
+      [
+        "neoplasms",
+        6
+      ],
+      [
+        "female",
+        5
+      ],
+      [
+        "immunotherapy, adoptive",
+        4
+      ],
+      [
+        "gene editing",
+        4
+      ],
+      [
+        "receptors, chimeric antigen",
+        4
+      ],
+      [
+        "male",
+        3
+      ],
+      [
+        "gene expression regulation, neoplastic",
+        3
+      ],
+      [
+        "genetic therapy",
+        3
+      ],
+      [
+        "killer cells, natural",
+        2
+      ]
+    ],
+    "2026": [
+      [
+        "humans",
+        3
+      ],
+      [
+        "animals",
+        3
+      ],
+      [
+        "mice",
+        3
+      ],
+      [
+        "crispr-cas systems",
+        3
+      ],
+      [
+        "clustered regularly interspaced short palindromic repeats",
+        3
+      ],
+      [
+        "t-lymphocytes",
+        1
+      ],
+      [
+        "neoplasms",
+        1
+      ],
+      [
+        "gtp-binding protein alpha subunits, gs",
+        1
+      ],
+      [
+        "genome, human",
+        1
+      ],
+      [
+        "female",
+        1
+      ],
+      [
+        "signal transduction",
+        1
+      ],
+      [
+        "lymphocytes, tumor-infiltrating",
+        1
+      ],
+      [
+        "male",
+        1
+      ],
+      [
+        "receptors, g-protein-coupled",
+        1
+      ],
+      [
+        "gene knockout techniques",
+        1
+      ]
+    ]
+  },
+  "emerging_mesh": [
+    {
+      "term": "mice",
+      "old_share": 0.0183,
+      "new_share": 0.0485,
+      "delta": 0.0302,
+      "new_count": 10
+    },
+    {
+      "term": "cell line, tumor",
+      "old_share": 0.0183,
+      "new_share": 0.0437,
+      "delta": 0.0254,
+      "new_count": 9
+    },
+    {
+      "term": "female",
+      "old_share": 0.0079,
+      "new_share": 0.0291,
+      "delta": 0.0213,
+      "new_count": 6
+    },
+    {
+      "term": "male",
+      "old_share": 0.0,
+      "new_share": 0.0194,
+      "delta": 0.0194,
+      "new_count": 4
+    },
+    {
+      "term": "immunotherapy, adoptive",
+      "old_share": 0.0079,
+      "new_share": 0.0194,
+      "delta": 0.0116,
+      "new_count": 4
+    },
+    {
+      "term": "mutation",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "lymphocytes, tumor-infiltrating",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "adolescent",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "adult",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "young adult",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "patient reported outcome measures",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "quality of life",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "treatment outcome",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "hematopoietic stem cells",
+      "old_share": 0.0,
+      "new_share": 0.0097,
+      "delta": 0.0097,
+      "new_count": 2
+    },
+    {
+      "term": "t-lymphocytes",
+      "old_share": 0.0052,
+      "new_share": 0.0146,
+      "delta": 0.0093,
+      "new_count": 3
+    },
+    {
+      "term": "gene expression regulation, neoplastic",
+      "old_share": 0.0052,
+      "new_share": 0.0146,
+      "delta": 0.0093,
+      "new_count": 3
+    },
+    {
+      "term": "receptors, chimeric antigen",
+      "old_share": 0.0105,
+      "new_share": 0.0194,
+      "delta": 0.0089,
+      "new_count": 4
+    },
+    {
+      "term": "killer cells, natural",
+      "old_share": 0.0026,
+      "new_share": 0.0097,
+      "delta": 0.0071,
+      "new_count": 2
+    },
+    {
+      "term": "tumor microenvironment",
+      "old_share": 0.0026,
+      "new_share": 0.0097,
+      "delta": 0.0071,
+      "new_count": 2
+    },
+    {
+      "term": "liver neoplasms",
+      "old_share": 0.0026,
+      "new_share": 0.0097,
+      "delta": 0.0071,
+      "new_count": 2
+    }
+  ],
+  "yearly_counts": {
+    "2022": 5,
+    "2023": 11,
+    "2025": 12,
+    "2020": 9,
+    "2021": 11,
+    "2024": 9,
+    "2026": 3
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "title": "KRAS-G12C inhibitor AZ-47 suppresses tumor cell growth and induces apoptosis in KRASG12C-mutant non-small cell lung cancer models",
+  "compound": "AZ-47",
+  "target": "KRAS G12C",
+  "disease": "non-small cell lung cancer (NSCLC)",
+  "cell_lines": ["NCI-H358", "NCI-H1373", "NCI-H2122"],
+  "key_finding": "AZ-47 potently inhibits viability of KRASG12C-mutant NSCLC cell lines (IC50 4-9 nM) while sparing KRAS wild-type lines, and induces apoptosis through suppression of RAF-MEK-ERK signaling.",
+  "assays": {
+    "viability_ic50_nm": {"NCI-H358": 4.2, "NCI-H1373": 8.7, "NCI-H2122": 6.1, "A549_KRAS_WT": 5400},
+    "mechanism": "phospho-ERK suppression, caspase-3/7 activation, PARP cleavage",
+    "statistics": "two-way ANOVA with Sidak's multiple comparisons test, n=3 biological replicates"
+  },
+  "simulated": true
+}

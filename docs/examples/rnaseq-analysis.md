@@ -1,3 +1,11 @@
+---
+layout: default
+title: "Example: Bulk RNA-seq Analysis"
+parent: Examples
+nav_order: 4
+description: "Differential expression and pathway analysis with DESeq2 + GSEA"
+---
+
 # Example: Bulk RNA-seq Analysis
 
 Differential expression and pathway analysis from a count matrix, ending in a

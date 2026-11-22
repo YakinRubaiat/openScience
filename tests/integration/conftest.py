@@ -18,7 +18,11 @@ os.environ.setdefault("OPENSCIENCE_API_SANDBOX_ENABLED", "false")
 
 @pytest.fixture()
 def integration_app(tmp_path, monkeypatch):
-    """Yield (TestClient, db_path, tmp_dir) for a fresh API app."""
+    """Yield (TestClient, db_path, tmp_dir) for a fresh API app.
+
+    The test process chdirs into ``tmp_path`` so request payloads can use
+    relative file paths, which is all the ``SafeFilePath`` validator allows.
+    """
     from fastapi.testclient import TestClient
 
     from openscience.api.config import reset_settings_cache
@@ -28,6 +32,7 @@ def integration_app(tmp_path, monkeypatch):
     monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL", f"sqlite:///{db_path}")
     monkeypatch.setenv("OPENSCIENCE_API_RATE_LIMIT_ENABLED", "false")
     monkeypatch.setenv("OPENSCIENCE_API_SANDBOX_ENABLED", "false")
+    monkeypatch.chdir(tmp_path)
     reset_settings_cache()
 
     app = create_app()

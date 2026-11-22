@@ -1,0 +1,9 @@
+# Placeholder — replace with actual banner image
+#
+# Suggested specs for banner.png:
+# - Width: 1200 px
+# - Height: ~300 px
+# - Format: PNG with transparency or clean SVG
+#
+# Once replaced, reference from docs/index.md as:
+#   ![openScience Banner](assets/images/banner.png)

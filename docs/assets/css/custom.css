@@ -1,0 +1,206 @@
+// Custom styles for openScience documentation
+// Overrides and extends just-the-docs defaults
+
+// ── Root variables ──────────────────────────────────────────
+:root {
+  --osc-primary: #667eea;
+  --osc-secondary: #764ba2;
+  --osc-success: #28a745;
+  --osc-warning: #ffc107;
+  --osc-danger: #dc3545;
+  --osc-info: #17a2b8;
+  --osc-code-bg: #f6f8fa;
+  --osc-border: #e1e4e8;
+}
+
+// ── Brand & headers ─────────────────────────────────────────
+.site-title {
+  font-weight: 700;
+  color: var(--osc-primary) !important;
+}
+
+// Gradient banner for hero sections
+.osc-banner {
+  background: linear-gradient(135deg, var(--osc-primary) 0%, var(--osc-secondary) 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+
+  h1, h2, h3 {
+    color: white;
+    margin-top: 0;
+  }
+}
+
+// ── Category badges ─────────────────────────────────────────
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.6em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.badge-literature { background: #e7f1ff; color: #0056b3; }
+  &.badge-experiment { background: #e8f5e9; color: #1e7e34; }
+  &.badge-data       { background: #fff3e0; color: #e65100; }
+  &.badge-analysis   { background: #f3e5f5; color: #6a1b9a; }
+  &.badge-figure     { background: #e0f2f1; color: #00695c; }
+  &.badge-writing    { background: #fce4ec; color: #c2185b; }
+  &.badge-review     { background: #efebe9; color: #5d4037; }
+}
+
+// ── Code blocks ─────────────────────────────────────────────
+.highlight {
+  background: var(--osc-code-bg);
+  border-radius: 6px;
+
+  pre {
+    border: 1px solid var(--osc-border);
+  }
+}
+
+code.language-bash::before {
+  content: "$ ";
+  color: #6a737d;
+  user-select: none;
+}
+
+// ── Navigation improvements ─────────────────────────────────
+.nav-list-item {
+  &:hover {
+    background: rgba(102, 126, 234, 0.08);
+  }
+
+  &.active {
+    background: rgba(102, 126, 234, 0.15);
+
+    > a {
+      color: var(--osc-primary);
+      font-weight: 600;
+    }
+  }
+}
+
+// ── Tables ──────────────────────────────────────────────────
+.table-wrapper {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+th {
+  background: #f6f8fa;
+  font-weight: 600;
+}
+
+// ── Card-like panels ────────────────────────────────────────
+.osc-card {
+  background: #f8f9fa;
+  border: 1px solid var(--osc-border);
+  border-left: 4px solid var(--osc-primary);
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 1rem 0;
+
+  h4 {
+    margin-top: 0;
+    color: var(--osc-primary);
+  }
+}
+
+// ── Agent entries ───────────────────────────────────────────
+.agent-entry {
+  border-bottom: 1px solid var(--osc-border);
+  padding: 1rem 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .agent-name {
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, monospace;
+    font-weight: 700;
+    color: var(--osc-primary);
+  }
+
+  .agent-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+
+    span {
+      font-size: 0.85em;
+      color: #586069;
+
+      strong {
+        color: inherit;
+        margin-right: 0.25rem;
+      }
+    }
+  }
+}
+
+// ── Dark mode tweaks (just-the-docs dark scheme) ────────────
+@media (prefers-color-scheme: dark) {
+  :root {
+    --osc-code-bg: #161b22;
+    --osc-border: #30363d;
+  }
+
+  .osc-card {
+    background: #161b22;
+    border-color: var(--osc-border);
+  }
+
+  th {
+    background: #21262d;
+  }
+}
+
+// ── Print styles ────────────────────────────────────────────
+@media print {
+  .side-bar, .site-nav, .search, .footer {
+    display: none !important;
+  }
+
+  .main-content {
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
+  .highlight pre {
+    border: 1px solid #ccc;
+  }
+}
+
+// ── Responsive adjustments ──────────────────────────────────
+@media (max-width: 768px) {
+  .agent-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .osc-banner {
+    padding: 1.5rem;
+  }
+}
+
+// ── Utility classes ─────────────────────────────────────────
+.text-success { color: var(--osc-success); }
+.text-warning { color: var(--osc-warning); }
+.text-danger  { color: var(--osc-danger); }
+.text-info    { color: var(--osc-info); }
+
+.mb-0 { margin-bottom: 0; }
+.mt-0 { margin-top: 0; }
+.p-1  { padding: 0.5rem; }
+.p-2  { padding: 1rem; }

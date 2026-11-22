@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Development Setup
-nav_order: 8
+nav_order: 9
 description: "Set up a local development environment for openScience"
 ---
 

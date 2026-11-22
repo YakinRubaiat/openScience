@@ -1,3 +1,10 @@
+---
+layout: default
+title: Library Build Guide
+nav_order: 15
+description: "Install and build the openScience library from source"
+---
+
 # Python Library Installation and Build Guide
 
 ## Building the openScience Library

@@ -57,9 +57,7 @@ def _efetch_details(pmids: list[str]) -> list[dict[str, Any]]:
             initials = a.findtext("Initials")
             if last:
                 authors.append(f"{last} {initials or ''}".strip())
-        abstract_parts = [
-            (t.text or "") for t in art.findall(".//Abstract/AbstractText")
-        ]
+        abstract_parts = [(t.text or "") for t in art.findall(".//Abstract/AbstractText")]
         doi = None
         for id_el in art.findall(".//ArticleIdList/ArticleId"):
             if id_el.get("IdType") == "doi":

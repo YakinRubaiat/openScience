@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Contributing
-nav_order: 10
+nav_order: 11
 description: "How to contribute to openScience"
 ---
 

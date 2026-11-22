@@ -1,0 +1,25 @@
+{
+  "test_name": "10_cache_performance",
+  "timestamp": "2026-11-22T11:51:42.087222",
+  "results": {
+    "no_cache_time_seconds": 0.007722139358520508,
+    "with_cache_time_seconds": 0.007627010345458984,
+    "speedup_factor": 1.012472647702407,
+    "cache_hit_rate": 0.0,
+    "cache_hits": 0,
+    "cache_misses": 100
+  },
+  "bottlenecks": [
+    {
+      "issue": "Low cache hit rate: 0.0%",
+      "severity": "medium",
+      "timestamp": "2026-11-22T11:51:42.102589"
+    }
+  ],
+  "recommendations": [
+    "Implement Redis for distributed caching",
+    "Use cache warming for frequently accessed data",
+    "Add cache invalidation strategy"
+  ],
+  "duration_seconds": 0.015374183654785156
+}

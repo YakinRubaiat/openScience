@@ -1,0 +1,26 @@
+{
+  "test_name": "07_large_file_upload",
+  "timestamp": "2026-11-22T11:58:40.438032",
+  "results": {
+    "upload_results": {
+      "1MB": {
+        "upload_time_seconds": 0.008940935134887695,
+        "throughput_mbps": 111.8451241300232
+      },
+      "10MB": {
+        "upload_time_seconds": 0.005527973175048828,
+        "throughput_mbps": 1808.9812818079877
+      },
+      "50MB": {
+        "upload_time_seconds": 0.014367103576660156,
+        "throughput_mbps": 3480.1725854629935
+      }
+    }
+  },
+  "bottlenecks": [],
+  "recommendations": [
+    "Implement chunked upload for large files",
+    "Add upload progress tracking"
+  ],
+  "duration_seconds": 0.3435862064361572
+}

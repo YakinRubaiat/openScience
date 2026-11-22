@@ -88,7 +88,7 @@ class AgentOrchestrator:
             from openscience.skills import load_default_skills
 
             load_default_skills()
-        except Exception:  # pragma: no cover - skills are optional
+        except Exception:  # noqa: S110  # pragma: no cover - skills are optional
             pass
 
     def execute_task(

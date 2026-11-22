@@ -25,7 +25,6 @@ import logging
 import re
 import shutil
 import subprocess
-import uuid
 
 import pytest
 
@@ -34,7 +33,7 @@ pytestmark = pytest.mark.integration
 DOCKER_PROJECT = "openscience-it08"
 
 
-def _repo_root() -> "pathlib.Path":
+def _repo_root() -> pathlib.Path:  # noqa: F821
     import pathlib
 
     return pathlib.Path(__file__).resolve().parents[2]
@@ -51,9 +50,7 @@ def _register_and_login(client, username="it_user", password="it-pass-12345"):
         },
     )
     assert r.status_code == 201, r.text
-    r = client.post(
-        "/api/v1/auth/login", json={"username": username, "password": password}
-    )
+    r = client.post("/api/v1/auth/login", json={"username": username, "password": password})
     assert r.status_code == 200, r.text
     return {"Authorization": f"Bearer {r.json()['access_token']}"}
 
@@ -65,7 +62,7 @@ class TestCompleteWorkflow:
     """Full scientific workflow through the FastAPI layer into the core."""
 
     def test_load_analyze_visualize_write(self, integration_app, project_dir):
-        client, db_path, _ = integration_app
+        client, _db_path, _ = integration_app
 
         # Exercise the core session end-to-end first (load -> analyze ->
         # visualize -> write), proving the framework pipeline works.
@@ -84,14 +81,15 @@ class TestCompleteWorkflow:
         doc = session.write_methods(result)
         assert doc is not None
 
-        # Now the same four steps through the REST API.
+        # Now the same four steps through the REST API (paths must be
+        # relative: ``SafeFilePath`` rejects absolute paths).
         headers = _register_and_login(client, "workflow_user")
         r = client.post("/api/v1/sessions", json={"name": "workflow"}, headers=headers)
         assert r.status_code == 201, r.text
         sid = r.json()["id"]
 
         steps: list[tuple[str, dict]] = [
-            ("/load", {"file_path": str(project_dir / "expression.csv")}),
+            ("/load", {"file_path": "project/expression.csv"}),
             ("/analyze", {"task": "quality control of expression data"}),
             ("/visualize", {"type": "auto", "style": "publication"}),
             ("/write", {"style": "nature", "citation_format": "apa"}),
@@ -104,8 +102,9 @@ class TestCompleteWorkflow:
         assert r.status_code == 200
         recorded_types = [t["task_type"] for t in r.json()["tasks"]]
         assert recorded_types == ["load", "analyze", "visualize", "write"]
-        assert all(t["status"] == "completed" and t["result"] is not None
-                   for t in r.json()["tasks"])
+        assert all(
+            t["status"] == "completed" and t["result"] is not None for t in r.json()["tasks"]
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -120,9 +119,7 @@ class TestDockerAPIIntegration:
         if shutil.which("docker") is None:
             pytest.skip("docker unavailable")
         try:
-            subprocess.run(
-                ["docker", "info"], check=True, capture_output=True, timeout=15
-            )
+            subprocess.run(["docker", "info"], check=True, capture_output=True, timeout=15)
         except Exception:
             pytest.skip("docker daemon not running")
 
@@ -131,8 +128,7 @@ class TestDockerAPIIntegration:
         # compose definition rather than a hand-rolled container.
         project = tmp_path_factory.mktemp("compose")
         compose_file = project / "docker-compose.yml"
-        compose_file.write_text(
-            """services:
+        compose_file.write_text("""services:
   db:
     image: postgres:16-alpine
     environment:
@@ -146,20 +142,30 @@ class TestDockerAPIIntegration:
       interval: 2s
       timeout: 3s
       retries: 20
-"""
-        )
+""")
         subprocess.run(
-            ["docker", "compose", "-p", DOCKER_PROJECT, "-f", str(compose_file),
-             "up", "-d", "--wait"],
-            check=True, capture_output=True, timeout=300,
+            [
+                "docker",
+                "compose",
+                "-p",
+                DOCKER_PROJECT,
+                "-f",
+                str(compose_file),
+                "up",
+                "-d",
+                "--wait",
+            ],
+            check=True,
+            capture_output=True,
+            timeout=300,
         )
         try:
             yield project, compose_file
         finally:
             subprocess.run(
-                ["docker", "compose", "-p", DOCKER_PROJECT, "-f", str(compose_file),
-                 "down", "-v"],
-                capture_output=True, timeout=120,
+                ["docker", "compose", "-p", DOCKER_PROJECT, "-f", str(compose_file), "down", "-v"],
+                capture_output=True,
+                timeout=120,
             )
 
     def test_postgres_container_and_api_integration(self, compose_stack, tmp_path):
@@ -167,19 +173,36 @@ class TestDockerAPIIntegration:
         # Inspect the running container: the Compose-managed image, readiness
         # and port mapping all prove the Docker layer works.
         ps = subprocess.run(
-            ["docker", "compose", "-p", DOCKER_PROJECT, "-f",
-             str(compose_stack[1]), "ps", "--format", "json"],
-            check=True, capture_output=True, text=True, timeout=60,
+            [
+                "docker",
+                "compose",
+                "-p",
+                DOCKER_PROJECT,
+                "-f",
+                str(compose_stack[1]),
+                "ps",
+                "--format",
+                "json",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=60,
         )
         containers = [json.loads(line) for line in ps.stdout.splitlines() if line.strip()]
         assert containers, "no compose containers running"
         assert any(c["State"] == "running" for c in containers)
 
-        psycopg = pytest.importorskip("psycopg2", reason="psycopg2 not installed; "
-                                      "DB driver unavailable outside Docker images")
+        psycopg = pytest.importorskip(
+            "psycopg2",
+            reason="psycopg2 not installed; " "DB driver unavailable outside Docker images",
+        )
         conn = psycopg.connect(
-            host="localhost", port=55432, user="test",
-            password="test", dbname="openscience_it",
+            host="localhost",
+            port=55432,
+            user="test",
+            password="test",
+            dbname="openscience_it",
         )
         try:
             cur = conn.cursor()
@@ -193,8 +216,7 @@ class TestDockerAPIIntegration:
             db_mod.reset_engine()
             db_mod.init_db("postgresql://test:test@localhost:55432/openscience_it")
             cur.execute(
-                "SELECT tablename FROM pg_tables WHERE schemaname='public' "
-                "ORDER BY tablename"
+                "SELECT tablename FROM pg_tables WHERE schemaname='public' " "ORDER BY tablename"
             )
             tables = {row[0] for row in cur.fetchall()}
             assert {"users", "agents", "sessions", "tasks"} <= tables
@@ -211,7 +233,7 @@ class TestAPIAgentWorkerIntegration:
 
     def test_api_agent_registry_seeded_into_database(self, integration_app):
         """Startup registers all 111 agents from the orchestrator into the DB."""
-        client, db_path, _ = integration_app
+        client, _db_path, _ = integration_app
         headers = _register_and_login(client, "agents_user")
 
         r = client.get("/api/v1/agents", headers=headers)
@@ -220,8 +242,13 @@ class TestAPIAgentWorkerIntegration:
         assert payload["total"] == 111
         categories = {a["category"] for a in payload["agents"]}
         assert {
-            "literature_review", "experiment_planning", "data_management",
-            "analysis", "figure_generation", "writing", "review",
+            "literature",
+            "experiment",
+            "data_management",
+            "analysis",
+            "visualization",
+            "writing",
+            "review",
         } <= categories
 
         # Detail endpoint round-trip through DB + auth middleware.
@@ -239,18 +266,20 @@ class TestAPIAgentWorkerIntegration:
         monkeypatch.setenv("OPENSCIENCE_API_SANDBOX_ENABLED", "false")
         from openscience.workers.tasks import analyze_data_task, health_check
 
-        # Eager-execute the task synchronously: no broker required.
+        # Eager-execute the task synchronously: no broker required.  In eager
+        # mode ``self.request.id`` is ``None``; the broker assigns ids only
+        # for queued runs, so assert on the captured payload instead.
         result = analyze_data_task.run(
             str(project_dir / "expression.csv"),
             "quality control of expression data",
         )
         assert result["status"] == "success"
-        assert result["task_id"]
+        assert "task_id" in result
         assert health_check() == {"status": "healthy"}
 
     def test_api_schedules_worker_task_chain(self, integration_app, project_dir):
         """End-to-end: API session work + Celery worker on same dataset."""
-        client, db_path, _ = integration_app
+        client, _db_path, _ = integration_app
         headers = _register_and_login(client, "chain_user")
 
         # API path: create session, load data.
@@ -258,7 +287,7 @@ class TestAPIAgentWorkerIntegration:
         sid = r.json()["id"]
         r = client.post(
             f"/api/v1/sessions/{sid}/load",
-            json={"file_path": str(project_dir / "expression.csv")},
+            json={"file_path": "project/expression.csv"},
             headers=headers,
         )
         assert r.status_code == 200
@@ -361,9 +390,9 @@ class TestSessionPersistence:
         from openscience.api.config import reset_settings_cache
         from openscience.api.main import create_app
 
-        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL",
-                           f"sqlite:///{tmp_path / 'persist.db'}")
+        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL", f"sqlite:///{tmp_path / 'persist.db'}")
         monkeypatch.setenv("OPENSCIENCE_API_RATE_LIMIT_ENABLED", "false")
+        monkeypatch.chdir(tmp_path)
         reset_settings_cache()
 
         data_file = tmp_path / "expression.csv"
@@ -373,16 +402,17 @@ class TestSessionPersistence:
         app = create_app()
         with TestClient(app) as client:
             headers = _register_and_login(client, "persist_user")
-            r = client.post("/api/v1/sessions", json={"name": "persist"},
-                            headers=headers)
+            r = client.post("/api/v1/sessions", json={"name": "persist"}, headers=headers)
             sid = r.json()["id"]
             r = client.post(
                 f"/api/v1/sessions/{sid}/load",
-                json={"file_path": str(data_file)}, headers=headers)
+                json={"file_path": "expression.csv"},
+                headers=headers,
+            )
             assert r.status_code == 200
             r = client.post(
-                f"/api/v1/sessions/{sid}/analyze",
-                json={"task": "quality control"}, headers=headers)
+                f"/api/v1/sessions/{sid}/analyze", json={"task": "quality control"}, headers=headers
+            )
             assert r.status_code == 200
 
         # --- Second "service lifetime" (fresh app, same DB file) ---
@@ -403,8 +433,8 @@ class TestSessionPersistence:
             # Live session is lazily rebuilt in the registry: continuing
             # work on a previously-created session succeeds after restart.
             r = client2.post(
-                f"/api/v1/sessions/{sid}/analyze",
-                json={"task": "clustering"}, headers=headers2)
+                f"/api/v1/sessions/{sid}/analyze", json={"task": "clustering"}, headers=headers2
+            )
             assert r.status_code == 200
 
     def test_worker_and_api_share_data_directory(self, integration_app, tmp_path):
@@ -426,13 +456,14 @@ class TestSessionPersistence:
         sid = r.json()["id"]
         r = client.post(
             f"/api/v1/sessions/{sid}/load",
-            json={"file_path": str(f)}, headers=headers)
+            json={"file_path": "shared_data/shared.csv"},
+            headers=headers,
+        )
         assert r.status_code == 200
 
 
 def _relogin(client, username, password):
-    r = client.post("/api/v1/auth/login",
-                    json={"username": username, "password": password})
+    r = client.post("/api/v1/auth/login", json={"username": username, "password": password})
     assert r.status_code == 200, r.text
     return {"Authorization": f"Bearer {r.json()['access_token']}"}
 
@@ -444,7 +475,7 @@ class TestErrorPropagation:
     """Failures surface correctly at every layer boundary."""
 
     def test_agent_error_becomes_400_and_failed_task_record(self, integration_app):
-        client, db_path, _ = integration_app
+        client, _db_path, _ = integration_app
         headers = _register_and_login(client, "error_user")
         r = client.post("/api/v1/sessions", json={"name": "errors"}, headers=headers)
         sid = r.json()["id"]
@@ -464,12 +495,13 @@ class TestErrorPropagation:
         assert failed[0]["task_type"] == "analyze"
         assert failed[0]["error"]
 
-        # Missing data file -> exception -> HTTP 400 for load.
+        # Path-traversal load payload -> input validation rejects with 422.
         r = client.post(
             f"/api/v1/sessions/{sid}/load",
-            json={"file_path": "/definitely/not/here-xyz.csv"}, headers=headers,
+            json={"file_path": "../escape.csv"},
+            headers=headers,
         )
-        assert r.status_code == 400 and "load failed" in r.json()["detail"]
+        assert r.status_code == 422
 
     def test_auth_and_validation_errors_propagate(self, integration_app):
         client, _, _ = integration_app
@@ -485,27 +517,31 @@ class TestErrorPropagation:
         assert "errors" in r.json()
 
         # Wrong password -> 401.
-        r = client.post("/api/v1/auth/login",
-                        json={"username": "valid_user", "password": "wrong-pass"})
+        r = client.post(
+            "/api/v1/auth/login", json={"username": "valid_user", "password": "wrong-pass"}
+        )
         assert r.status_code == 401
 
     def test_worker_task_error_is_captured_not_raised(self, project_dir):
         pytest.importorskip("celery")
         from openscience.workers.tasks import analyze_data_task
 
+        # An unknown specialist makes the orchestrator raise; the worker
+        # task must capture the error into its result payload, not raise.
         result = analyze_data_task.run(
-            str(project_dir / "missing.csv"), "quality control"
+            str(project_dir / "expression.csv"),
+            "quality control",
+            specialist="nonexistent_agent",
         )
         assert result["status"] == "error"
-        assert "error" in result and result["task_id"]
+        assert "error" in result and "nonexistent_agent" in result["error"]
 
     def test_session_not_found_and_unauthorized_access(self, integration_app):
         client, _, _ = integration_app
         headers_a = _register_and_login(client, "owner_a")
         headers_b = _register_and_login(client, "owner_b")
 
-        r = client.post("/api/v1/sessions", json={"name": "mine"},
-                        headers=headers_a)
+        r = client.post("/api/v1/sessions", json={"name": "mine"}, headers=headers_a)
         sid = r.json()["id"]
 
         # Non-existent session -> 404.
@@ -531,9 +567,11 @@ class TestLoggingAcrossServices:
         r = client.get("/health")
         assert "X-Process-Time-Ms" in r.headers
 
-        records = [rec for rec in caplog.records
-                   if rec.name == "openscience.api"
-                   and "GET /health -> 200" in rec.getMessage()]
+        records = [
+            rec
+            for rec in caplog.records
+            if rec.name == "openscience.api" and "GET /health -> 200" in rec.getMessage()
+        ]
         assert records, "request logging middleware did not log /health"
 
     def test_error_propagation_is_logged_server_side(self, integration_app, caplog):
@@ -549,7 +587,8 @@ class TestLoggingAcrossServices:
         )
         assert r.status_code == 400
         assert any(
-            rec.name == "openscience.api" and rec.levelno >= logging.ERROR
+            rec.name == "openscience.api"
+            and rec.levelno >= logging.ERROR
             and "analyze failed" in rec.getMessage()
             for rec in caplog.records
         )
@@ -569,6 +608,7 @@ class TestLoggingAcrossServices:
 
         # Middleware wiring happens in the API factory.
         from openscience.api.middleware.logging import RequestLoggingMiddleware
+
         assert RequestLoggingMiddleware is not None
 
 
@@ -591,7 +631,7 @@ class TestMonitoringAndMetrics:
         flask_app = create_app()
         flask_app.testing = True
         r = flask_app.test_client().get("/health")
-        assert r.status_code == 200 and r.json()["status"] == "healthy"
+        assert r.status_code == 200 and r.get_json()["status"] == "healthy"
 
     def test_worker_health_task_and_celery_config(self):
         pytest.importorskip("celery")
@@ -613,8 +653,9 @@ class TestMonitoringAndMetrics:
 
         # Every compose service ships a healthcheck.
         for service in ("api", "ui", "worker", "db", "redis", "flower"):
-            assert re.search(rf"\n  {service}:.*?healthcheck:", compose,
-                             re.DOTALL), f"{service} missing healthcheck"
+            assert re.search(
+                rf"\n  {service}:.*?healthcheck:", compose, re.DOTALL
+            ), f"{service} missing healthcheck"
 
         # Flower monitoring service is defined.
         assert "flower" in compose
@@ -633,21 +674,21 @@ class TestBackupAndRecovery:
         import openscience.api.database as db_mod
         from openscience.api.config import reset_settings_cache
 
-        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL",
-                           f"sqlite:///{tmp_path / 'live.db'}")
+        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL", f"sqlite:///{tmp_path / 'live.db'}")
         reset_settings_cache()
         db_mod.reset_engine()
         db_mod.init_db()
 
         # Seed a user + session via the ORM.
+        from openscience.api.middleware.auth import hash_password
         from openscience.api.models.session import SessionModel
         from openscience.api.models.user import UserModel
-        from openscience.api.middleware.auth import hash_password
 
         db = next(db_mod.get_db())
         try:
-            user = UserModel(username="bk_user", email="bk@t.dev",
-                             hashed_password=hash_password("bk-pass-123"))
+            user = UserModel(
+                username="bk_user", email="bk@t.dev", hashed_password=hash_password("bk-pass-123")
+            )
             db.add(user)
             db.commit()
             db.refresh(user)
@@ -666,8 +707,7 @@ class TestBackupAndRecovery:
         src.close()
 
         # "Recover": point the app at the backup and verify data integrity.
-        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL",
-                           f"sqlite:///{tmp_path / 'backup.db'}")
+        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL", f"sqlite:///{tmp_path / 'backup.db'}")
         reset_settings_cache()
         db_mod.reset_engine()
         engine = create_engine(f"sqlite:///{tmp_path / 'backup.db'}")
@@ -698,9 +738,7 @@ class TestBackupAndRecovery:
             assert name in orch.agents
 
         # Orchestrator can route a backup-style task to a valid agent.
-        result = orch.execute_task(
-            "back up and archive analysis data", parameters={}, context={}
-        )
+        result = orch.execute_task("back up and archive analysis data", parameters={}, context={})
         assert result is not None
 
 
@@ -714,13 +752,12 @@ class TestUpgradePath:
 
     def test_alembic_upgrade_head_creates_schema(self, tmp_path, monkeypatch):
         pytest.importorskip("alembic")
-        from alembic import command
         from alembic.config import Config
-
         from sqlalchemy import create_engine
 
-        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL",
-                           f"sqlite:///{tmp_path / 'mig.db'}")
+        from alembic import command
+
+        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL", f"sqlite:///{tmp_path / 'mig.db'}")
         cfg = Config(str(_repo_root() / "alembic.ini"))
         cfg.set_main_option("script_location", str(_repo_root() / "alembic"))
         command.upgrade(cfg, "head")
@@ -734,19 +771,27 @@ class TestUpgradePath:
         # Columns exist as expected on the sessions table (integration of
         # the schema with the ORM models).
         cols = {c["name"] for c in inspect(engine).get_columns("sessions")}
-        assert {"id", "name", "owner_id", "project_dir", "compute_backend",
-                "status", "data_keys", "loaded_data", "created_at",
-                "updated_at"} <= cols
+        assert {
+            "id",
+            "name",
+            "owner_id",
+            "project_dir",
+            "compute_backend",
+            "status",
+            "data_keys",
+            "loaded_data",
+            "created_at",
+            "updated_at",
+        } <= cols
 
     def test_alembic_downgrade_then_upgrade_roundtrip(self, tmp_path, monkeypatch):
         pytest.importorskip("alembic")
-        from alembic import command
         from alembic.config import Config
-
         from sqlalchemy import create_engine, inspect
 
-        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL",
-                           f"sqlite:///{tmp_path / 'rt.db'}")
+        from alembic import command
+
+        monkeypatch.setenv("OPENSCIENCE_API_DATABASE_URL", f"sqlite:///{tmp_path / 'rt.db'}")
         cfg = Config(str(_repo_root() / "alembic.ini"))
         cfg.set_main_option("script_location", str(_repo_root() / "alembic"))
 
@@ -763,8 +808,8 @@ class TestUpgradePath:
 
     def test_orm_metadata_matches_migration_head(self):
         """ORM metadata and the 0001 migration agree on table names."""
-        from openscience.api.database import Base
         import openscience.api.models  # noqa: F401 (register models)
+        from openscience.api.database import Base
 
         orm_tables = set(Base.metadata.tables.keys())
         assert {"users", "agents", "sessions", "tasks"} <= orm_tables

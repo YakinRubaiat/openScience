@@ -138,8 +138,9 @@ exclude_lines = [
 exclude_dirs = ["tests", "scripts", "examples"]
 # Skips are intentional for this research-workbench codebase:
 # B101 assert usage, B104 dev-server bind on 0.0.0.0 (guarded by env config),
-# B106 demo/dev seeded credentials, B301/B403 pickle is used deliberately for
-# local session persistence (documented), B112 try-except-continue in the
+# B106 demo/dev seeded credentials, B110 try-except-pass where optional
+# plugins/skills fail to load by design, B301/B403 pickle is used deliberately
+# for local session persistence (documented), B112 try-except-continue in the
 # plugin loader, B201 Flask debug mode is dev-only in server.py,
 # B405/B314 stdlib ElementTree parses trusted PubMed API responses.
-skips = ["B101", "B104", "B106", "B201", "B301", "B314", "B403", "B405", "B112"]
+skips = ["B101", "B104", "B106", "B110", "B112", "B201", "B301", "B314", "B403", "B405"]

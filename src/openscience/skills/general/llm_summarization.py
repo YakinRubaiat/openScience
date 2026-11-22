@@ -8,12 +8,12 @@ This gives the lit_summarizer agent something truthful to work with
 even when no LLM is configured.
 """
 
-import os
 from collections import Counter
-from typing import Any
 
 
-def run(operation: str, parameters: dict = None, context: dict = None, **kwargs) -> dict:
+def run(
+    operation: str, parameters: dict | None = None, context: dict | None = None, **kwargs
+) -> dict:
     if operation != "run":
         raise ValueError(f"Unsupported operation: {operation}")
     parameters = parameters or {}
@@ -54,12 +54,8 @@ def _summarize_paper(p: dict) -> dict:
 def _synthesize(papers: list[dict], topic: str) -> dict:
     years = Counter(p.get("year") for p in papers if p.get("year"))
     journals = Counter(p.get("journal") for p in papers if p.get("journal"))
-    mesh = Counter(
-        term.lower() for p in papers for term in (p.get("mesh_terms") or [])
-    )
-    pub_types = Counter(
-        pt for p in papers for pt in (p.get("publication_types") or [])
-    )
+    mesh = Counter(term.lower() for p in papers for term in (p.get("mesh_terms") or []))
+    pub_types = Counter(pt for p in papers for pt in (p.get("publication_types") or []))
     return {
         "topic": topic,
         "years": sorted(years.items(), key=lambda kv: kv[0] or 0),

@@ -1,0 +1,41 @@
+{
+  "test_name": "09_agent_execution_timeout",
+  "timestamp": "2026-11-22T11:58:40.914430",
+  "results": {
+    "timeout_scenarios": {
+      "fast_agent": {
+        "expected_time": 0.1,
+        "timeout": 1.0,
+        "actual_time": 0.10069608688354492,
+        "timed_out": false,
+        "should_timeout": false
+      },
+      "slow_agent": {
+        "expected_time": 2.0,
+        "timeout": 1.0,
+        "actual_time": 0.9985849857330322,
+        "timed_out": false,
+        "should_timeout": true
+      },
+      "normal_agent": {
+        "expected_time": 0.5,
+        "timeout": 2.0,
+        "actual_time": 0.504127025604248,
+        "timed_out": false,
+        "should_timeout": false
+      }
+    }
+  },
+  "bottlenecks": [
+    {
+      "issue": "slow_agent should have timed out but didn't",
+      "severity": "medium",
+      "timestamp": "2026-11-22T11:58:42.517900"
+    }
+  ],
+  "recommendations": [
+    "Implement configurable timeout per agent",
+    "Add timeout warnings for long-running agents"
+  ],
+  "duration_seconds": 1.6034910678863525
+}

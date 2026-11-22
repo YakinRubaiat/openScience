@@ -135,24 +135,44 @@ class Sandbox:
                 self.original_limits = {}
 
             def __enter__(self):
-                # Set memory limit
+                # Set memory limit.  Some platforms (e.g. macOS) do not
+                # support tightening RLIMIT_AS from an unlimited value --
+                # limits are best-effort on development machines and are
+                # enforced by the container runtime in production.
                 if self.policy.max_memory:
-                    mem_limit = self._parse_memory(self.policy.max_memory)
-                    self.original_limits["as"] = resource.getrlimit(resource.RLIMIT_AS)
-                    resource.setrlimit(resource.RLIMIT_AS, (mem_limit, mem_limit))
+                    try:
+                        mem_limit = self._parse_memory(self.policy.max_memory)
+                        self.original_limits["as"] = resource.getrlimit(resource.RLIMIT_AS)
+                        resource.setrlimit(resource.RLIMIT_AS, (mem_limit, mem_limit))
+                    except (OSError, ValueError):
+                        pass
 
                 # Set CPU time limit
                 if self.policy.max_execution_time:
-                    self.original_limits["cpu"] = resource.getrlimit(resource.RLIMIT_CPU)
-                    resource.setrlimit(
-                        resource.RLIMIT_CPU,
-                        (self.policy.max_execution_time, self.policy.max_execution_time),
-                    )
+                    try:
+                        self.original_limits["cpu"] = resource.getrlimit(resource.RLIMIT_CPU)
+                        resource.setrlimit(
+                            resource.RLIMIT_CPU,
+                            (self.policy.max_execution_time, self.policy.max_execution_time),
+                        )
+                    except (OSError, ValueError):
+                        pass
 
             def __exit__(self, *args):
-                # Restore original limits
-                for lim, value in self.original_limits.items():
-                    resource.setrlimit(getattr(resource, f"RLIMIT_{lim.upper()}"), value)
+                # Restore original limits as far as permitted. A non-root
+                # process may not raise a hard limit once lowered, so keep the
+                # current hard limit and restore the soft limit capped by it.
+                for lim, (soft, hard) in self.original_limits.items():
+                    rlim = getattr(resource, f"RLIMIT_{lim.upper()}")
+                    _, cur_hard = resource.getrlimit(rlim)
+                    # The hard limit cannot be raised back up by a non-root
+                    # process once lowered; keep it and clamp the soft limit.
+                    new_hard = cur_hard
+                    if cur_hard == resource.RLIM_INFINITY:
+                        new_soft = soft
+                    else:
+                        new_soft = cur_hard if soft == resource.RLIM_INFINITY else min(soft, cur_hard)
+                    resource.setrlimit(rlim, (new_soft, new_hard))
 
             def _parse_memory(self, mem_str: str) -> int:
                 """Parse memory string like '8GB' to bytes."""
