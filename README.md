@@ -62,89 +62,70 @@ python experiments/run_scrna_experiment.py    # Single-cell analysis
 
 ---
 
-## 🏗️ **Architecture (Professional Diagram)**
+## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          🎨 WEB PRESENTATION LAYER                          │
-│                                                                             │
-│  ┌─────────────────────┐    ┌─────────────────────────────────────────┐     │
-│  │   Web UI (React)    │◄──►│      API Documentation (OpenAPI)      │     │
-│  │ • Agent selection   │    │ • Interactive Swagger UI              │     │
-│  │ • Workflow builder  │    │ • Endpoint testing                    │     │
-│  │ • Results display   │    │ • Request/response schemas            │     │
-│  │ • Mobile responsive │    │ • Authentication testing              │     │
-│  └─────────────────────┘    └─────────────────────────────────────────┘     │
-│                                                                             │
-└─────────────────────────────┬───────────────────────────────────────────────┘
-                              │ HTTP/REST + WebSocket
-                              ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        🔌 APPLICATION LAYER                                 │
-│                                                                             │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                   FastAPI REST API                                  │   │
-│  │  • Sessions • Analysis • Agents • Auth • Results • Health Checks   │   │
-│  │  • JWT authentication • Rate limiting • Input validation           │   │
-│  │  • SQLAlchemy ORM • PostgreSQL • Redis caching                     │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-└─────────────────────────────┬───────────────────────────────────────────────┘
-                              │ Task Queue (Celery/Redis)
-                              ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        🤖 AGENT ORCHESTRATION LAYER                         │
-│                                                                             │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │              Agent Orchestrator (Rust + Python)                     │   │
-│  │  • Task routing • Agent selection • Error handling • Retries       │   │
-│  │  • Async execution • Concurrent processing • Result aggregation    │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
-│  │ Literature│ │Experiment│ │   Data   │ │ Analysis │ │  Figure  │      │
-│  │  Review   │ │ Planning │ │Management│ │          │ │Generation│      │
-│  │  (15)     │ │  (15)    │ │  (15)    │ │  (20)    │ │  (15)    │      │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
-│  ┌──────────┐                                                            │
-│  │  Writing   │                                                            │
-│  │  Agents    │                                                            │
-│  │   (20)     │                                                            │
-│  └──────────┘                                                            │
-│                                                                             │
-└─────────────────────────────┬───────────────────────────────────────────────┘
-                              │ Skill Execution
-                              ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        🛠️ SCIENTIFIC SKILLS LAYER                           │
-│                                                                             │
-│  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐              │
-│  │  PubMed    │ │   RDKit    │ │   Scanpy   │ │ Matplotlib │              │
-│  │  API       │ │  Chemistry │ │  Single-   │ │ Statistics │              │
-│  │  (Real)    │ │  (Real)    │ │  Cell (Real)│ │ (Real)     │              │
-│  └────────────┘ └────────────┘ └────────────┘ └────────────┘              │
-│                                                                             │
-│  ┌────────────┐ ┌────────────┐ ┌────────────┐ (Partial implementations)     │
-│  │Statsmodels │ │ Lifelines  │ │ Scientific │                            │
-│  │ Statistics │ │ Survival   │ │  Writing   │                            │
-│  │ (Real)     │ │ Analysis   │ │ (Real)     │                            │
-│  └────────────┘ └────────────┘ └────────────┘                            │
-│                                                                             │
-└─────────────────────────────┬───────────────────────────────────────────────┘
-                              │ Database Access
-                              ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        🗄️ DATA PERSISTENCE LAYER                            │
-│                                                                             │
-│  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐              │
-│  │ PostgreSQL │ │   Redis    │ │   Files    │ │  Sessions  │              │
-│  │ • Users    │ │ • Cache    │ │ • Artifacts│ │ • Results  │              │
-│  │ • Sessions │ │ • Queue    │ │ • Datasets │ │ • History  │              │
-│  │ • Results  │ │ • Pub/Sub  │ │ • Logs     │ │ • Metadata │              │
-│  └────────────┘ └────────────┘ └────────────┘ └────────────┘              │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
++=====================================================================+
+|                         WEB PRESENTATION LAYER                      |
+|                                                                     |
+|   +------------------+              +---------------------------+   |
+|   |  Web UI (React)  |  <~~~~~~~~>  |  API Docs (OpenAPI/HTTP)  |   |
+|   |  agents + runs   |  HTTP/REST   |  Swagger UI + schemas     |   |
+|   +------------------+              +---------------------------+   |
++----------------------------------|----------------------------------+
+                                   | Task Queue (Celery / Redis)
+                                   v
++=====================================================================+
+|                          APPLICATION LAYER                          |
+|                                                                     |
+|   +-------------------------------------------------------------+   |
+|   |  FastAPI REST API  (Python)                                 |   |
+|   |  sessions | analyze | agents | auth(JWT) | rate-limit       |   |
+|   +-------------------------------+-----------------------------+   |
+|                                 |  calls                          |
+|                                 v                                 |
+|   +-------------------------------------------------------------+   |
+|   |  Agent Orchestrator  (Rust core + Python facade)            |   |
+|   |  task routing | agent selection | sandbox | retries         |   |
+|   +-------------------------------+-----------------------------+   |
++----------------------------------|----------------------------------+
+                                   | dispatches to 111 agents
+                                   v
++=====================================================================+
+|                        AGENT + SKILLS LAYER                         |
+|                                                                     |
+|  LITERATURE (15)   EXPERIMENT (15)   DATA MGMT (15)  ANALYSIS (20)  |
+|  +----------+      +----------+      +-----------+   +-----------+  |
+|  | pubmed   |      | power    |      | ingest    |   | scanpy    |  |
+|  | search   |      | design   |      | validate  |   | DESeq2    |  |
+|  | trends   |      | prereg   |      | batch fx  |   | variants  |  |
+|  +----------+      +----------+      +-----------+   +-----------+  |
+|                                                                     |
+|  FIGURES (15)      WRITING (20)      REVIEW (11)                    |
+|  +----------+      +----------+      +-----------+                  |
+|  | matplotlib      | abstract |      | security  |                  |
+|  | seaborn   |     | methods  |      | quality   |                  |
+|  | plotly    |     | grants   |      | devops    |                  |
+|  +----------+      +----------+      +-----------+                  |
+|                                                                     |
+|     271 registered skills: RDKit | scanpy | statsmodels | lifelines |
+|     matplotlib | PubMed/OpenAlex/CrossRef | meta-analysis | ...     |
++----------------------------------|----------------------------------+
+                                   | SQL / cache / files
+                                   v
++=====================================================================+
+|                        DATA PERSISTENCE LAYER                       |
+|                                                                     |
+|    +-------------+    +-----------+    +-----------+                |
+|    | PostgreSQL  |    |   Redis   |    |   Files   |                |
+|    | users       |    | cache     |    | datasets  |                |
+|    | sessions    |    | queues    |    | artifacts |                |
+|    | results     |    | pub/sub   |    | logs      |                |
+|    +-------------+    +-----------+    +-----------+                |
++=====================================================================+
 ```
+
+**Data flow:** UI/REST → FastAPI → **AgentOrchestrator** routes the task to one of **111 agents** across 7 categories → agents call **271 registered skills** → results persist to PostgreSQL/Redis/files and stream back.
 
 ---
 
