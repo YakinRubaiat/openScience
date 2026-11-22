@@ -33,12 +33,13 @@ def check(path: str, **kwargs: Any) -> dict[str, Any]:
     """Check whether files under ``path`` are black-formatted."""
     files = ac.collect_python_files(path)
     if _black_available():
-        proc = _run_black(["--check", "--quiet", str(path)])
+        proc = _run_black(["--check", "--quiet", *(map(str, files))])
         out = proc.stderr + proc.stdout
-        unformatted = [f for f in map(str, files) if f in out]
+        unformatted = [line.rsplit("would be reformatted", 1)[0].strip()
+                       for line in out.splitlines() if "would be reformatted" in line]
         if proc.returncode != 0 and not unformatted:
-            unformatted = [line.rsplit("would be reformatted", 1)[0].strip()
-                           for line in out.splitlines() if "would be reformatted" in line]
+            # parse error or empty selection: keep files we could not verify
+            unformatted = [f for f in map(str, files)]
         engine = "black"
     else:
         unformatted = [str(f) for f in files if _needs_format_fallback(f)]

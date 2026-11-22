@@ -125,7 +125,9 @@ def rfe(**kwargs: Any) -> dict[str, Any]:
 
     min_features = int(kw.get("min_features", 1))
     cv = int(kw.get("cv", 5))
-    step = float(kw.get("step", 1))
+    step = kw.get("step", 1)
+    if isinstance(step, float) and step.is_integer():
+        step = int(step)
 
     n_classes = y.nunique()
     if n_classes < 2:

@@ -276,4 +276,10 @@ def discussion_writing(operation: str, **kwargs) -> Any:
 
 register_skill("scientific_writing", scientific_writing)
 register_skill("results_writing", results_writing)
-register_skill("discussion_writing", discussion_writing)
+# ``discussion.py`` (imported earlier) provides an extended dispatcher that
+# also supports render/paragraph_order_check; only register the legacy
+# dispatcher if the extended one is absent.
+from openscience.skills import get_skill as _get_skill
+
+if _get_skill("discussion_writing") is None:
+    register_skill("discussion_writing", discussion_writing)

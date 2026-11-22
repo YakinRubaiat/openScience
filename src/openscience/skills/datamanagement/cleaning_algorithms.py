@@ -73,11 +73,16 @@ def drop_duplicates(data: Any, columns: list[str] | None = None,
     return _finished(out.reset_index(drop=True), {"n_dropped": int(before - len(out))})
 
 
+def _string_col_names(df: pd.DataFrame) -> list[str]:
+    return [str(c) for c in df.columns
+            if pd.api.types.is_string_dtype(df[c].dtype) or df[c].dtype == object]
+
+
 def strip_strings(data: Any, columns: list[str] | None = None,
                   chars: str | None = None) -> dict[str, Any]:
     """Strip whitespace (or ``chars``) from string cells."""
     df = _frame(data)
-    cols = columns or [c for c in df.columns if df[c].dtype == object]
+    cols = columns or _string_col_names(df)
     changed = 0
     out = df.copy()
     for col in cols:

@@ -32,7 +32,8 @@ class _FallbackLinter(ast.NodeVisitor):
         })
 
     def visit(self, tree: ast.AST) -> None:  # type: ignore[override]
-        self._check_unused_imports(tree)
+        if isinstance(tree, ast.Module):
+            self._check_unused_imports(tree)
         super().visit(tree)
 
     def _check_unused_imports(self, tree: ast.AST) -> None:

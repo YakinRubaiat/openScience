@@ -55,19 +55,10 @@ def _cc_fallback(path: Path) -> list[dict[str, Any]]:
     return results
 
 
-def _logical_lines(source: str) -> int:
-    try:
-        return sum(1 for tok in __import__("tokenize").generate_tokens(
-            iter(source.splitlines(keepends=True)).__next__)
-        )
-    except Exception:
-        return len([l for l in source.splitlines() if l.strip()])
-
-
 def _mi_fallback(path: Path) -> dict[str, Any]:
     """Simplified MI: 100 - penalties for complexity and comment scarcity."""
     source = ac.read_source(path)
-    tree = ac.parse_file(source)
+    tree = ac.parse_file(path)
     funcs = [n for n in ast.walk(tree)
              if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]
     avg_cc = (sum(cyclomatic_complexity(f) for f in funcs) / len(funcs)) if funcs else 1.0

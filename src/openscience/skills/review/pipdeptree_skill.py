@@ -26,7 +26,14 @@ def _fallback_tree() -> dict[str, list[str]]:
         if not name:
             continue
         deps = []
-        for req in dist.requires() or []:
+        requires = dist.requires if callable(dist.requires) else getattr(dist, "requires", None)
+        if callable(requires):
+            reqs = requires() or []
+        elif isinstance(requires, list):
+            reqs = requires
+        else:
+            reqs = []
+        for req in reqs:
             m = re.match(r"\s*([A-Za-z0-9_.\-]+)", req)
             if m and "extra ==" not in req:
                 deps.append(m.group(1).lower())

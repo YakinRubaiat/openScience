@@ -20,21 +20,21 @@ import importlib
 from typing import Any, Callable
 
 # Keys that never belong to a skill operation's signature.
-_RESERVED_KEYS = ("operation", "parameters", "context")
+_RESERVED_KEYS = ("operation", "parameters")
 
 
 def unwrap(kwargs: dict[str, Any]) -> dict[str, Any]:
     """Agents pass parameters={"parameters": {...}}; unwrap one level.
 
     Returns the inner dict when present, else the kwargs themselves with the
-    reserved keys ("operation", "parameters", "context") removed.
+    reserved keys ("operation", "parameters") removed.
     """
     p = kwargs.get("parameters")
     if isinstance(p, dict):
         merged = {k: v for k, v in kwargs.items() if k not in _RESERVED_KEYS}
         merged.update(p)
         return merged
-    return {k: v for k, v in kwargs.items() if k not in ("operation", "context")}
+    return {k: v for k, v in kwargs.items() if k != "operation"}
 
 
 def result(status: str = "ok", **payload: Any) -> dict[str, Any]:
@@ -73,6 +73,10 @@ def skill_run(operations: dict[str, Callable[..., Any]]) -> Callable[..., Any]:
     Any operation name not in the table raises ``ValueError``. The special
     operation ``"run"`` maps to the first entry in the table, which supports
     agents that call ``skill.run("run", ...)`` generically.
+
+    Extra keyword arguments that the target operation does not accept (e.g.
+    orchestration metadata such as ``context``) are dropped, unless the
+    operation accepts ``**kwargs``.
     """
 
     default_op = next(iter(operations))
@@ -84,6 +88,12 @@ def skill_run(operations: dict[str, Callable[..., Any]]) -> Callable[..., Any]:
                 f"Unknown operation {operation!r}. "
                 f"Available: {sorted(operations)}"
             )
-        return op(**unwrap(kwargs))
+        args = unwrap(kwargs)
+        import inspect
+
+        sig = inspect.signature(op)
+        if not any(p.kind == p.VAR_KEYWORD for p in sig.parameters.values()):
+            args = {k: v for k, v in args.items() if k in sig.parameters}
+        return op(**args)
 
     return run

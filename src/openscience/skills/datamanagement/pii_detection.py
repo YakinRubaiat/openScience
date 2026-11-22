@@ -45,7 +45,9 @@ def scan(data: Any, columns: list[str] | None = None,
     Returns per-column PII type counts and (optionally) redacted examples.
     """
     df = _frame(data)
-    cols = columns or [c for c in df.columns if df[c].dtype == object]
+    cols = columns or [c for c in df.columns
+                       if pd.api.types.is_string_dtype(df[c].dtype)
+                       or df[c].dtype == object]
     findings: dict[str, dict[str, int]] = {}
     examples: dict[str, dict[str, list[str]]] = {}
     for col in cols:

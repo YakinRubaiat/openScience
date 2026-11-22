@@ -720,16 +720,28 @@ class TestBackupAndRecovery:
             assert sessions == [("bk",)]
         db_mod.reset_engine()
 
-    def test_backup_manager_agent_exec_result(self):
+    def test_backup_manager_agent_exec_result(self, tmp_path):
         """The backup_manager agent executes through the orchestrator."""
+        src = tmp_path / "project"
+        src.mkdir()
+        (src / "notes.txt").write_text("ran qc on 2 genes")
+        backup_root = tmp_path / "backups"
+
         from openscience.core.orchestrator import AgentOrchestrator
 
         orch = AgentOrchestrator()
         assert "backup_manager" in orch.agents
-        result = orch.execute_agent("backup_manager", {}, {})
+        result = orch.execute_agent(
+            "backup_manager",
+            {"source_dir": str(src), "backup_root": str(backup_root)},
+            {},
+        )
         assert result is not None
         assert result.metadata.get("agent") == "backup_manager"
         assert isinstance(result.data, dict)
+        assert result.data["status"] == "ok"
+        # The snapshot really landed on disk.
+        assert any(backup_root.iterdir())
 
     def test_data_ingestor_supports_backup_formats(self):
         """The data_management category retains its data ingestor agent."""

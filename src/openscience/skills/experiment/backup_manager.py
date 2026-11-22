@@ -17,7 +17,7 @@ _META_NAME = "backup_meta.json"
 def create(
     source_dir: str = "",
     backup_dir: str = "",
-    name: str | None = None,
+    backup_name: str | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]:
     """Create a gzipped tar backup of ``source_dir`` in ``backup_dir``."""
@@ -30,7 +30,7 @@ def create(
     bdir.mkdir(parents=True, exist_ok=True)
 
     timestamp = _dt.datetime.now().strftime("%Y%m%dT%H%M%S")
-    base = f"{name}_{timestamp}" if name else f"backup_{timestamp}"
+    base = f"{backup_name}_{timestamp}" if backup_name else f"backup_{timestamp}"
     out = bdir / f"{base}.tar.gz"
     i = 1
     while out.exists():

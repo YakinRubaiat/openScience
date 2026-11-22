@@ -80,8 +80,8 @@ def render(findings: Any = None, prior_work: Any = None, limitations: Any = None
 _PARAGRAPH_PATTERNS: list[tuple[str, str]] = [
     ("findings", r"\b(in this study|we (show|found|observed|demonstrated)|principal finding)\b"),
     ("prior_work", r"\b(prior|previous|consistent with|in contrast|literature|extend)\b"),
-    ("limitations", r"\b(limitation|caveat|shortcoming|weakness)\b"),
-    ("implications", r"\b(implication|future|translation|clinical|policy|further research)\b"),
+    ("limitations", r"\b(limitation\w*|caveat\w*|shortcoming\w*|weakness\w*)\b"),
+    ("implications", r"\b(implication\w*|future|translation\w*|clinical|policy|further research)\b"),
 ]
 
 

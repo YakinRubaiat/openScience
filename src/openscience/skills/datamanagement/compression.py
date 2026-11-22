@@ -80,7 +80,11 @@ def ratio_report(paths: list[str]) -> dict[str, Any]:
         if not p.exists() or not p.is_file():
             raise FileNotFoundError(f"File not found: {p}")
         blob = p.read_bytes()
-        compressed = zlib.compress(blob, 9)
+        compressed = zlib.compressobj(
+            9, zlib.DEFLATED, 16 + zlib.MAX_WBITS
+        )
+        compressed_data = compressed.compress(blob) + compressed.flush()
+        compressed = compressed_data
         entries.append({
             "path": str(p),
             "size_bytes": len(blob),

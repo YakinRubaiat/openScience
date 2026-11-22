@@ -53,7 +53,9 @@ def mask(data: Any, columns: list[str] | None = None,
          replacement: str = "***") -> dict[str, Any]:
     """Mask PII-ish patterns in string cells (emails -> x@x.com, ...)."""
     df = _frame(data)
-    cols = columns or [c for c in df.columns if df[c].dtype == object]
+    cols = columns or [c for c in df.columns
+                       if pd.api.types.is_string_dtype(df[c].dtype)
+                       or df[c].dtype == object]
     n_masked = 0
     for col in cols:
         if col not in df.columns:

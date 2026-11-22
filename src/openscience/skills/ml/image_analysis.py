@@ -18,7 +18,7 @@ from typing import Any
 import numpy as np
 
 from openscience.skills import register_skill
-from openscience.skills._common import has_module, skill_run, unwrap
+from openscience.skills._common import has_module, optional_import, skill_run, unwrap
 
 
 def load_tiff(**kwargs: Any) -> dict[str, Any]:
@@ -32,8 +32,6 @@ def load_tiff(**kwargs: Any) -> dict[str, Any]:
         raise FileNotFoundError(f"Image not found: {path}")
 
     if has_module("tifffile"):
-        from openscience.skills._common import optional_import
-
         tifffile = optional_import("tifffile")
         arr = tifffile.imread(str(path))
     else:
@@ -90,8 +88,6 @@ def threshold_otsu(**kwargs: Any) -> dict[str, Any]:
     arr = np.asarray(arr, dtype=float)
 
     if has_module("skimage"):
-        from openscience.skills._common import optional_import
-
         filters = optional_import("skimage.filters", package="scikit-image")
         thresh = float(filters.threshold_otsu(arr))
     else:

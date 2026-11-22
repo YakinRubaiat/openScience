@@ -78,8 +78,21 @@ def isolation_forest(data: Any, contamination: float = 0.1,
 
     df = _frame(data)
     num, cols = _numeric(df, None)
+    x = num.fillna(num.median()).to_numpy(dtype=float, copy=True)
     model = IsolationForest(contamination=contamination, random_state=random_state)
-    labels = model.fit_predict(num.fillna(num.median()))
+    try:
+        labels = model.fit_predict(x)
+        scores = model.decision_function(x)
+    except ValueError as exc:
+        # numpy's _CopyMode identity breaks when numpy gets reloaded
+        # (e.g. under coverage instrumentation); surface a clear error.
+        if "_CopyMode" in str(exc):
+            raise RuntimeError(
+                "sklearn is unusable in this interpreter because numpy was "
+                "reloaded (e.g. under coverage). Original error: "
+                f"{exc}"
+            ) from exc
+        raise
     mask = labels == -1
     return result(
         method="isolation_forest",
@@ -87,7 +100,7 @@ def isolation_forest(data: Any, contamination: float = 0.1,
         columns=cols,
         outlier_indices=[int(i) for i in np.flatnonzero(mask)],
         n_outliers=int(mask.sum()),
-        anomaly_scores=model.decision_function(num.fillna(num.median())).tolist(),
+        anomaly_scores=[float(s) for s in scores],
     )
 
 

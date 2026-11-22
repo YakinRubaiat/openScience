@@ -78,10 +78,10 @@ def render(materials: Any = None, steps: Any = None, analysis: Any = None,
 
 _CHECKLIST_PATTERNS: list[tuple[str, str]] = [
     ("study_design", r"\b(design|cohort|trial|cross-sectional|randomi[sz]ed)\b"),
-    ("materials", r"\b(material|reagent|sample|specimen|instrument|kit)\b"),
-    ("procedures", r"\b(procedure|protocol|step|incubat|centrifug|pipett|inject)\b"),
-    ("analysis", r"\b(analy[sz]is|statistic|regression|test|model)\b"),
-    ("reproducibility", r"\b(replicat|repeat|blind|control|calibrat)\b"),
+    ("materials", r"\b(material|reagent|sample|specimen|instrument|kit)s?\b"),
+    ("procedures", r"\b(procedure|protocol|step|incubat\w*|centrifug\w*|pipett\w*|inject\w*)\b"),
+    ("analysis", r"\b(analy[sz]is|statistic\w*|regression|test|model)s?\b"),
+    ("reproducibility", r"\b(replicat\w*|repeat\w*|blind\w*|control\w*|calibrat\w*)\b"),
 ]
 
 

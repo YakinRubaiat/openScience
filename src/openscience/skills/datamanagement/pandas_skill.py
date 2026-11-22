@@ -71,7 +71,7 @@ def read_excel(file_path: str, **kwargs) -> dict[str, Any]:
 def describe(data: Any) -> dict[str, Any]:
     """Summary statistics for numeric columns plus dtype info."""
     df = _to_frame(data)
-    desc = df.describe(include="all", datetime_is_numeric=True)
+    desc = df.describe(include="all")
     stats = {
         str(col): {str(k): (None if pd.isna(v) else float(v) if isinstance(v, (int, float)) else str(v))
                    for k, v in desc[col].items()}
@@ -137,8 +137,13 @@ def to_csv(data: Any, output_path: str, index: bool = False) -> dict[str, Any]:
 
 def to_json(data: Any, output_path: str, orient: str = "records") -> dict[str, Any]:
     """Write records to JSON."""
+    import json as _json
+
     df = _to_frame(data)
-    df.to_json(output_path, orient=orient)
+    if orient == "records":
+        Path(output_path).write_text(_json.dumps(df.to_dict("records"), default=str))
+    else:
+        df.to_json(output_path, orient=orient)
     return result(path=str(output_path), **_frame_summary(df))
 
 

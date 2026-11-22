@@ -464,7 +464,7 @@ def test_backup_create_verify_restore(tmp_path):
     bdir = tmp_path / "backups"
 
     r = execute_skill(
-        "backup_manager", "create", source_dir=str(src), backup_dir=str(bdir), name="daily"
+        "backup_manager", "create", source_dir=str(src), backup_dir=str(bdir), backup_name="daily"
     )
     assert r["n_files"] == 2
     backup_path = Path(r["backup_path"])

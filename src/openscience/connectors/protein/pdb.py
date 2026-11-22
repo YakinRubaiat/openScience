@@ -98,7 +98,10 @@ def parse_pdb_text(text: str, pdb_id: str = "") -> PDBRecord:
             # REMARK 2 RESOLUTION line
             if "RESOLUTION." in line:
                 try:
-                    resolution = float(line[11:].split()[2])
+                    # "REMARK   2 RESOLUTION.  1.50 ANGSTROMS." -> 1.50
+                    tokens = line.split()
+                    res_idx = tokens.index("RESOLUTION.")
+                    resolution = float(tokens[res_idx + 1])
                 except (ValueError, IndexError):
                     pass
         elif record in ("ATOM", "HETATM"):
@@ -151,7 +154,7 @@ class PDBConnector:
 
     def fetch_record(self, pdb_id: str) -> PDBRecord:
         """Download and parse header/chain summary."""
-        return parse_pdb_text(self.fetch_text(pdb_id), pdb_id=pdb_id)
+        return parse_pdb_text(self.fetch_text(pdb_id), pdb_id=pdb_id.strip().upper())
 
     def get_structure(self, pdb_id: str, file_format: str = "pdb"):
         """Parse the entry into a Biopython ``Structure`` object.

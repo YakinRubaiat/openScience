@@ -89,10 +89,12 @@ def parse_tsv_export(tsv_path=None, **kwargs: Any):
     p = Path(p)
     if not p.exists():
         raise FileNotFoundError(f"TSV export not found: {p}")
-    # biom-converted tables start with a "#OTU ID" header, may have a comment line
-    df = pd.read_csv(p, sep="\t", index_col=0, comment="")
-    if df.columns[:1].str.startswith("#").any():
-        df = pd.read_csv(p, sep="\t", index_col=0, skiprows=1)
+    # biom-converted tables start with a "#OTU ID" header, sometimes preceded
+    # by a "# Constructed from biom file" comment line that must be skipped
+    with p.open() as fh:
+        first = fh.readline()
+    skip = 1 if first.startswith("# Constructed") or (first.startswith("#") and "OTU" not in first) else 0
+    df = pd.read_csv(p, sep="\t", index_col=0, skiprows=skip)
     numeric = df.apply(pd.to_numeric, errors="coerce")
     numeric = numeric.dropna(axis=1, how="all")
     sample_sums = numeric.sum(axis=0)

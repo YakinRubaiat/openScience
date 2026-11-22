@@ -348,6 +348,54 @@ def _box(df: pd.DataFrame, ax=None, palette=None, **kw):
     return fig, ax
 
 
+def _embedding(df: pd.DataFrame, ax=None, palette=None, **kw):
+    """2-D embedding scatter (UMAP/PCA-style): x,y columns + optional label.
+
+    Accepts a DataFrame with columns like ``umap_1/umap_2``, ``x/y`` or the
+    first two numeric columns, coloured by ``label``/``cluster``/``cell_type``
+    when present.
+    """
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(3.5, 3.0))
+    else:
+        fig = ax.figure
+
+    while isinstance(df, dict) and "data" in df:
+        df = df["data"]
+    if not isinstance(df, pd.DataFrame):
+        df = pd.DataFrame(df)
+    df = df.copy()
+    cols = list(df.columns)
+    cand_pairs = [("umap_1", "umap_2"), ("UMAP1", "UMAP2"), ("x", "y"),
+                  ("pc1", "pc2"), ("PC1", "PC2")]
+    pair = next((p for p in cand_pairs if p[0] in cols and p[1] in cols), None)
+    if pair is None:
+        numeric_cols = df.select_dtypes("number").columns.tolist()
+        if len(numeric_cols) >= 2:
+            pair = (numeric_cols[0], numeric_cols[1])
+        else:
+            raise ValueError("embedding data needs at least two numeric columns")
+    x, y = df[pair[0]], df[pair[1]]
+
+    label_col = next((c for c in ("label", "cluster", "cell_type", "group")
+                      if c in cols), None)
+    default_colors = ["#0072B2", "#D55E00", "#009E73", "#CC79A7",
+                      "#F0E442", "#56B4E9", "#E69F00", "#000000"]
+    if label_col is not None:
+        cats = sorted(df[label_col].astype(str).unique())
+        cmap = {c: default_colors[i % len(default_colors)] for i, c in enumerate(cats)}
+        for c in cats:
+            mask = df[label_col].astype(str) == c
+            ax.scatter(x[mask], y[mask], s=3, c=cmap[c], label=c,
+                       linewidths=0, alpha=0.9)
+        ax.legend(markerscale=3, fontsize=6, frameon=False, loc="best")
+    else:
+        ax.scatter(x, y, s=3, c=default_colors[0], linewidths=0, alpha=0.9)
+    ax.set_xlabel(str(pair[0]), fontsize=7)
+    ax.set_ylabel(str(pair[1]), fontsize=7)
+    return fig, ax
+
+
 _PLOT_BUILDERS = {
     "volcano": _volcano,
     "heatmap": _heatmap,
@@ -358,6 +406,10 @@ _PLOT_BUILDERS = {
     "correlation": _correlation_matrix,
     "box": _box,
     "boxplot": _box,
+    "umap": _embedding,
+    "scatter": _embedding,
+    "embedding": _embedding,
+    "pca": _embedding,
 }
 
 

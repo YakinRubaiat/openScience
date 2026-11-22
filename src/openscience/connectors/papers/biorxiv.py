@@ -76,15 +76,23 @@ def parse_rss(xml_text: str) -> list[dict[str, str]]:
 
     # Atom
     atom = "http://www.w3.org/2005/Atom"
-    for entry in root.findall(f".//{{{atom}}}entry") or root.findall(".//entry"):
+    feed_entries = root.findall(f".//{{{atom}}}entry")
+    if not feed_entries:
+        feed_entries = root.findall(".//entry")
+    for entry in feed_entries:
         link = ""
-        for lnk in entry.findall(f"{{{atom}}}link") or entry.findall("link"):
+        links = entry.findall(f"{{{atom}}}link")
+        if not links:
+            links = entry.findall("link")
+        for lnk in links:
             if lnk.get("href"):
                 link = lnk.get("href", "")
                 break
 
         def atext(tag):
-            node = entry.find(f"{{{atom}}}{tag}") or entry.find(tag)
+            node = entry.find(f"{{{atom}}}{tag}")
+            if node is None:
+                node = entry.find(tag)
             return (node.text or "").strip() if node is not None and node.text else ""
 
         entries.append(

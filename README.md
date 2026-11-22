@@ -12,6 +12,8 @@
 
 *Inspired by [Claude Science](https://claude.com/product/claude-science) — An open-source agentic research environment*
 
+### 📖 [Documentation Site](https://yakinrubaiat.github.io/openScience/) — Full guides, API reference, and tutorials
+
 </div>
 
 ---

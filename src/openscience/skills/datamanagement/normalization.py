@@ -101,7 +101,7 @@ def quantile(data: Any, columns: list[str] | None = None) -> dict[str, Any]:
     order = np.argsort(mat, axis=0)
     ranks = np.empty_like(order)
     rows = np.arange(mat.shape[0])[:, None]
-    ranks[order, rows] = rows
+    ranks[order, np.arange(mat.shape[1])] = rows
     sorted_vals = np.sort(mat, axis=0)
     mean_profile = np.nanmean(sorted_vals, axis=1)
     out = mean_profile[ranks]

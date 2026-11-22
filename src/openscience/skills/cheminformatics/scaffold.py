@@ -2,6 +2,10 @@
 
 Registers:
 - ``scaffold_analysis``
+
+Uses ``rdkit.Chem.Scaffolds.MurckoScaffold``. Falls back to the pure-python
+``_pyGetScaffoldForMol`` implementation when the C++ ``MurckoDecompose``
+backend raises a ``RuntimeError`` (observed on some RDKit 2026 builds).
 """
 
 from __future__ import annotations
@@ -23,28 +27,35 @@ def _mol_from_smiles(smiles: str):
     return mol
 
 
+def _scaffold_mol(mol):
+    """Return the Bemis–Murcko scaffold ``Mol``. Falls back to _pyGetScaffoldForMol."""
+    scaffold_mod = optional_import("rdkit.Chem.Scaffolds.MurckoScaffold", "rdkit")
+    try:
+        return scaffold_mod.GetScaffoldForMol(mol)
+    except RuntimeError:
+        # Some RDKit builds (2026.x) ship a broken MurckoDecompose C++ binding;
+        # the pure-python implementation below gives the identical result.
+        return scaffold_mod._pyGetScaffoldForMol(mol)
+
+
 def murcko_scaffold(smiles: str, **kwargs: Any) -> dict[str, Any]:
     """Return the Bemis–Murcko scaffold SMILES for a molecule."""
     scaffold_mod = optional_import("rdkit.Chem.Scaffolds.MurckoScaffold", "rdkit")
+    chem = optional_import("rdkit.Chem", "rdkit")
     mol = _mol_from_smiles(smiles)
-    scaffold_smiles = scaffold_mod.MurckoScaffoldSmiles(mol=mol, includeChirality=False)
+    scaffold = _scaffold_mol(mol)
+    scaffold_smiles = chem.MolToSmiles(scaffold) if scaffold is not None else ""
     generic_smiles = ""
     try:
         generic = scaffold_mod.MakeScaffoldGeneric(mol)
-        generic_smiles = optional_import("rdkit.Chem", "rdkit").MolToSmiles(generic)
+        generic_smiles = chem.MolToSmiles(generic)
     except Exception:
         generic_smiles = ""
-    framework = ""
-    try:
-        fw = scaffold_mod.GetScaffoldForMol(mol)
-        framework = optional_import("rdkit.Chem", "rdkit").MolToSmiles(fw)
-    except Exception:
-        framework = scaffold_smiles
     return result(
         smiles=smiles,
         scaffold_smiles=scaffold_smiles,
         generic_scaffold=generic_smiles,
-        framework=framework,
+        framework=scaffold_smiles,
     )
 
 
@@ -54,7 +65,7 @@ def scaffold_counts(
     **kwargs: Any,
 ) -> dict[str, Any]:
     """Count Murcko scaffold occurrences across a list of SMILES."""
-    scaffold_mod = optional_import("rdkit.Chem.Scaffolds.MurckoScaffold", "rdkit")
+    chem = optional_import("rdkit.Chem", "rdkit")
     counts: Counter[str] = Counter()
     n_valid = 0
     n_invalid = 0
@@ -65,7 +76,8 @@ def scaffold_counts(
             n_invalid += 1
             continue
         n_valid += 1
-        scaf = scaffold_mod.MurckoScaffoldSmiles(mol=mol)
+        scaf_mol = _scaffold_mol(mol)
+        scaf = chem.MolToSmiles(scaf_mol) if scaf_mol is not None else ""
         if scaf == "" and not include_empty:
             scaf = "<no-scaffold>"
         counts[scaf] += 1
@@ -89,24 +101,30 @@ def scaffold_tree_level(
 ) -> dict[str, Any]:
     """Return the scaffold-tree node at a given trimming level.
 
-    Falls back to the plain Murcko scaffold when the tree decomposition
-    (introduced in RDKit 2020.03) is unavailable.
+    When ``MurckoScaffold.ScaffoldTree`` is unavailable (e.g. RDKit <2020.03
+    or stripped builds), falls back to the plain Murcko scaffold with a
+    tree size of 1.
     """
     scaffold_mod = optional_import("rdkit.Chem.Scaffolds.MurckoScaffold", "rdkit")
     chem = optional_import("rdkit.Chem", "rdkit")
     mol = _mol_from_smiles(smiles)
 
-    try:
-        tree = scaffold_mod.ScaffoldTree(mol)
-        nodes = list(tree)
-        if not nodes:
-            raise RuntimeError("empty scaffold tree")
-        idx = max(0, min(int(level) - 1, len(nodes) - 1))
-        target = nodes[idx]
-        level_smiles = chem.MolToSmiles(target)
-        levels = len(nodes)
-    except Exception:
-        level_smiles = scaffold_mod.MurckoScaffoldSmiles(mol=mol)
+    tree_cls = getattr(scaffold_mod, "ScaffoldTree", None)
+    level_smiles = ""
+    levels = 1
+    if tree_cls is not None:
+        try:
+            tree = tree_cls(mol)
+            nodes = list(tree)
+            if nodes:
+                idx = max(0, min(int(level) - 1, len(nodes) - 1))
+                level_smiles = chem.MolToSmiles(nodes[idx])
+                levels = len(nodes)
+        except Exception:
+            tree_cls = None
+    if not level_smiles:
+        scaf_mol = _scaffold_mol(mol)
+        level_smiles = chem.MolToSmiles(scaf_mol) if scaf_mol is not None else ""
         levels = 1
     return result(
         smiles=smiles,

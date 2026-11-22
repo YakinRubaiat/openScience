@@ -132,7 +132,7 @@ def test_discussion_writing_render():
         findings=["we found that compound X reduced tumor growth"],
         prior_work=["This is consistent with Smith et al. (2020)."],
         limitations=["Our sample size was modest."],
-        future=["Larger cohorts are needed."],
+        implications=["Larger cohorts are needed."],
         conclusion="compound X is a promising candidate",
     )
     d = out["discussion"]

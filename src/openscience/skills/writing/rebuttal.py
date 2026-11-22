@@ -38,9 +38,8 @@ def point_by_point(comments: Any = None, **_: Any) -> dict[str, Any]:
     optionally ``change`` / ``justification``.
     """
     items: list[dict[str, str]] = []
-    for i, c in enumerate(_as_list(comments) if not isinstance(comments, list)
-                          or not all(isinstance(x, dict) for x in comments)
-                          else comments, start=1):
+    raw = comments if isinstance(comments, list) else _as_list(comments)
+    for i, c in enumerate(raw, start=1):
         if isinstance(c, dict):
             comment = str(c.get("comment", ""))
             change = str(c.get("change", ""))
