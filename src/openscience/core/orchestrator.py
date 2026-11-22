@@ -83,6 +83,13 @@ class AgentOrchestrator:
         # pass an empty registry without triggering the default loader.
         self.agents = agent_registry if agent_registry is not None else self._load_agents()
         self._agent_cache: dict[str, BaseAgent] = {}
+        # Load built-in skill implementations so execute_skill can resolve them.
+        try:
+            from openscience.skills import load_default_skills
+
+            load_default_skills()
+        except Exception:  # pragma: no cover - skills are optional
+            pass
 
     def execute_task(
         self,
@@ -177,6 +184,17 @@ class AgentOrchestrator:
         Returns:
             Skill execution result
         """
+        try:
+            from openscience import skills as skill_registry
+        except Exception:
+            skill_registry = None
+
+        if skill_registry is not None:
+            fn = skill_registry.get_skill(skill_name)
+            if fn is not None:
+                return fn(operation=operation, **kwargs)
+
+        # Fallback: deterministic stub echo when no skill is registered.
         return {
             "skill": skill_name,
             "operation": operation,

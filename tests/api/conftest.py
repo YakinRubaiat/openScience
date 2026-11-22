@@ -31,9 +31,9 @@ from openscience.api.main import create_app
 @pytest.fixture()
 def app():
     # Reset state so every test gets a clean database and settings.
+    reset_engine()
     if TEST_DB.exists():
         TEST_DB.unlink()
-    reset_engine()
     application = create_app()
     yield application
     reset_engine()

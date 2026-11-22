@@ -2,7 +2,7 @@
 
 from typing import Generator
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 
@@ -12,6 +12,21 @@ class Base(DeclarativeBase):
 
 _engine = None
 _SessionLocal = None
+
+
+def _enable_sqlite_foreign_keys(engine) -> None:
+    """Enforce FOREIGN KEY constraints on every SQLite connection.
+
+    SQLite ships with ``PRAGMA foreign_keys`` off, and it must be enabled
+    per connection. Without this, FK constraints in the schema are parsed
+    but never enforced, allowing orphaned rows.
+    """
+
+    @event.listens_for(engine, "connect")
+    def _set_sqlite_pragma(dbapi_connection, _connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
 
 
 def get_engine(database_url: str | None = None):
@@ -24,6 +39,8 @@ def get_engine(database_url: str | None = None):
             database_url = get_settings().database_url
         connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
         _engine = create_engine(database_url, connect_args=connect_args)
+        if database_url.startswith("sqlite"):
+            _enable_sqlite_foreign_keys(_engine)
         _reset_session_factory()
     return _engine
 

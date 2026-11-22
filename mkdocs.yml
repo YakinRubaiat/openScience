@@ -22,6 +22,7 @@ nav:
       - Publication Figures: examples/publication-figures.md
       - Literature Review: examples/literature-review.md
   - Troubleshooting: troubleshooting.md
+  - Library Guide: library.md
   - FAQ: faq.md
 
 theme:

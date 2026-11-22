@@ -74,6 +74,8 @@ services:
       - ./src:/app/src:ro
       - ./data:/app/data
       - worker-logs:/var/log/openscience
+    tmpfs:
+      - /tmp:size=512M
     networks:
       - openscience-network
     depends_on:
@@ -143,6 +145,8 @@ services:
       - FLOWER_PORT=5555
     ports:
       - "5555:5555"
+    tmpfs:
+      - /tmp:size=512M
     networks:
       - openscience-network
     depends_on:

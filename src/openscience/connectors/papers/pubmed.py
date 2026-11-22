@@ -6,12 +6,11 @@ See: https://www.ncbi.nlm.nih.gov/books/NBK25501/
 
 import time
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from typing import Optional
 from urllib.parse import urlencode
 
 import requests
-
 
 EUTILS_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 DEFAULT_TOOL = "openscience"
