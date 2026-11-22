@@ -9,11 +9,6 @@ def create_app():
     """Create and configure the Flask application."""
     app = Flask(__name__)
 
-    # Register API blueprint
-    from openscience.api import api_bp
-
-    app.register_blueprint(api_bp)
-
     # Global session (would use proper session management in production)
     session = ScienceSession()
 

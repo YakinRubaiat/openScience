@@ -58,6 +58,34 @@ def _apply_rc(style: str) -> None:
 # ----------------------------------------------------------------------
 # Plot builders — each returns (fig, ax)
 # ----------------------------------------------------------------------
+
+
+def _auto(data: Any, ax=None, palette=None, **kw):
+    """Best-effort panel when the caller asks for ``viz_type="auto"``.
+
+    Unwraps nested ``{"data": ...}`` payloads (skill/agent envelopes), then:
+    - DataFrame with numeric columns -> box plot of the numeric columns;
+    - anything else -> a simple text figure summarising the payload, so the
+      pipeline still yields a visual artefact for stub/deferred skills.
+    """
+    while isinstance(data, dict) and "data" in data:
+        data = data["data"]
+    if isinstance(data, dict):
+        try:
+            data = pd.DataFrame(data)
+        except (ValueError, TypeError):
+            numeric = {k: [v] for k, v in data.items() if isinstance(v, (int, float))}
+            data = pd.DataFrame(numeric) if numeric else None
+
+    if isinstance(data, pd.DataFrame) and not data.select_dtypes("number").empty:
+        return _box(data.select_dtypes("number"), ax=ax, palette=palette, **kw)
+
+    fig, ax = plt.subplots(figsize=(3.5, 3.0)) if ax is None else (ax.figure, ax)
+    ax.axis("off")
+    keys = list(data.keys())[:10] if isinstance(data, dict) else []
+    summary = f"{len(keys)} field(s): " + ", ".join(map(str, keys)) if keys else str(type(data).__name__)
+    ax.text(0.02, 0.98, f"Auto summary\n{summary}", va="top", fontsize=7, wrap=True)
+    return fig, ax
 def _volcano(df: pd.DataFrame, ax=None, palette=None, **kw):
     """Volcano plot: x = log2FoldChange, y = -log10(padj)."""
     if ax is None:
@@ -349,15 +377,24 @@ def render(
     """
     _apply_rc(style)
 
+    # Accept framework ``Result`` objects as well as raw payloads.
+    if figure_data is not None and not isinstance(figure_data, dict):
+        maybe = getattr(figure_data, "data", None)
+        if maybe is not None:
+            figure_data = maybe
+
     if isinstance(figure_data, dict) and "data" in figure_data:
         palette = palette or figure_data.get("palette")
         figure_data = figure_data["data"]
 
     builder = _PLOT_BUILDERS.get(viz_type)
     if builder is None:
-        raise ValueError(
-            f"Unsupported viz_type '{viz_type}'. "
-            f"Available: {sorted(_PLOT_BUILDERS)}")
+        if viz_type == "auto":
+            builder = _auto
+        else:
+            raise ValueError(
+                f"Unsupported viz_type '{viz_type}'. "
+                f"Available: {sorted(_PLOT_BUILDERS)}")
 
     fig, ax = builder(figure_data, ax=ax, palette=palette, **kwargs)
 

@@ -1,0 +1,19 @@
+{
+  "test_name": "04_database_query_performance",
+  "timestamp": "2026-11-22T12:15:38.216078",
+  "results": {
+    "insert_time_seconds": 0.0006740093231201172,
+    "query_times_seconds": {
+      "SELECT_ALL": 0.0004189419746398926,
+      "SELECT_FILTERED": 0.0004245185852050781,
+      "SELECT_JOIN": 0.0002836775779724121,
+      "COUNT": 9.918212890625e-07
+    }
+  },
+  "bottlenecks": [],
+  "recommendations": [
+    "Add indexes on frequently queried columns",
+    "Implement query result caching"
+  ],
+  "duration_seconds": 0.11376285552978516
+}

@@ -305,4 +305,4 @@ You now have:
 - Accessibility-checked palette
 - Reproducible caption
 
-Return to the [tutorials hub](../index.md#-tutorial-examples) for more workflows.
+Return to the [tutorials hub](../index.md#tutorial-examples) for more workflows.
