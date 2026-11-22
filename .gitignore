@@ -169,3 +169,4 @@ figures/
 openscience.db
 .audit_security.db
 tests/integration/.scratch_db_test/
+smoke.db
