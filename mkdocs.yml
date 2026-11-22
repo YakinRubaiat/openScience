@@ -1,0 +1,32 @@
+site_name: openScience
+site_description: Open-source AI workbench for scientific research
+docs_dir: docs
+repo_url: https://github.com/YakinRubaiat/openScience
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Quickstart: quickstart.md
+  - Architecture: architecture.md
+  - Agent Catalog: agents.md
+  - API Reference: api.md
+  - Configuration: configuration.md
+  - Docker Guide: docker.md
+  - Development: development.md
+  - Security: security.md
+  - Contributing: contributing.md
+  - Examples:
+      - Overview: examples/README.md
+      - RNA-seq Analysis: examples/rnaseq-analysis.md
+      - Single-Cell Workflow: examples/single-cell.md
+      - Literature Review: examples/literature-review.md
+  - Troubleshooting: troubleshooting.md
+  - FAQ: faq.md
+
+theme:
+  name: readthedocs
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - fenced_code

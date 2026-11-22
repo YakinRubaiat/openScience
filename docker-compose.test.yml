@@ -1,0 +1,94 @@
+services:
+  # Test runner service
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: openscience-test
+    environment:
+      - FLASK_ENV=testing
+      - DATABASE_URL=postgresql://test:test@db-test:5432/openscience_test
+      - REDIS_URL=redis://redis-test:6379/0
+      - CELERY_BROKER_URL=redis://redis-test:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis-test:6379/0
+      - SECRET_KEY=test-secret-key
+      - LOG_LEVEL=DEBUG
+      - PYTEST_CURRENT_TEST=1
+    volumes:
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+      - ./pytest.ini:/app/pytest.ini:ro
+      - test-results:/app/results
+    networks:
+      - openscience-test-network
+    depends_on:
+      db-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    command: >
+      sh -c "pytest
+             --verbose
+             --cov=openscience
+             --cov-report=html:/app/results/coverage
+             --cov-report=term
+             --junit-xml=/app/results/junit.xml
+             /app/tests"
+    working_dir: /app
+
+  # Test Database
+  db-test:
+    image: postgres:16-alpine
+    container_name: openscience-db-test
+    tmpfs:
+      - /var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=openscience_test
+    networks:
+      - openscience-test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d openscience_test"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Test Redis
+  redis-test:
+    image: redis:7-alpine
+    container_name: openscience-redis-test
+    tmpfs:
+      - /data
+    networks:
+      - openscience-test-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    command: redis-server --save '' --appendonly no
+
+  # Lint and code quality checks
+  lint:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: openscience-lint
+    volumes:
+      - ./src:/app/src:ro
+      - ./pyproject.toml:/app/pyproject.toml:ro
+    networks:
+      - openscience-test-network
+    command: >
+      sh -c "black --check --diff src/ &&
+             ruff check src/ &&
+             mypy --strict src/openscience/"
+
+networks:
+  openscience-test-network:
+    driver: bridge
+
+volumes:
+  test-results:
+    driver: local

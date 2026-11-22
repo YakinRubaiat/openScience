@@ -48,6 +48,21 @@ viz = [
 all = [
     "openscience[bio,chem,ml,viz]",
 ]
+dev = [
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "bandit[toml]>=1.7.5",
+    "pip-audit>=2.6.0",
+    "build>=1.0.0",
+    "twine>=4.0.0",
+]
+test = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "pytest-asyncio>=0.23.0",
+]
 
 [project.scripts]
 openscience = "openscience.cli:cli"
@@ -66,6 +81,40 @@ target-version = ["py310"]
 line-length = 100
 target-version = "py310"
 
+[tool.ruff.lint]
+# Rules ignored to match the current codebase baseline; tighten incrementally.
+ignore = [
+    "B008",   # function call in default argument (intentional with FastAPI/typer-style deps)
+    "BLE001", # blind except (broad handlers at app boundaries)
+    "S112",   # try-except-continue
+    "N999",   # invalid module name
+    "EXE001", # shebang-not-executable
+    "C408",   # unnecessary-collection-call
+    "UP035",  # deprecated-import (transitional typing imports)
+    "UP045",  # non-pep604 optional
+    "UP007",  # non-pep604 union
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # assert usage in tests
+
 [tool.mypy]
 python_version = "3.10"
 strict = true
+
+[tool.coverage.run]
+source = ["openscience"]
+branch = true
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "scripts", "examples"]
+skips = ["B101"]

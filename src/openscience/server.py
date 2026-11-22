@@ -8,57 +8,71 @@ from openscience.core.session import ScienceSession
 def create_app():
     """Create and configure the Flask application."""
     app = Flask(__name__)
-    
+
+    # Register API blueprint
+    from openscience.api import api_bp
+
+    app.register_blueprint(api_bp)
+
     # Global session (would use proper session management in production)
     session = ScienceSession()
-    
+
     @app.route("/")
     def index():
         """Serve the main UI."""
         return render_template_string(HTML_TEMPLATE)
-    
+
     @app.route("/api/agents")
     def list_agents():
         """List available agents."""
         agents = []
         for name, agent_class in session.orchestrator.agents.items():
-            agents.append({
-                "name": name,
-                "category": agent_class.metadata.category,
-                "description": agent_class.metadata.description,
-            })
+            agents.append(
+                {
+                    "name": name,
+                    "category": agent_class.metadata.category,
+                    "description": agent_class.metadata.description,
+                }
+            )
         return jsonify({"agents": agents})
-    
+
     @app.route("/api/session/load", methods=["POST"])
     def load_data():
         """Load data into session."""
         from flask import request
+
         data = request.get_json()
-        
+
         file_path = data.get("file_path")
         format_hint = data.get("format", "auto")
-        
+
         try:
             session.load_data(file_path, format=format_hint)
             return jsonify({"status": "success"})
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 400
-    
+
     @app.route("/api/session/analyze", methods=["POST"])
     def analyze():
         """Run analysis task."""
         from flask import request
+
         data = request.get_json()
-        
+
         task = data.get("task")
         specialist = data.get("specialist")
-        
+
         try:
             result = session.analyze(task, specialist=specialist)
             return jsonify({"status": "success", "result": str(result)})
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 400
-    
+
+    @app.route("/health")
+    def health():
+        """Health check endpoint for Docker health checks."""
+        return jsonify({"status": "healthy", "service": "openscience-api", "version": "0.1.0"}), 200
+
     return app
 
 

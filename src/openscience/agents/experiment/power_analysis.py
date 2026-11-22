@@ -1,6 +1,6 @@
 """Statistical power calculation agent for experiment planning."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class PowerAnalysisAgent(BaseAgent):

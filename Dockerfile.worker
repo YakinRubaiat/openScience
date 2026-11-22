@@ -1,0 +1,63 @@
+# Worker Dockerfile for background tasks
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    CELERY_BROKER_URL=redis://redis:6379/0 \
+    CELERY_RESULT_BACKEND=redis://redis:6379/0
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    make \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r openscience && useradd -r -g openscience openscience
+
+# Create app directory
+WORKDIR /app
+
+# Copy dependency files and install
+COPY pyproject.toml ./
+RUN pip install --no-warn-script-location \
+    celery>=5.3.0 \
+    redis>=4.5.0 \
+    psycopg2-binary>=2.9.0 \
+    flask>=2.3.0 \
+    pydantic>=2.0.0 \
+    pyyaml>=6.0.1 \
+    requests>=2.31.0 \
+    click>=8.1.0 \
+    numpy>=1.24.0 \
+    pandas>=2.0.0 \
+    scipy>=1.10.0 \
+    matplotlib>=3.7.0 \
+    seaborn>=0.12.0 \
+    plotly>=5.14.0 \
+    scikit-learn>=1.3.0
+
+# Copy application code
+COPY --chown=openscience:openscience src/ ./src/
+COPY --chown=openscience:openscience pyproject.toml ./
+
+# Install the package
+RUN pip install --no-warn-script-location -e .
+
+# Switch to non-root user
+USER openscience
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD celery -A openscience.workers.tasks inspect ping -d celery@$$HOSTNAME || exit 1
+
+# Run Celery worker
+CMD ["celery", "-A", "openscience.workers.tasks", "worker", \
+     "--loglevel=info", "--concurrency=4", "--max-tasks-per-child=1000", \
+     "--time-limit=3600", "--soft-time-limit=3300"]

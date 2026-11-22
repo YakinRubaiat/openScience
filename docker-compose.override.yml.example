@@ -1,0 +1,34 @@
+# Docker Compose Override for local development
+# This file is automatically loaded by docker-compose and overrides docker-compose.yml
+# Use this for local customizations that shouldn't be committed
+
+services:
+  api:
+    # Add local development overrides here
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    # Example: Mount local source for live reload
+    # volumes:
+    #   - ./src:/app/src:rw
+
+  ui:
+    # Add local UI development overrides here
+    environment:
+      - NODE_ENV=development
+
+  worker:
+    # Add local worker development overrides here
+    environment:
+      - LOG_LEVEL=DEBUG
+      - CELERY_LOG_LEVEL=DEBUG
+
+  db:
+    # Add local database overrides here
+    ports:
+      - "5432:5432"
+
+  redis:
+    # Add local redis overrides here
+    ports:
+      - "6379:6379"

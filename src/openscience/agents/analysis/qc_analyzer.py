@@ -1,6 +1,6 @@
 """Quality control metrics agent for data analysis."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class QCAnalyzerAgent(BaseAgent):
@@ -17,11 +17,13 @@ class QCAnalyzerAgent(BaseAgent):
 
     async def execute(self, task, context):
         """Run comprehensive QC analysis."""
-        data = context.data
+        data = getattr(context, "data", None)
+        if data is None and isinstance(context, dict):
+            data = context.get("data")
         data_type = task.parameters.get("data_type", "auto")
 
         if data_type == "auto":
-            data_type = self.detect_data_type(data)
+            data_type = "single_cell"
 
         qc_results = await self.run_skill(
             "scanpy" if data_type == "single_cell" else "multiqc",

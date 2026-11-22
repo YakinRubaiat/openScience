@@ -1,6 +1,87 @@
 # Agent Catalog
 
-This document provides a complete catalog of all 100 specialized agents in openScience.
+This document provides a complete catalog of all 111 specialized agents in openScience.
+
+## Review Agents (11)
+
+### security_reviewer
+**Category**: Review  
+**Description**: Reviews code for security vulnerabilities and OWASP compliance  
+**Skills**: bandit, safety, semgrep  
+**Input**: source_code, dependencies  
+**Output**: security_report, vulnerability_list, recommendations
+
+### code_quality_reviewer
+**Category**: Review  
+**Description**: Reviews code quality, style, and maintainability  
+**Skills**: pylint, radon, black, mypy  
+**Input**: source_code  
+**Output**: quality_report, complexity_metrics, recommendations
+
+### architecture_reviewer
+**Category**: Review  
+**Description**: Reviews software architecture and design patterns  
+**Skills**: pydeps, import-linter, architecture-rules  
+**Input**: source_code, dependencies  
+**Output**: architecture_report, dependency_graph, recommendations
+
+### performance_reviewer
+**Category**: Review  
+**Description**: Reviews code performance and identifies optimizations  
+**Skills**: py-spy, memory-profiler, line-profiler, scalene  
+**Input**: source_code, runtime_metrics  
+**Output**: performance_report, bottlenecks, recommendations
+
+### documentation_reviewer
+**Category**: Review  
+**Description**: Reviews documentation completeness and quality  
+**Skills**: pydocstyle, darglint, interrogate  
+**Input**: source_code, documentation  
+**Output**: documentation_report, coverage_metrics, recommendations
+
+### test_coverage_reviewer
+**Category**: Review  
+**Description**: Reviews test coverage and quality  
+**Skills**: pytest, coverage, mutmut  
+**Input**: test_code, coverage_reports  
+**Output**: coverage_report, test_quality_metrics, recommendations
+
+### database_reviewer
+**Category**: Review  
+**Description**: Reviews database design and query optimization  
+**Skills**: sqlfluff, pgbadger, django-debug-toolbar  
+**Input**: models, migrations, queries  
+**Output**: database_report, optimization_suggestions, recommendations
+
+### api_design_reviewer
+**Category**: Review  
+**Description**: Reviews API design and RESTful best practices  
+**Skills**: openapi-spec-validator, spectral  
+**Input**: api_spec, endpoint_code  
+**Output**: api_report, design_violations, recommendations
+
+### dependency_reviewer
+**Category**: Review  
+**Description**: Reviews dependency management and security  
+**Skills**: safety, pip-audit, license-checker, pipdeptree  
+**Input**: requirements_files, lock_files  
+**Output**: dependency_report, vulnerability_list, recommendations
+
+### accessibility_reviewer
+**Category**: Review  
+**Description**: Reviews accessibility compliance and WCAG standards  
+**Skills**: axe-core, pa11y, html-proofer  
+**Input**: html_files, ui_components  
+**Output**: accessibility_report, wcag_violations, recommendations
+
+### devops_reviewer
+**Category**: Review  
+**Description**: Reviews DevOps practices and infrastructure configuration  
+**Skills**: hadolint, trivy, checkov, kube-score  
+**Input**: dockerfiles, ci_configs, infrastructure_code  
+**Output**: devops_report, security_findings, recommendations
+
+---
 
 ## Literature Review Agents (15)
 

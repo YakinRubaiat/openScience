@@ -3,11 +3,11 @@
 __version__ = "0.1.0"
 __author__ = "openScience Contributors"
 
-from openscience.core.session import ScienceSession
 from openscience.core.orchestrator import AgentOrchestrator
+from openscience.core.session import ScienceSession
 
 __all__ = [
-    "ScienceSession",
     "AgentOrchestrator",
+    "ScienceSession",
     "__version__",
 ]

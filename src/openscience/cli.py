@@ -1,7 +1,8 @@
 """Command-line interface for openScience."""
 
-import click
 from pathlib import Path
+
+import click
 
 from openscience import __version__
 
@@ -10,7 +11,6 @@ from openscience import __version__
 @click.version_option(version=__version__)
 def cli():
     """openScience: Open-source AI workbench for scientific research."""
-    pass
 
 
 @cli.command()
@@ -19,20 +19,20 @@ def cli():
 def init(project_dir: str, compute: str):
     """Initialize a new openScience project."""
     project_path = Path(project_dir)
-    
+
     # Create directory structure
     dirs = [
         "data/raw",
-        "data/processed", 
+        "data/processed",
         "results",
         "figures",
         "notebooks",
         "config",
     ]
-    
+
     for d in dirs:
         (project_path / d).mkdir(parents=True, exist_ok=True)
-    
+
     # Create config file
     config = f"""# openScience configuration
 compute:
@@ -50,9 +50,9 @@ sandbox:
   enabled: true
   network_policy: deny_all
 """
-    
+
     (project_path / "openscience.yaml").write_text(config)
-    
+
     click.echo(f"✅ Initialized openScience project in {project_path}")
     click.echo(f"   Config: {project_path / 'openscience.yaml'}")
 
@@ -64,13 +64,14 @@ sandbox:
 def start(host: str, port: int, daemon: bool):
     """Start the openScience daemon."""
     click.echo(f"🚀 Starting openScience daemon on {host}:{port}")
-    
+
     from openscience.server import create_app
-    
+
     app = create_app()
-    
+
     if daemon:
         import daemon
+
         with daemon.DaemonContext():
             app.run(host=host, port=port)
     else:
@@ -82,9 +83,9 @@ def start(host: str, port: int, daemon: bool):
 def ui(browser: bool):
     """Open the openScience web interface."""
     import webbrowser
-    
+
     url = "http://localhost:8080"
-    
+
     if browser:
         webbrowser.open(url)
         click.echo(f"🌐 Opened {url} in browser")
@@ -96,24 +97,24 @@ def ui(browser: bool):
 def agents():
     """List all available agents."""
     from openscience.core.orchestrator import AgentOrchestrator
-    
+
     orch = AgentOrchestrator()
-    
+
     by_category = {}
     for name, agent_class in orch.agents.items():
         cat = agent_class.metadata.category
         if cat not in by_category:
             by_category[cat] = []
         by_category[cat].append((name, agent_class.metadata.description))
-    
+
     click.echo("\n🤖 Available Agents\n" + "=" * 50)
-    
+
     for category, agents in sorted(by_category.items()):
         click.echo(f"\n📁 {category.upper()} ({len(agents)} agents)")
         click.echo("-" * 50)
         for name, desc in sorted(agents):
             click.echo(f"  • {name:<25} {desc}")
-    
+
     click.echo(f"\n✅ Total: {len(orch.agents)} agents")
 
 
@@ -121,7 +122,7 @@ def agents():
 def config():
     """Show current configuration."""
     config_path = Path("openscience.yaml")
-    
+
     if config_path.exists():
         click.echo(config_path.read_text())
     else:

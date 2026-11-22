@@ -1,6 +1,6 @@
 """PubMed/PMC systematic literature search agent."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class PubMedSearchAgent(BaseAgent):

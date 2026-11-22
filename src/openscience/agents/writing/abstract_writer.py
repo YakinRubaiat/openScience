@@ -1,6 +1,6 @@
 """Abstract drafting and optimization agent."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class AbstractWriterAgent(BaseAgent):

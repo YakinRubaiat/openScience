@@ -1,0 +1,81 @@
+# Docker ignore file
+.git
+.github
+.gitignore
+*.pyc
+__pycache__
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+.venv
+venv
+ENV
+env
+.env
+.env.*
+!.env.example
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+.tox
+coverage.xml
+*.cover
+.hypothesis
+
+# CI/CD
+.gitlab-ci.yml
+.travis.yml
+.github
+
+# Documentation
+docs/_build
+*.md
+!README.md
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+docker/nginx-prod.conf
+docker/prometheus.yml
+
+# Project specific
+data/
+logs/
+*.log
+.DS_Store
+node_modules
+ui/node_modules
+ui/dist
+*.sublime-*
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/

@@ -1,6 +1,6 @@
 """Multi-format data import agent."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class DataIngestorAgent(BaseAgent):

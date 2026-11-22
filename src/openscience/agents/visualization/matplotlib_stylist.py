@@ -1,6 +1,6 @@
 """Matplotlib figure optimization agent."""
 
-from openscience.core.agent import BaseAgent, AgentMetadata
+from openscience.core.agent import AgentMetadata, BaseAgent
 
 
 class MatplotlibStylistAgent(BaseAgent):

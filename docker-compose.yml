@@ -1,0 +1,161 @@
+services:
+  # API Service - Flask backend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: openscience-api
+    restart: unless-stopped
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - DATABASE_URL=postgresql://openscience:openscience@db:5432/openscience
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
+      - LOG_LEVEL=DEBUG
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/app/src:ro
+      - ./data:/app/data
+      - api-logs:/var/log/openscience
+    networks:
+      - openscience-network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    command: >
+      sh -c "flask run --host=0.0.0.0 --port=5000 --reload"
+
+  # Web UI Service
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    container_name: openscience-ui
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    networks:
+      - openscience-network
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # Background Worker Service
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: openscience-worker
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://openscience:openscience@db:5432/openscience
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./src:/app/src:ro
+      - ./data:/app/data
+      - worker-logs:/var/log/openscience
+    networks:
+      - openscience-network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "celery", "-A", "openscience.workers.tasks", "inspect", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: openscience-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=openscience
+      - POSTGRES_PASSWORD=openscience
+      - POSTGRES_DB=openscience
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - openscience-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openscience -d openscience"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Redis for Task Queue
+  redis:
+    image: redis:7-alpine
+    container_name: openscience-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - openscience-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+  # Celery Flower for monitoring (optional)
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: openscience-flower
+    restart: unless-stopped
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - FLOWER_PORT=5555
+    ports:
+      - "5555:5555"
+    networks:
+      - openscience-network
+    depends_on:
+      - redis
+      - worker
+    command: celery -A openscience.workers.tasks flower --port=5555
+
+networks:
+  openscience-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  api-logs:
+  worker-logs:
