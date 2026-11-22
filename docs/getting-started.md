@@ -174,7 +174,7 @@ openscience credentials set openai_api_key sk-your-key
 openscience start --host 127.0.0.1 --port 8080
 ```
 
-Open http://localhost:8080 in your browser.
+Open <http://localhost:8080> in your browser.
 
 ---
 

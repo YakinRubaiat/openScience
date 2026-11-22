@@ -178,7 +178,8 @@ jobs:
 
       - name: Smoke test image
         run: |
-          docker run --rm openscience:ci python -c "import openscience; print(openscience.__version__)"
+          docker run --rm --entrypoint python openscience:ci \
+            -c "import openscience; print(openscience.__version__)"
 
   build-package:
     name: Build package

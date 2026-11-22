@@ -21,8 +21,8 @@ WORKDIR /app
 # Copy dependency files
 COPY pyproject.toml ./
 
-# Install Python dependencies
-RUN pip install --user --no-warn-script-location \
+# Install Python dependencies system-wide
+RUN pip install --no-warn-script-location \
     flask>=2.3.0 \
     gunicorn>=21.0.0 \
     psycopg2-binary>=2.9.0 \
@@ -46,7 +46,6 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PATH=/root/.local/bin:$PATH \
     FLASK_APP=openscience.server \
     FLASK_ENV=production
 
@@ -63,14 +62,15 @@ RUN groupadd -r openscience && useradd -r -g openscience openscience
 WORKDIR /app
 
 # Copy Python dependencies from builder
-COPY --from=builder /root/.local /root/.local
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code
 COPY --chown=openscience:openscience src/ ./src/
 COPY --chown=openscience:openscience pyproject.toml ./
 
 # Install the package
-RUN pip install --user --no-warn-script-location -e .
+RUN pip install --no-warn-script-location -e .
 
 # Switch to non-root user
 USER openscience

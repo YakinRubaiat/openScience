@@ -7,7 +7,8 @@ be run against a local install or the Docker stack (see
 | Example | Domain | Agents used |
 |---------|--------|-------------|
 | [RNASeq Analysis](rnaseq-analysis.md) | Bulk RNA-seq | qc_analyzer, deseq2_specialist, gsea_analyzer, publication_formatter |
-| [Single-Cell Workflow](single-cell.md) | Single-cell | qc_analyzer, scanpy_specialist, matplotlib_stylist, methods_writer |
+| [Single-Cell Workflow](single-cell-analysis.md) | Single-cell | qc_analyzer, scanpy_specialist, matplotlib_stylist, methods_writer |
+| [Publication Figures](publication-figures.md) | Figures | layout_composer, matplotlib_stylist, annotation_specialist, publication_formatter |
 | [Literature Review Automation](literature-review.md) | Literature | pubmed_search, lit_summarizer, systematic_review, citation_manager |
 
 All examples follow the same shape:

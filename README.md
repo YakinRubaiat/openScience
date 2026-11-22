@@ -28,14 +28,43 @@ The fastest way to get started with openScience:
 git clone https://github.com/YakinRubaiat/openScience.git
 cd openScience
 
-# Start with Docker Compose
+# Copy environment configuration
+cp .env.example .env
+
+# Start all services (dev environment)
+./docker/quick-start.sh
+
+# Or use docker-compose directly
 docker-compose up -d
 
-# Access the web UI
-open http://localhost:8080
+# Access the services
+open http://localhost:3000    # Web UI
+open http://localhost:5000    # API
+open http://localhost:5555    # Celery monitoring
 ```
 
-That's it! See [Docker Guide](docs/docker.md) for details.
+That's it! See [Docker Guide](docker/README.md) for details on development, testing, and production deployments.
+
+### Manual Docker Commands
+
+```bash
+# Validate configuration
+./docker/validate.sh
+
+# Development
+docker-compose up -d              # Start services
+docker-compose logs -f            # View logs
+docker-compose down               # Stop services
+
+# Testing
+docker-compose -f docker-compose.test.yml run --rm test
+
+# Production
+docker-compose -f docker-compose.prod.yml up -d
+
+# Management utilities
+./docker/docker-utils.sh help     # View all commands
+```
 
 ---
 

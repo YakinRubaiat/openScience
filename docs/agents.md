@@ -5,6 +5,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 ## Review Agents (11)
 
 ### security_reviewer
+
 **Category**: Review  
 **Description**: Reviews code for security vulnerabilities and OWASP compliance  
 **Skills**: bandit, safety, semgrep  
@@ -12,6 +13,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: security_report, vulnerability_list, recommendations
 
 ### code_quality_reviewer
+
 **Category**: Review  
 **Description**: Reviews code quality, style, and maintainability  
 **Skills**: pylint, radon, black, mypy  
@@ -19,6 +21,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: quality_report, complexity_metrics, recommendations
 
 ### architecture_reviewer
+
 **Category**: Review  
 **Description**: Reviews software architecture and design patterns  
 **Skills**: pydeps, import-linter, architecture-rules  
@@ -26,6 +29,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: architecture_report, dependency_graph, recommendations
 
 ### performance_reviewer
+
 **Category**: Review  
 **Description**: Reviews code performance and identifies optimizations  
 **Skills**: py-spy, memory-profiler, line-profiler, scalene  
@@ -33,6 +37,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: performance_report, bottlenecks, recommendations
 
 ### documentation_reviewer
+
 **Category**: Review  
 **Description**: Reviews documentation completeness and quality  
 **Skills**: pydocstyle, darglint, interrogate  
@@ -40,6 +45,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: documentation_report, coverage_metrics, recommendations
 
 ### test_coverage_reviewer
+
 **Category**: Review  
 **Description**: Reviews test coverage and quality  
 **Skills**: pytest, coverage, mutmut  
@@ -47,6 +53,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: coverage_report, test_quality_metrics, recommendations
 
 ### database_reviewer
+
 **Category**: Review  
 **Description**: Reviews database design and query optimization  
 **Skills**: sqlfluff, pgbadger, django-debug-toolbar  
@@ -54,6 +61,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: database_report, optimization_suggestions, recommendations
 
 ### api_design_reviewer
+
 **Category**: Review  
 **Description**: Reviews API design and RESTful best practices  
 **Skills**: openapi-spec-validator, spectral  
@@ -61,6 +69,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: api_report, design_violations, recommendations
 
 ### dependency_reviewer
+
 **Category**: Review  
 **Description**: Reviews dependency management and security  
 **Skills**: safety, pip-audit, license-checker, pipdeptree  
@@ -68,6 +77,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: dependency_report, vulnerability_list, recommendations
 
 ### accessibility_reviewer
+
 **Category**: Review  
 **Description**: Reviews accessibility compliance and WCAG standards  
 **Skills**: axe-core, pa11y, html-proofer  
@@ -75,6 +85,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: accessibility_report, wcag_violations, recommendations
 
 ### devops_reviewer
+
 **Category**: Review  
 **Description**: Reviews DevOps practices and infrastructure configuration  
 **Skills**: hadolint, trivy, checkov, kube-score  
@@ -86,6 +97,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 ## Literature Review Agents (15)
 
 ### pubmed_search
+
 **Category**: Literature Review  
 **Description**: PubMed/PMC systematic literature search  
 **Skills**: pubmed_api, xml_parsing  
@@ -93,6 +105,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: paper_list, abstracts, citations
 
 ### biorxiv_monitor
+
 **Category**: Literature Review  
 **Description**: Preprint tracking and notifications  
 **Skills**: biorxiv_api, rss_parsing  
@@ -100,6 +113,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: preprint_list
 
 ### semantic_scholar
+
 **Category**: Literature Review  
 **Description**: Citation network analysis  
 **Skills**: semantic_scholar_api, network_analysis  
@@ -107,6 +121,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: citation_graph
 
 ### pubmed_central
+
 **Category**: Literature Review  
 **Description**: Full-text article mining  
 **Skills**: pmc_api, fulltext_parser  
@@ -114,6 +129,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: fulltext_data
 
 ### clinical_trials
+
 **Category**: Literature Review  
 **Description**: Clinical trial registry search  
 **Skills**: clinicaltrials_api, trial_parser  
@@ -121,6 +137,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: trial_list
 
 ### patent_search
+
 **Category**: Literature Review  
 **Description**: USPTO/EPO patent literature  
 **Skills**: patent_api, patent_parser  
@@ -128,6 +145,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: patent_list
 
 ### openalex
+
 **Category**: Literature Review  
 **Description**: Open bibliographic database  
 **Skills**: openalex_api, bibliometric_analysis  
@@ -135,6 +153,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: work_list
 
 ### lit_summarizer
+
 **Category**: Literature Review  
 **Description**: Automated literature summarization  
 **Skills**: llm_summarization, citation_extraction  
@@ -142,6 +161,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: summary
 
 ### citation_graph
+
 **Category**: Literature Review  
 **Description**: Citation network visualization  
 **Skills**: networkx, graph_visualization  
@@ -149,6 +169,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: network_graph
 
 ### systematic_review
+
 **Category**: Literature Review  
 **Description**: PRISMA-compliant review automation  
 **Skills**: prisma_workflow, screening_automation  
@@ -156,6 +177,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: prisma_flow
 
 ### meta_analysis
+
 **Category**: Literature Review  
 **Description**: Meta-analysis and forest plots  
 **Skills**: statsmodels_meta, forest_plot  
@@ -163,6 +185,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: meta_analysis_results
 
 ### fact_checker
+
 **Category**: Literature Review  
 **Description**: Claim verification against sources  
 **Skills**: crossref_api, fact_verification  
@@ -170,6 +193,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: verification_report
 
 ### related_work_finder
+
 **Category**: Literature Review  
 **Description**: Similar research identification  
 **Skills**: semantic_similarity, paper_clustering  
@@ -177,6 +201,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: similar_papers
 
 ### research_gap_analyzer
+
 **Category**: Literature Review  
 **Description**: Identification of understudied areas  
 **Skills**: bibliometric_analysis, topic_modeling  
@@ -184,6 +209,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: gap_analysis
 
 ### trend_tracker
+
 **Category**: Literature Review  
 **Description**: Emerging topic detection  
 **Skills**: topic_modeling, trend_detection  
@@ -195,6 +221,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 ## Experiment Planning Agents (15)
 
 ### power_analysis
+
 **Category**: Experiment Planning  
 **Description**: Statistical power calculation  
 **Skills**: statsmodels, numpy_stats  
@@ -202,6 +229,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: sample_size, power_curve
 
 ### experimental_design
+
 **Category**: Experiment Planning  
 **Description**: Factorial and response surface designs  
 **Skills**: pyDOE2, design_of_experiments  
@@ -209,6 +237,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: design_matrix
 
 ### sample_size_calc
+
 **Category**: Experiment Planning  
 **Description**: Sample size determination  
 **Skills**: statsmodels, power_analysis  
@@ -216,6 +245,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: sample_size
 
 ### protocol_optimizer
+
 **Category**: Experiment Planning  
 **Description**: Experimental protocol optimization  
 **Skills**: bayesian_optimization, protocol_analysis  
@@ -223,6 +253,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: optimized_protocol
 
 ### reagent_optimizer
+
 **Category**: Experiment Planning  
 **Description**: Reagent selection and concentration  
 **Skills**: optimization_algorithms, reagent_database  
@@ -230,6 +261,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: optimal_reagents
 
 ### control_designer
+
 **Category**: Experiment Planning  
 **Description**: Positive/negative control selection  
 **Skills**: control_theory, experimental_design  
@@ -237,6 +269,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: control_plan
 
 ### randomization_planner
+
 **Category**: Experiment Planning  
 **Description**: Randomization and blinding schemes  
 **Skills**: randomization_algorithms, blinding_protocols  
@@ -244,6 +277,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: randomization_plan
 
 ### batch_effect_guardian
+
 **Category**: Experiment Planning  
 **Description**: Batch effect detection and correction planning  
 **Skills**: combat, batch_effect_detection  
@@ -251,6 +285,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: correction_plan
 
 ### dose_response_design
+
 **Category**: Experiment Planning  
 **Description**: Dose-response curve optimization  
 **Skills**: dose_response_analysis, curve_fitting  
@@ -258,6 +293,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: optimal_doses
 
 ### time_course_planner
+
 **Category**: Experiment Planning  
 **Description**: Longitudinal study design  
 **Skills**: time_series_design, longitudinal_analysis  
@@ -265,6 +301,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: time_points
 
 ### multiplex_designer
+
 **Category**: Experiment Planning  
 **Description**: Multiplex assay panel design  
 **Skills**: multiplex_optimization, assay_compatibility  
@@ -272,6 +309,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: multiplex_panel
 
 ### feasibility_checker
+
 **Category**: Experiment Planning  
 **Description**: Resource and timeline feasibility  
 **Skills**: resource_planning, timeline_estimation  
@@ -279,6 +317,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: feasibility_report
 
 ### cost_estimator
+
 **Category**: Experiment Planning  
 **Description**: Budget and cost projection  
 **Skills**: cost_modeling, budget_optimization  
@@ -286,6 +325,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: cost_breakdown
 
 ### risk_assessor
+
 **Category**: Experiment Planning  
 **Description**: Technical risk identification  
 **Skills**: risk_analysis, mitigation_planning  
@@ -293,6 +333,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: risk_assessment
 
 ### preregistration_writer
+
 **Category**: Experiment Planning  
 **Description**: Preregistration document drafting  
 **Skills**: preregistration_templates, study_design_documentation  
@@ -304,6 +345,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 ## Data Management Agents (15)
 
 ### data_ingestor
+
 **Category**: Data Management  
 **Description**: Multi-format data import  
 **Skills**: pandas, bioio  
@@ -311,6 +353,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: loaded_data
 
 ### format_converter
+
 **Category**: Data Management  
 **Description**: File format conversion  
 **Skills**: format_converters, data_validation  
@@ -318,6 +361,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: converted_data
 
 ### metadata_extractor
+
 **Category**: Data Management  
 **Description**: Metadata extraction and validation  
 **Skills**: metadata_standards, validation_rules  
@@ -325,6 +369,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: metadata
 
 ### data_validator
+
 **Category**: Data Management  
 **Description**: Quality and integrity checking  
 **Skills**: data_validation, integrity_checks  
@@ -332,6 +377,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: validation_report
 
 ### data_cleaner
+
 **Category**: Data Management  
 **Description**: Outlier detection and cleaning  
 **Skills**: outlier_detection, cleaning_algorithms  
@@ -339,6 +385,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: clean_data
 
 ### normalization_expert
+
 **Category**: Data Management  
 **Description**: Normalization method selection  
 **Skills**: normalization_methods, data_characteristics  
@@ -346,6 +393,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: normalized_data
 
 ### batch_corrector
+
 **Category**: Data Management  
 **Description**: Batch effect correction  
 **Skills**: harmony, combat  
@@ -353,6 +401,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: corrected_data
 
 ### data_integrator
+
 **Category**: Data Management  
 **Description**: Multi-omics data integration  
 **Skills**: multiomics_integration, data_alignment  
@@ -360,6 +409,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: integrated_data
 
 ### database_writer
+
 **Category**: Data Management  
 **Description**: Database ingestion  
 **Skills**: database_connectors, schema_management  
@@ -367,6 +417,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: database_records
 
 ### s3_manager
+
 **Category**: Data Management  
 **Description**: Cloud storage management  
 **Skills**: boto3, cloud_storage  
@@ -374,6 +425,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: cloud_locations
 
 ### version_controller
+
 **Category**: Data Management  
 **Description**: Data versioning and lineage  
 **Skills**: dvc, lineage_tracking  
@@ -381,6 +433,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: versioned_data
 
 ### privacy_guardian
+
 **Category**: Data Management  
 **Description**: PHI/PII detection and masking  
 **Skills**: pii_detection, anonymization  
@@ -388,6 +441,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: masked_data
 
 ### compression_optimizer
+
 **Category**: Data Management  
 **Description**: Storage optimization  
 **Skills**: compression_algorithms, storage_optimization  
@@ -395,6 +449,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: compressed_data
 
 ### backup_manager
+
 **Category**: Data Management  
 **Description**: Backup and archival  
 **Skills**: backup_strategies, archival_systems  
@@ -402,6 +457,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: backup_locations
 
 ### provenance_tracker
+
 **Category**: Data Management  
 **Description**: Complete data lineage tracking  
 **Skills**: provenance_modeling, workflow_tracking  
@@ -413,6 +469,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 ## Data Analysis Agents (20)
 
 ### qc_analyzer
+
 **Category**: Data Analysis  
 **Description**: Quality control metrics  
 **Skills**: scanpy, multiqc  
@@ -420,6 +477,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: qc_report
 
 ### deseq2_specialist
+
 **Category**: Data Analysis  
 **Description**: Bulk RNA-seq differential expression  
 **Skills**: DESeq2, rpy2  
@@ -427,6 +485,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: de_results
 
 ### scanpy_specialist
+
 **Category**: Data Analysis  
 **Description**: Single-cell analysis (Scanpy)  
 **Skills**: scanpy, anndata  
@@ -434,6 +493,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: analysis_results
 
 ### seurat_specialist
+
 **Category**: Data Analysis  
 **Description**: Single-cell analysis (Seurat)  
 **Skills**: seurat, rpy2  
@@ -441,6 +501,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: analysis_results
 
 ### cellranger_specialist
+
 **Category**: Data Analysis  
 **Description**: 10x Genomics preprocessing  
 **Skills**: cellranger, fastq_processing  
@@ -448,6 +509,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: count_matrix
 
 ### gsea_analyzer
+
 **Category**: Data Analysis  
 **Description**: Gene set enrichment analysis  
 **Skills**: gseapy, msigdb  
@@ -455,6 +517,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: enrichment_results
 
 ### pathway_analyzer
+
 **Category**: Data Analysis  
 **Description**: Pathway and network analysis  
 **Skills**: pathway_databases, network_analysis  
@@ -462,6 +525,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: pathway_results
 
 ### variant_caller
+
 **Category**: Data Analysis  
 **Description**: Variant detection and annotation  
 **Skills**: gatk, vep  
@@ -469,6 +533,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: vcf_file
 
 ### chip_seq_analyzer
+
 **Category**: Data Analysis  
 **Description**: ChIP-seq peak calling and analysis  
 **Skills**: macs2, homer  
@@ -476,6 +541,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: peak_calls
 
 ### atac_seq_analyzer
+
 **Category**: Data Analysis  
 **Description**: ATAC-seq analysis  
 **Skills**: macs2, chromVAR  
@@ -483,6 +549,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: accessibility_results
 
 ### methylation_analyzer
+
 **Category**: Data Analysis  
 **Description**: DNA methylation analysis  
 **Skills**: minfi, methylation_array  
@@ -490,6 +557,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: methylation_data
 
 ### metagenomics_analyzer
+
 **Category**: Data Analysis  
 **Description**: Microbiome analysis  
 **Skills**: qiime2, dada2  
@@ -497,6 +565,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: microbiome_profile
 
 ### proteomics_analyzer
+
 **Category**: Data Analysis  
 **Description**: Mass spec proteomics  
 **Skills**: maxquant, proteomics_tools  
@@ -504,6 +573,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: protein_quant
 
 ### metabolomics_analyzer
+
 **Category**: Data Analysis  
 **Description**: Metabolomics data analysis  
 **Skills**: xcms, metabolomics_tools  
@@ -511,6 +581,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: metabolite_data
 
 ### image_analyzer
+
 **Category**: Data Analysis  
 **Description**: Bioimage analysis (CellProfiler, Fiji)  
 **Skills**: cellprofiler, fiji  
@@ -518,6 +589,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: measurements
 
 ### flow_cytometry_analyzer
+
 **Category**: Data Analysis  
 **Description**: Flow cytometry gating and analysis  
 **Skills**: flowcore, flowjo  
@@ -525,6 +597,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: gating_results
 
 ### ml_modeler
+
 **Category**: Data Analysis  
 **Description**: Machine learning model development  
 **Skills**: scikit-learn, model_training  
@@ -532,6 +605,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: trained_model
 
 ### deep_learning_specialist
+
 **Category**: Data Analysis  
 **Description**: Neural network design and training  
 **Skills**: pytorch, tensorflow  
@@ -539,6 +613,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: model_weights
 
 ### statistical_modeler
+
 **Category**: Data Analysis  
 **Description**: Statistical inference and modeling  
 **Skills**: statsmodels, bayesian_inference  
@@ -546,6 +621,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: model_results
 
 ### survival_analyzer
+
 **Category**: Data Analysis  
 **Description**: Survival analysis and Kaplan-Meier  
 **Skills**: lifelines, survival_analysis  
@@ -557,6 +633,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 ## Figure Generation Agents (15)
 
 ### matplotlib_stylist
+
 **Category**: Figure Generation  
 **Description**: Matplotlib figure optimization  
 **Skills**: matplotlib, style_sheets  
@@ -564,6 +641,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: optimized_figure
 
 ### seaborn_stylist
+
 **Category**: Figure Generation  
 **Description**: Statistical visualization  
 **Skills**: seaborn, statistical_plots  
@@ -571,6 +649,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: statistical_plots
 
 ### plotly_specialist
+
 **Category**: Figure Generation  
 **Description**: Interactive visualizations  
 **Skills**: plotly, interactive_viz  
@@ -578,6 +657,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: interactive_plot
 
 ### ggplot_converter
+
 **Category**: Figure Generation  
 **Description**: R ggplot2 to Python conversion  
 **Skills**: plotnine, ggplot_syntax  
@@ -585,6 +665,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: python_plot
 
 ### publication_formatter
+
 **Category**: Figure Generation  
 **Description**: Journal-specific formatting  
 **Skills**: publication_styles, journal_templates  
@@ -592,6 +673,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: formatted_figure
 
 ### color_palette_designer
+
 **Category**: Figure Generation  
 **Description**: Accessible color scheme design  
 **Skills**: colorbrewer, accessibility_checking  
@@ -599,6 +681,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: color_palette
 
 ### layout_composer
+
 **Category**: Figure Generation  
 **Description**: Multi-panel figure composition  
 **Skills**: matplotlib_gridspec, layout_optimization  
@@ -606,6 +689,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: composed_figure
 
 ### annotation_specialist
+
 **Category**: Figure Generation  
 **Description**: Figure annotation and labeling  
 **Skills**: annotation_tools, label_placement  
@@ -613,6 +697,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: annotated_figure
 
 ### vector_graphics_editor
+
 **Category**: Figure Generation  
 **Description**: SVG/PDF optimization  
 **Skills**: cairosvg, vector_editing  
@@ -620,6 +705,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: optimized_svg
 
 ### data_viz_consultant
+
 **Category**: Figure Generation  
 **Description**: Visualization best practices  
 **Skills**: viz_guidelines, chart_selection  
@@ -627,6 +713,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: viz_recommendations
 
 ### interactive_dashboard
+
 **Category**: Figure Generation  
 **Description**: Web-based dashboard creation  
 **Skills**: dash, plotly_dash  
@@ -634,6 +721,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: dashboard_app
 
 ### animation_generator
+
 **Category**: Figure Generation  
 **Description**: Animated figure creation  
 **Skills**: matplotlib_animation, ffmpeg  
@@ -641,6 +729,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: animation
 
 ### 3d_visualizer
+
 **Category**: Figure Generation  
 **Description**: 3D structure visualization  
 **Skills**: py3Dmol, nglview  
@@ -648,6 +737,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: 3d_visualization
 
 ### graph_network_visualizer
+
 **Category**: Figure Generation  
 **Description**: Network and graph visualization  
 **Skills**: networkx, graphviz  
@@ -655,6 +745,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: network_graph
 
 ### schematic_illustrator
+
 **Category**: Figure Generation  
 **Description**: Scientific schematic creation  
 **Skills**: matplotlib, illustration_tools  
@@ -666,6 +757,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 ## Scientific Writing Agents (20)
 
 ### abstract_writer
+
 **Category**: Scientific Writing  
 **Description**: Abstract drafting and optimization  
 **Skills**: text_summarization, scientific_writing  
@@ -673,6 +765,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: abstract_draft, word_count_analysis
 
 ### introduction_writer
+
 **Category**: Scientific Writing  
 **Description**: Introduction section drafting  
 **Skills**: scientific_writing, literature_review  
@@ -680,6 +773,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: introduction
 
 ### methods_writer
+
 **Category**: Scientific Writing  
 **Description**: Methods section documentation  
 **Skills**: methodology_writing, protocol_documentation  
@@ -687,6 +781,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: methods_section
 
 ### results_writer
+
 **Category**: Scientific Writing  
 **Description**: Results narrative generation  
 **Skills**: results_writing, statistical_reporting  
@@ -694,6 +789,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: results_section
 
 ### discussion_writer
+
 **Category**: Scientific Writing  
 **Description**: Discussion and interpretation  
 **Skills**: discussion_writing, scientific_argumentation  
@@ -701,6 +797,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: discussion_section
 
 ### conclusion_writer
+
 **Category**: Scientific Writing  
 **Description**: Conclusion and future directions  
 **Skills**: conclusion_writing, future_work_synthesis  
@@ -708,6 +805,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: conclusion
 
 ### citation_manager
+
 **Category**: Scientific Writing  
 **Description**: Reference formatting and management  
 **Skills**: bibtex, citation_styles  
@@ -715,6 +813,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: formatted_citations
 
 ### bibtex_converter
+
 **Category**: Scientific Writing  
 **Description**: BibTeX conversion and validation  
 **Skills**: bibtex_parsing, citation_validation  
@@ -722,6 +821,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: bibtex_file
 
 ### journal_formatter
+
 **Category**: Scientific Writing  
 **Description**: Journal-specific submission formatting  
 **Skills**: journal_templates, formatting_rules  
@@ -729,6 +829,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: formatted_manuscript
 
 ### cover_letter_writer
+
 **Category**: Scientific Writing  
 **Description**: Cover letter drafting  
 **Skills**: letter_writing, submission_guidelines  
@@ -736,6 +837,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: cover_letter
 
 ### response_to_reviewers
+
 **Category**: Scientific Writing  
 **Description**: Reviewer response drafting  
 **Skills**: response_writing, revision_planning  
@@ -743,6 +845,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: response_letter
 
 ### grant_proposal_writer
+
 **Category**: Scientific Writing  
 **Description**: Grant proposal development  
 **Skills**: grant_writing, budget_planning  
@@ -750,6 +853,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: grant_proposal
 
 ### specific_aims_optimizer
+
 **Category**: Scientific Writing  
 **Description**: Specific aims refinement  
 **Skills**: aims_optimization, logic_modeling  
@@ -757,6 +861,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: refined_aims
 
 ### lay_summary_writer
+
 **Category**: Scientific Writing  
 **Description**: Plain language summary  
 **Skills**: science_communication, plain_language  
@@ -764,6 +869,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: lay_summary
 
 ### press_release_writer
+
 **Category**: Scientific Writing  
 **Description**: Media and outreach materials  
 **Skills**: press_writing, media_relations  
@@ -771,6 +877,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: press_release
 
 ### thesis_writer
+
 **Category**: Scientific Writing  
 **Description**: Thesis and dissertation drafting  
 **Skills**: thesis_structure, academic_writing  
@@ -778,6 +885,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: thesis_chapters
 
 ### presentation_writer
+
 **Category**: Scientific Writing  
 **Description**: Conference presentation materials  
 **Skills**: presentation_design, slide_creation  
@@ -785,6 +893,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: presentation_slides
 
 ### poster_creator
+
 **Category**: Scientific Writing  
 **Description**: Scientific poster design  
 **Skills**: poster_layout, visual_communication  
@@ -792,6 +901,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: poster_file
 
 ### protocol_writer
+
 **Category**: Scientific Writing  
 **Description**: Standard operating procedures  
 **Skills**: protocol_documentation, sop_writing  
@@ -799,6 +909,7 @@ This document provides a complete catalog of all 111 specialized agents in openS
 **Output**: sop_document
 
 ### dataset_descriptor
+
 **Category**: Scientific Writing  
 **Description**: Data availability statements  
 **Skills**: data_description, repository_documentation  

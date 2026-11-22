@@ -18,7 +18,8 @@ nav:
   - Examples:
       - Overview: examples/README.md
       - RNA-seq Analysis: examples/rnaseq-analysis.md
-      - Single-Cell Workflow: examples/single-cell.md
+      - Single-Cell Workflow: examples/single-cell-analysis.md
+      - Publication Figures: examples/publication-figures.md
       - Literature Review: examples/literature-review.md
   - Troubleshooting: troubleshooting.md
   - FAQ: faq.md

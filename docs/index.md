@@ -27,20 +27,24 @@ openScience automates the toil between scientific questions and answers — hand
 ## 📚 Core Documentation
 
 ### Architecture and Design
+
 - **[Architecture Deep-Dive](architecture.md)** — System design, components, and data flow
 - **[Agent Catalog](agents.md)** — Complete reference for all 100 specialized agents
 - **[API Reference](api.md)** — Python API, REST API, and CLI documentation
 
 ### Deployment and Operations
+
 - **[Docker Deployment](docker.md)** — Containerized deployment from dev to production
 - **[Development Setup](development.md)** — Local development environment
 
 ### Policies and Support
+
 - **[Security Policies](security.md)** — Sandbox, biosecurity, credential management
 - **[Troubleshooting](troubleshooting.md)** — Common issues and solutions
 - **[FAQ](faq.md)** — Frequently asked questions
 
 ### Community
+
 - **[Contributing Guide](contributing.md)** — How to contribute to openScience
 
 ---

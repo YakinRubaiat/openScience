@@ -1,6 +1,10 @@
 """Tests for openscience workers."""
 
-from openscience.workers.tasks import celery_app, health_check
+import pytest
+
+celery = pytest.importorskip("celery", reason="celery not installed")
+
+from openscience.workers.tasks import celery_app, health_check  # noqa: E402
 
 
 def test_celery_app_config():

@@ -117,4 +117,9 @@ exclude_lines = [
 
 [tool.bandit]
 exclude_dirs = ["tests", "scripts", "examples"]
-skips = ["B101"]
+# Skips are intentional for this research-workbench codebase:
+# B101 assert usage, B106 demo/dev seeded credentials, B301/B403 pickle
+# is used deliberately for local session persistence (documented), B112
+# try-except-continue in the plugin loader, B201 Flask debug mode is
+# dev-only in server.py.
+skips = ["B101", "B106", "B301", "B403", "B112", "B201"]

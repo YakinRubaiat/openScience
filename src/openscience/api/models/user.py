@@ -1,53 +1,37 @@
-"""User model for API authentication.
+"""User ORM model."""
 
-This is a minimal in-memory user representation. A production deployment
-should back this with a real database and salted password hashing.
-"""
+import uuid
+from datetime import datetime, timezone
 
-from dataclasses import dataclass, field
-from typing import Optional
+from sqlalchemy import Boolean, DateTime, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-
-@dataclass
-class User:
-    """An authenticated API user."""
-
-    username: str
-    hashed_password: str
-    disabled: bool = False
-    scopes: list = field(default_factory=list)
-
-    def is_active(self) -> bool:
-        """Return True if the user can authenticate."""
-        return not self.disabled
+from openscience.api.database import Base
 
 
-# In-memory development users. Passwords are SHA-256 hashes of the
-# plaintext values documented below — replace with a real store in prod.
-_DEFAULT_USERS = {
-    "admin": User(
-        username="admin",
-        # sha256("admin")
-        hashed_password="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
-        scopes=["read", "write", "admin"],
-    ),
-    "researcher": User(
-        username="researcher",
-        # sha256("researcher")
-        hashed_password="c1c05743a9fa944b61a2e9b0e36f1ff86cbe02e19a1a94d3a656f0e6f7fdb27e",
-        scopes=["read", "write"],
-    ),
-}
+def _uuid() -> str:
+    return str(uuid.uuid4())
 
 
-def get_user(username: str) -> Optional[User]:
-    """Look up a user by username."""
-    return _DEFAULT_USERS.get(username)
+def _utcnow() -> datetime:
+    return datetime.now(timezone.utc)
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Compare a plaintext password against its SHA-256 hash."""
-    import hashlib
+class UserModel(Base):
+    """A registered API user."""
 
-    digest = hashlib.sha256(plain_password.encode("utf-8")).hexdigest()
-    return digest == hashed_password
+    __tablename__ = "users"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    username: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255))
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+    sessions: Mapped[list["SessionModel"]] = relationship(  # noqa: F821
+        "SessionModel",
+        back_populates="owner",
+        cascade="all, delete-orphan",
+    )

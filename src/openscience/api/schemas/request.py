@@ -1,44 +1,81 @@
-"""Request schemas for the openScience API."""
+"""Request schemas."""
 
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
+
+from openscience.api.utils.validation import (
+    SafeAgentName,
+    SafeFilePath,
+    SessionName,
+    Username,
+)
+
+
+class UserCreateRequest(BaseModel):
+    """Payload for registering a new user."""
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    username: Username
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=128)
 
 
 class LoginRequest(BaseModel):
-    """Credentials payload for token issuance."""
+    """Payload for obtaining an access token."""
 
-    username: str = Field(..., min_length=1)
-    password: str = Field(..., min_length=1)
+    username: str = Field(min_length=1, max_length=64)
+    password: str = Field(min_length=1, max_length=128)
+
+
+class SessionCreateRequest(BaseModel):
+    """Payload for creating a new session."""
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    name: SessionName
+    project_dir: Optional[SafeFilePath] = None
+    compute_backend: str = Field(default="local", max_length=64)
 
 
 class LoadDataRequest(BaseModel):
-    """Payload for loading a data file into a session."""
+    """Payload for loading data into a session."""
 
-    file_path: str = Field(..., min_length=1)
-    format: str = Field(default="auto")
-    name: Optional[str] = None
-    options: dict[str, Any] = Field(default_factory=dict)
+    model_config = ConfigDict(str_strip_whitespace=True)
 
-
-class AnalyzeRequest(BaseModel):
-    """Payload for running an analysis task."""
-
-    task: str = Field(..., min_length=1)
-    specialist: Optional[str] = None
-    data_name: Optional[str] = None
-    parameters: dict[str, Any] = Field(default_factory=dict)
+    file_path: SafeFilePath
+    format: str = Field(default="auto", max_length=32, pattern=r"^[a-zA-Z0-9_]*$")
+    name: Optional[str] = Field(default=None, max_length=255, pattern=r"^[\w\-. ]*$")
 
 
-class AskRequest(BaseModel):
-    """Payload for asking a natural-language question."""
+class AnalysisRequest(BaseModel):
+    """Payload for running an analysis."""
 
-    question: str = Field(..., min_length=1)
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    task: str = Field(min_length=1, max_length=4000)
+    specialist: Optional[SafeAgentName] = None
+    data_name: Optional[str] = Field(default=None, max_length=255)
+    parameters: Dict[str, Any] = Field(default_factory=dict)
 
 
-class CreateSessionRequest(BaseModel):
-    """Payload for creating a new session."""
+class VisualizeRequest(BaseModel):
+    """Payload for generating a visualization."""
 
-    project_dir: Optional[str] = None
-    compute_backend: str = "local"
-    sandbox_enabled: bool = False
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    result_key: Optional[str] = Field(default=None, max_length=4000)
+    type: str = Field(default="auto", max_length=32, pattern=r"^[a-zA-Z0-9_]*$")
+    style: str = Field(default="publication", max_length=32, pattern=r"^[a-zA-Z0-9_\-]*$")
+    output: Optional[SafeFilePath] = None
+
+
+class WriteRequest(BaseModel):
+    """Payload for generating scientific writing."""
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    result_key: Optional[str] = Field(default=None, max_length=4000)
+    style: str = Field(default="nature", max_length=32, pattern=r"^[a-zA-Z0-9_\-]*$")
+    citation_format: str = Field(default="apa", max_length=32, pattern=r"^[a-zA-Z0-9_\-]*$")

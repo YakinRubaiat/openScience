@@ -16,7 +16,7 @@ services:
       - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
       - LOG_LEVEL=DEBUG
     ports:
-      - "5000:5000"
+      - "8080:5000"
     volumes:
       - ./src:/app/src:ro
       - ./data:/app/data
